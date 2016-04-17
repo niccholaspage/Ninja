@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.DepthComparator;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
@@ -99,7 +99,7 @@ public class RenderSystem extends SortedIteratingSystem {
             flip = true;
         }
 
-        Vector2 position = physics.getPosition();
+        Vector3 position = physics.getPosition();
 
         int width = region.getRegionWidth();
 

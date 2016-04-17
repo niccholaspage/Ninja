@@ -15,6 +15,6 @@ public class DepthComparator implements Comparator<Entity> {
 
         PhysicsComponent physics2 = physicsMapper.get(entity2);
 
-        return (int) (physics.getDepth() - physics2.getDepth());
+        return (int) (physics.getPosition().z - physics2.getPosition().z);
     }
 }

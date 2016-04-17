@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Level;
 import com.nicholasnassar.ninja.components.CollidableComponent;
 import com.nicholasnassar.ninja.components.GravityComponent;
@@ -49,7 +50,7 @@ public class PhysicsSystem extends IteratingSystem {
 
         PhysicsComponent physics = physicsMapper.get(entity);
 
-        Vector2 position = physics.getPosition();
+        Vector3 position = physics.getPosition();
 
         Vector2 velocity = physics.getVelocity();
 
@@ -79,7 +80,7 @@ public class PhysicsSystem extends IteratingSystem {
 
                 PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                Vector2 pos2 = loopPhysics.getPosition();
+                Vector3 pos2 = loopPhysics.getPosition();
 
                 float x2 = pos2.x;
 
@@ -115,7 +116,7 @@ public class PhysicsSystem extends IteratingSystem {
 
                 PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                Vector2 pos2 = loopPhysics.getPosition();
+                Vector3 pos2 = loopPhysics.getPosition();
 
                 float x2 = pos2.x;
 
@@ -150,13 +151,13 @@ public class PhysicsSystem extends IteratingSystem {
 
             setValidConstraints(position);
         } else {
-            position.add(velocity.x * deltaTime, velocity.y * deltaTime);
+            position.add(velocity.x * deltaTime, velocity.y * deltaTime, 0);
 
             setValidConstraints(position);
         }
     }
 
-    private void setValidConstraints(Vector2 position) {
+    private void setValidConstraints(Vector3 position) {
         Level level = screen.getLevel();
 
         float levelWidth = level.getWidth() - 1;
@@ -179,7 +180,7 @@ public class PhysicsSystem extends IteratingSystem {
             newY = levelHeight;
         }
 
-        position.set(newX, newY);
+        position.set(newX, newY, position.z);
     }
 
     private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2) {

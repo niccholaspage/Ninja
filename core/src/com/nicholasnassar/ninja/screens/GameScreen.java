@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -255,7 +255,7 @@ public class GameScreen extends NinjaScreen {
                 if (save.getCategory().equals("spawner")) {
                     PhysicsComponent physics = physicsMapper.get(entity);
 
-                    Vector2 position = physics.getPosition();
+                    Vector3 position = physics.getPosition();
 
                     Entity newSpawn = spawner.spawnEntity("creature_" + save.getType(), true, position.x, position.y);
 
@@ -498,13 +498,17 @@ public class GameScreen extends NinjaScreen {
     }
 
     public void load(FileHandle handle) {
+        load(handle.readString("UTF-8"));
+    }
+
+    public void load(String text) {
         isLoading = true;
 
         if (this.levelProperties != null) {
             levelProperties.setVisible(false);
         }
 
-        JsonValue json = new JsonReader().parse(handle);
+        JsonValue json = new JsonReader().parse(text);
 
         JsonValue levelProperties = json.get("level_info");
 

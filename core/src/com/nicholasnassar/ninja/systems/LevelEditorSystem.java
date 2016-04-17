@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -175,7 +174,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
             for (Entity entity : entities) {
                 PhysicsComponent physics = physicsMapper.get(entity);
 
-                Vector2 position = physics.getPosition();
+                Vector3 position = physics.getPosition();
 
                 float x = position.x * GameScreen.PIXELS_PER_METER;
 
@@ -227,7 +226,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
             PhysicsComponent physics = physicsMapper.get(selectedEntity);
 
-            Vector2 position = physics.getPosition();
+            Vector3 position = physics.getPosition();
 
             float mouseX = mouse.x / GameScreen.PIXELS_PER_METER - physics.getWidth() / 2;
 
@@ -240,7 +239,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
             }
 
             if (isTileFree(mouseX, mouseY)) {
-                position.set(mouseX, mouseY);
+                position.set(mouseX, mouseY, position.z);
             }
         } else if (selectedBuild != null) {
             placeLogic();
@@ -265,7 +264,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
                 if (save != null && !save.getId().equals("spawner_player")) {
                     PhysicsComponent physics = physicsMapper.get(entity);
 
-                    Vector2 position = physics.getPosition();
+                    Vector3 position = physics.getPosition();
 
                     if (mouseX >= position.x && mouseX <= position.x + physics.getWidth() && mouseY >= position.y &&
                             mouseY <= position.y + physics.getHeight()) {
@@ -304,7 +303,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
         for (Entity entity : entities) {
             PhysicsComponent physics = physicsMapper.get(entity);
 
-            Vector2 position = physics.getPosition();
+            Vector3 position = physics.getPosition();
 
             if (position.x == x && position.y == y) {
                 return false;
@@ -333,6 +332,10 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
     }
 
     public void load(final FileHandle handle) {
+        load(handle.readString());
+    }
+
+    public void load(final String text) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -344,7 +347,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
                 getEngine().update(0);
 
-                screen.load(handle);
+                screen.load(text);
             }
         });
     }
@@ -355,7 +358,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
         }
 
         for (Entity entity : entities) {
-            Vector2 position = physicsMapper.get(entity).getPosition();
+            Vector3 position = physicsMapper.get(entity).getPosition();
 
             float x = position.x;
 
@@ -376,8 +379,10 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
     }
 
     public void save(FileHandle handle) {
-        Writer writer = handle.writer(false);
+        save(handle.writer(false));
+    }
 
+    public void save(Writer writer) {
         Json json = new Json();
 
         json.setWriter(new JsonWriter(writer));

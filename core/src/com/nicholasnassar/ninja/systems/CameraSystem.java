@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Level;
 import com.nicholasnassar.ninja.components.CameraComponent;
 import com.nicholasnassar.ninja.components.PhysicsComponent;
@@ -38,7 +38,7 @@ public class CameraSystem extends IteratingSystem {
 
         PhysicsComponent physics = physicsMapper.get(target);
 
-        Vector2 position = physics.getPosition();
+        Vector3 position = physics.getPosition();
 
         Level level = screen.getLevel();
 
