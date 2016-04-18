@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -23,6 +24,8 @@ public class InputSystem extends IteratingSystem {
 
     private final ComponentMapper<LevelEditorComponent> levelMapper;
 
+    private final ComponentMapper<DirectionComponent> directionMapper;
+
     public InputSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class, SpeedComponent.class, ControllableComponent.class).get());
 
@@ -37,6 +40,8 @@ public class InputSystem extends IteratingSystem {
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
 
         levelMapper = ComponentMapper.getFor(LevelEditorComponent.class);
+
+        directionMapper = ComponentMapper.getFor(DirectionComponent.class);
     }
 
     @Override
@@ -71,6 +76,12 @@ public class InputSystem extends IteratingSystem {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D)) {
             stop = true;
+        }
+
+        if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            Vector3 position = physics.getPosition();
+
+            screen.getSpawner().spawnShuriken(position.x, position.y, directionMapper.get(entity).getDirection());
         }
 
         if (levelMapper.has(entity)) {

@@ -291,6 +291,10 @@ public class GameScreen extends NinjaScreen {
         }
     }
 
+    public Spawner getSpawner() {
+        return spawner;
+    }
+
     private void setupLevelEditor(final NinjaGame game, Spawner spawner) {
         Skin skin = game.getSkin();
 

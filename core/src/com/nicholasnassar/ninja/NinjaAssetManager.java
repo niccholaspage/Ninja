@@ -37,6 +37,7 @@ public class NinjaAssetManager {
         manager.load("sprites/entities/player_in_air.png", Texture.class);
         manager.load("sprites/entities/soldier_idle.png", Texture.class);
         manager.load("sprites/entities/soldier_walk.png", Texture.class);
+        manager.load("sprites/entities/shuriken.png", Texture.class);
 
         blocks.put("dirt", null);
         blocks.put("grass", null);
@@ -61,7 +62,7 @@ public class NinjaAssetManager {
         return manager.get("ui/uiskin.json", Skin.class);
     }
 
-    private Texture getTexture(String name) {
+    public Texture getTexture(String name) {
         return manager.get(name);
     }
 

@@ -158,6 +158,35 @@ public class Spawner {
         return entity;
     }
 
+    public Entity spawnShuriken(float x, float y, int direction) {
+        Entity entity = new Entity();
+
+        TextureRegion region = new TextureRegion(manager.getTexture("sprites/entities/shuriken.png"));
+
+        float width = region.getRegionWidth() / GameScreen.PIXELS_PER_METER;
+
+        float height = region.getRegionHeight() / GameScreen.PIXELS_PER_METER;
+
+        if (direction == DirectionComponent.RIGHT) {
+            x += 1.5;
+        } else {
+            x -= 1.5;
+        }
+
+        PhysicsComponent physics = new PhysicsComponent(x, y + .5f, 0, width, height);
+
+        physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 10 : -10;
+
+        entity.add(physics);
+        entity.add(new VisualComponent(region, 750f));
+        entity.add(new DirectionComponent());
+        entity.add(new CollidableComponent(true));
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
     public Entity spawnSpawner(String id, float x, float y) {
         Entity entity = new Entity();
 

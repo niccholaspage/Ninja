@@ -93,6 +93,26 @@ public class RenderSystem extends SortedIteratingSystem {
 
         DirectionComponent direction = directionMapper.get(entity);
 
+        float rotation = visual.getRotation();
+
+        if (rotation != -1) {
+            if (rotation < 0) {
+                rotation = 360;
+            } else {
+                boolean subtract = direction.getDirection() == DirectionComponent.RIGHT;
+
+                if (subtract) {
+                    rotation -= visual.getRotationSpeed() * deltaTime;
+                } else {
+                    rotation += visual.getRotationSpeed() * deltaTime;
+                }
+            }
+
+            visual.setRotation(rotation);
+        } else {
+            rotation = 0;
+        }
+
         boolean flip = false;
 
         if (direction != null && direction.getDirection() == DirectionComponent.LEFT) {
@@ -123,6 +143,7 @@ public class RenderSystem extends SortedIteratingSystem {
             batch.setColor(Color.WHITE);
         }
 
-        batch.draw(region, flip ? x + width : x, y, 0, 0, flip ? -width : width, height, 1, 1, 0);
+        //batch.draw(region, flip ? x + width : x, y, width / 2, height / 2, flip ? -width : width, height, 1, 1, flip ? -rotation : rotation);
+        batch.draw(region, flip ? x + width : x, y, flip ? -width / 2 : width / 2, height / 2, flip ? -width : width, height, 1, 1, rotation);
     }
 }

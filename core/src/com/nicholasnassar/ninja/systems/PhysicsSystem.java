@@ -62,7 +62,9 @@ public class PhysicsSystem extends IteratingSystem {
             if (velocity.y < -MAX) {
                 velocity.y = -MAX;
             }
+        }
 
+        if (velocity.x != 0 || velocity.y != 0) {
             float newX = position.x + velocity.x * deltaTime;
 
             float y = position.y;
@@ -73,8 +75,12 @@ public class PhysicsSystem extends IteratingSystem {
 
             float height = physics.getHeight();
 
+            CollidableComponent collide = collideMapper.get(entity);
+
             for (Entity loopEntity : getEntities()) {
-                if (entity == loopEntity || !collideMapper.has(loopEntity)) {
+                CollidableComponent loopCollide = collideMapper.get(loopEntity);
+
+                if (entity == loopEntity || loopCollide == null) {
                     continue;
                 }
 
@@ -90,8 +96,24 @@ public class PhysicsSystem extends IteratingSystem {
 
                 float height2 = loopPhysics.getHeight();
 
+                float radius = physics.getRadius();
+
+                float radius2 = loopPhysics.getRadius();
+
                 if (width2 > 0 && height2 > 0) {
-                    if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
+                    if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
+                        if (collide.shouldDestroy()) {
+                            getEngine().removeEntity(entity);
+
+                            continue;
+                        }
+
+                        if (loopCollide.shouldDestroy()) {
+                            getEngine().removeEntity(loopEntity);
+
+                            continue;
+                        }
+
                         if (velocity.x > 0) {
                             velocity.x = 0;
 
@@ -107,10 +129,14 @@ public class PhysicsSystem extends IteratingSystem {
                 }
             }
 
-            gravity.setGrounded(false);
+            if (gravity != null) {
+                gravity.setGrounded(false);
+            }
 
             for (Entity loopEntity : getEntities()) {
-                if (entity == loopEntity || !collideMapper.has(loopEntity)) {
+                CollidableComponent loopCollide = collideMapper.get(loopEntity);
+
+                if (entity == loopEntity || loopCollide == null) {
                     continue;
                 }
 
@@ -126,8 +152,24 @@ public class PhysicsSystem extends IteratingSystem {
 
                 float height2 = loopPhysics.getHeight();
 
+                float radius = physics.getRadius();
+
+                float radius2 = loopPhysics.getRadius();
+
                 if (width2 > 0 && height2 > 0) {
-                    if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2)) {
+                    if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
+                        if (collide.shouldDestroy()) {
+                            getEngine().removeEntity(entity);
+
+                            continue;
+                        }
+
+                        if (loopCollide.shouldDestroy()) {
+                            getEngine().removeEntity(loopEntity);
+
+                            continue;
+                        }
+
                         if (velocity.y > 0) {
                             velocity.y = 0;
 
@@ -137,7 +179,9 @@ public class PhysicsSystem extends IteratingSystem {
 
                             velocity.y = 0;
 
-                            gravity.setGrounded(true);
+                            if (gravity != null) {
+                                gravity.setGrounded(true);
+                            }
                         }
 
                         break;
@@ -148,13 +192,9 @@ public class PhysicsSystem extends IteratingSystem {
             position.x = newX;
 
             position.y = newY;
-
-            setValidConstraints(position);
-        } else {
-            position.add(velocity.x * deltaTime, velocity.y * deltaTime, 0);
-
-            setValidConstraints(position);
         }
+
+        setValidConstraints(position);
     }
 
     private void setValidConstraints(Vector3 position) {
@@ -183,7 +223,42 @@ public class PhysicsSystem extends IteratingSystem {
         position.set(newX, newY, position.z);
     }
 
-    private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2) {
+    private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2, float radius, float radius2) {
+        if (radius > 0 && radius2 > 0) {
+            float dx = x - x2;
+            float dy = y - y2;
+
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            return distance < radius + radius2;
+        }
+
+        if (radius > 0 && radius2 < 0) {
+            float closestX = clamp(x, x2, x2 + width2);
+            float closestY = clamp(y, y2, y2 + height2);
+
+            float distanceX = x - closestX;
+            float distanceY = y - closestY;
+
+            float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+            return distanceSquared < (radius * radius);
+        }
+
+        if (radius2 > 0 && radius < 0) {
+            float closestX = clamp(x2, x, x + width);
+            float closestY = clamp(y2, y, y + height);
+
+            float distanceX = x2 - closestX;
+            float distanceY = y2 - closestY;
+
+            float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+            return distanceSquared < (radius2 * radius2);
+        }
+
         return x < x2 + width2 && x + width > x2 && y < y2 + height2 && height + y > y2;
+    }
+
+    private float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(value, max));
     }
 }
