@@ -320,6 +320,10 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        if (screen.getState() != GameScreen.STATE_EDITING) {
+            return true;
+        }
+
         float zoom = ((OrthographicCamera) camera).zoom + ((float) amount / 2);
 
         ((OrthographicCamera) camera).zoom = Math.max(1, Math.min(3, zoom));

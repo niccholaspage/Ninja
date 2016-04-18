@@ -225,6 +225,8 @@ public class GameScreen extends NinjaScreen {
                 physics2.getPosition().set(physics.getPosition());
             } else {
                 camera.setSelected(0);
+
+                ((OrthographicCamera) camera.getCamera()).zoom = 1f;
             }
 
             if (state == STATE_EDITING || this.state == STATE_EDITING) {
