@@ -6,19 +6,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.nicholasnassar.ninja.NinjaGame;
 
 public class MainMenuScreen extends NinjaScreen {
     private final Stage stage;
-
-    private final Label label;
-
-    private final TextButton button;
-
-    private final TextButton levelEditor;
 
     private final Music mainMenuMusic;
 
@@ -29,18 +25,29 @@ public class MainMenuScreen extends NinjaScreen {
 
         Gdx.input.setInputProcessor(stage);
 
-        stage.addActor(label = new Label("nNINJA", game.getSkin()));
+        Table mainMenuTable = new Table();
 
-        stage.addActor(button = new TextButton("Play Game", game.getSkin()));
+        mainMenuTable.align(Align.center);
 
-        button.addListener(new ChangeListener() {
+        mainMenuTable.setFillParent(true);
+
+        TextButton playGame = new TextButton("Play Game", game.getSkin());
+
+        TextButton levelEditor = new TextButton("Level Editor", game.getSkin());
+
+        mainMenuTable.add(new Label("nNINJA", game.getSkin())).colspan(2);
+        mainMenuTable.row();
+        mainMenuTable.add(playGame).padRight(5);
+        mainMenuTable.add(levelEditor);
+
+        stage.addActor(mainMenuTable);
+
+        playGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 startGame(game, false);
             }
         });
-
-        stage.addActor(levelEditor = new TextButton("Level Editor", game.getSkin()));
 
         levelEditor.addListener(new ChangeListener() {
             @Override
@@ -63,12 +70,6 @@ public class MainMenuScreen extends NinjaScreen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
-
-        label.setPosition(width / 2 - label.getWidth() / 2, height - 200);
-
-        button.setPosition(width / 2 - button.getWidth() - 5, height - 300);
-
-        levelEditor.setPosition(width / 2 + 5, height - 300);
     }
 
     @Override

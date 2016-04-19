@@ -168,9 +168,9 @@ public class Spawner {
         float height = region.getRegionHeight() / GameScreen.PIXELS_PER_METER;
 
         if (direction == DirectionComponent.RIGHT) {
-            x += 1.5;
+            x += 1;
         } else {
-            x -= 1.5;
+            x -= 1;
         }
 
         PhysicsComponent physics = new PhysicsComponent(x, y + .5f, 0, width, height);
@@ -178,7 +178,7 @@ public class Spawner {
         physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 10 : -10;
 
         entity.add(physics);
-        entity.add(new VisualComponent(region, 750f));
+        entity.add(new VisualComponent(region, 1000f));
         entity.add(new DirectionComponent());
         entity.add(new CollidableComponent(true));
         entity.add(new DestroyOutsideComponent());
