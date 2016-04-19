@@ -96,19 +96,21 @@ public class RenderSystem extends SortedIteratingSystem {
         float rotation = visual.getRotation();
 
         if (rotation != -1) {
-            if (rotation < 0) {
-                rotation = 360;
-            } else {
-                boolean subtract = direction.getDirection() == DirectionComponent.RIGHT;
-
-                if (subtract) {
-                    rotation -= visual.getRotationSpeed() * deltaTime;
+            if (screen.getState() == GameScreen.STATE_RUNNING) {
+                if (rotation < 0) {
+                    rotation = 360;
                 } else {
-                    rotation += visual.getRotationSpeed() * deltaTime;
-                }
-            }
+                    boolean subtract = direction.getDirection() == DirectionComponent.RIGHT;
 
-            visual.setRotation(rotation);
+                    if (subtract) {
+                        rotation -= visual.getRotationSpeed() * deltaTime;
+                    } else {
+                        rotation += visual.getRotationSpeed() * deltaTime;
+                    }
+                }
+
+                visual.setRotation(rotation);
+            }
         } else {
             rotation = 0;
         }
