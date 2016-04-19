@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.nicholasnassar.ninja.Level;
 import com.nicholasnassar.ninja.NinjaGame;
 
 public class MainMenuScreen extends NinjaScreen {
@@ -34,14 +33,10 @@ public class MainMenuScreen extends NinjaScreen {
 
         stage.addActor(button = new TextButton("Play Game", game.getSkin()));
 
-        final Level level = new Level(100, 20);
-
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.input.setInputProcessor(null);
-
-                game.setScreen(new GameScreen(game, batch, level, false));
+                startGame(game, false);
             }
         });
 
@@ -50,15 +45,19 @@ public class MainMenuScreen extends NinjaScreen {
         levelEditor.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.input.setInputProcessor(null);
-
-                game.setScreen(new GameScreen(game, batch, level, true));
+                startGame(game, true);
             }
         });
 
         mainMenuMusic = game.getAssetManager().getMusic("main_menu");
 
         mainMenuMusic.play();
+    }
+
+    private void startGame(NinjaGame game, boolean editing) {
+        Gdx.input.setInputProcessor(null);
+
+        game.setScreen(new GameScreen(game, batch, editing));
     }
 
     @Override

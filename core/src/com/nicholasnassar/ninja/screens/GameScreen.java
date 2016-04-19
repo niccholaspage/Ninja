@@ -70,7 +70,7 @@ public class GameScreen extends NinjaScreen {
 
     public static final int STATE_EDITING = 2;
 
-    public GameScreen(final NinjaGame game, final SpriteBatch batch, Level level, boolean levelEditor) {
+    public GameScreen(final NinjaGame game, final SpriteBatch batch, boolean levelEditor) {
         super(batch);
 
         camera = new OrthographicCamera();
@@ -105,7 +105,7 @@ public class GameScreen extends NinjaScreen {
             }
         });
 
-        this.level = level;
+        level = new Level(100, 20);
 
         Gdx.input.setInputProcessor(uiStage);
 
