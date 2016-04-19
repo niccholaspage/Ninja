@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -62,32 +63,32 @@ public class InputSystem extends IteratingSystem {
 
         Vector2 velocity = physics.getVelocity();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT)) {
             velocity.x = -force;
 
             stop = false;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
             velocity.x = force;
 
             stop = false;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) && Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
             stop = true;
         }
 
-        if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+        if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(ControlManager.THROW)) {
             Vector3 position = physics.getPosition();
 
             screen.getSpawner().spawnShuriken(position.x, position.y, directionMapper.get(entity).getDirection());
         }
 
         if (levelMapper.has(entity)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (Gdx.input.isKeyPressed(ControlManager.MOVE_UP)) {
                 velocity.y = force;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            } else if (Gdx.input.isKeyPressed(ControlManager.MOVE_DOWN)) {
                 velocity.y = -force;
             } else {
                 velocity.y = 0;
@@ -100,7 +101,7 @@ public class InputSystem extends IteratingSystem {
 
         JumpComponent jump = jumpMapper.get(entity);
 
-        if (jump != null && Gdx.input.isKeyPressed(Input.Keys.SPACE) && gravity.isGrounded()) {
+        if (jump != null && Gdx.input.isKeyPressed(ControlManager.JUMP) && gravity.isGrounded()) {
             velocity.y = jump.getJumpHeight();
         }
     }

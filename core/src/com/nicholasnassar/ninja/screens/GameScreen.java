@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.Level;
 import com.nicholasnassar.ninja.NinjaGame;
 import com.nicholasnassar.ninja.Spawner;
@@ -184,7 +185,7 @@ public class GameScreen extends NinjaScreen {
     @Override
     public void render(float delta) {
         //super.render(delta); - We don't need this, we pause the game when escape is pressed (no exit anymore, oops.).
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(ControlManager.BACK)) {
             togglePause();
         }
 
