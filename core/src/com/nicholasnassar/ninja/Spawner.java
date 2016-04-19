@@ -181,6 +181,7 @@ public class Spawner {
         entity.add(new VisualComponent(region, 750f));
         entity.add(new DirectionComponent());
         entity.add(new CollidableComponent(true));
+        entity.add(new DestroyOutsideComponent());
 
         engine.addEntity(entity);
 

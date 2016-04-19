@@ -7,10 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Level;
-import com.nicholasnassar.ninja.components.CollidableComponent;
-import com.nicholasnassar.ninja.components.GravityComponent;
-import com.nicholasnassar.ninja.components.LevelEditorComponent;
-import com.nicholasnassar.ninja.components.PhysicsComponent;
+import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class PhysicsSystem extends IteratingSystem {
@@ -28,6 +25,8 @@ public class PhysicsSystem extends IteratingSystem {
 
     private final ComponentMapper<CollidableComponent> collideMapper;
 
+    private final ComponentMapper<DestroyOutsideComponent> destroyMapper;
+
     public PhysicsSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class).get());
 
@@ -40,6 +39,8 @@ public class PhysicsSystem extends IteratingSystem {
         levelMapper = ComponentMapper.getFor(LevelEditorComponent.class);
 
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
+
+        destroyMapper = ComponentMapper.getFor(DestroyOutsideComponent.class);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class PhysicsSystem extends IteratingSystem {
 
                 if (width2 > 0 && height2 > 0) {
                     if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
-                        if (collide.shouldDestroy()) {
+                        if (collide != null && collide.shouldDestroy()) {
                             getEngine().removeEntity(entity);
 
                             continue;
@@ -158,7 +159,7 @@ public class PhysicsSystem extends IteratingSystem {
 
                 if (width2 > 0 && height2 > 0) {
                     if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
-                        if (collide.shouldDestroy()) {
+                        if (collide != null && collide.shouldDestroy()) {
                             getEngine().removeEntity(entity);
 
                             continue;
@@ -194,10 +195,10 @@ public class PhysicsSystem extends IteratingSystem {
             position.y = newY;
         }
 
-        setValidConstraints(position);
+        setValidConstraints(entity, position);
     }
 
-    private void setValidConstraints(Vector3 position) {
+    private void setValidConstraints(Entity entity, Vector3 position) {
         Level level = screen.getLevel();
 
         float levelWidth = level.getWidth() - 1;
@@ -208,19 +209,37 @@ public class PhysicsSystem extends IteratingSystem {
 
         float newY = position.y;
 
-        if (newX < 0) {
-            newX = 0;
-        } else if (newX > levelWidth) {
-            newX = levelWidth;
-        }
+        if (!destroyMapper.has(entity)) {
+            if (newX < 0) {
+                newX = 0;
+            } else if (newX > levelWidth) {
+                newX = levelWidth;
+            }
 
-        if (newY < 0) {
-            newY = 0;
-        } else if (newY > levelHeight) {
-            newY = levelHeight;
-        }
+            if (newY < 0) {
+                newY = 0;
+            } else if (newY > levelHeight) {
+                newY = levelHeight;
+            }
 
-        position.set(newX, newY, position.z);
+            position.set(newX, newY, position.z);
+        } else {
+            PhysicsComponent physics = physicsMapper.get(entity);
+
+            if (newX < -physics.getWidth()) {
+                getEngine().removeEntity(entity);
+            } else if (newX - physics.getWidth() > levelWidth) {
+                getEngine().removeEntity(entity);
+            }
+
+            if (newY < -physics.getHeight()) {
+                getEngine().removeEntity(entity);
+            } else if (newY - physics.getHeight() > levelHeight) {
+                getEngine().removeEntity(entity);
+            }
+
+            position.set(newX, newY, position.z);
+        }
     }
 
     private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2, float radius, float radius2) {
