@@ -71,7 +71,7 @@ public class Spawner {
         float height = region.getRegionHeight() / GameScreen.PIXELS_PER_METER;
 
         entity.add(new PhysicsComponent(x, y, width, height));
-        entity.add(new JumpComponent(26f));
+        entity.add(new JumpComponent(26f, 1));
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent());

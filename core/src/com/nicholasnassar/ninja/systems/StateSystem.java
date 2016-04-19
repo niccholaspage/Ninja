@@ -5,10 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
-import com.nicholasnassar.ninja.components.DirectionComponent;
-import com.nicholasnassar.ninja.components.GravityComponent;
-import com.nicholasnassar.ninja.components.PhysicsComponent;
-import com.nicholasnassar.ninja.components.StateComponent;
+import com.nicholasnassar.ninja.components.*;
 
 public class StateSystem extends IteratingSystem {
     private final ComponentMapper<PhysicsComponent> physicsMapper;
@@ -18,6 +15,8 @@ public class StateSystem extends IteratingSystem {
     private final ComponentMapper<DirectionComponent> directionMapper;
 
     private final ComponentMapper<GravityComponent> gravityMapper;
+
+    private final ComponentMapper<JumpComponent> jumpMapper;
 
     public StateSystem() {
         super(Family.all(PhysicsComponent.class).one(StateComponent.class, DirectionComponent.class).get());
@@ -29,6 +28,8 @@ public class StateSystem extends IteratingSystem {
         directionMapper = ComponentMapper.getFor(DirectionComponent.class);
 
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
+
+        jumpMapper = ComponentMapper.getFor(JumpComponent.class);
     }
 
     @Override
@@ -41,6 +42,8 @@ public class StateSystem extends IteratingSystem {
 
         GravityComponent gravity = gravityMapper.get(entity);
 
+        JumpComponent jump = jumpMapper.get(entity);
+
         Vector2 velocity = physics.getVelocity();
 
         if (state != null) {
@@ -50,6 +53,12 @@ public class StateSystem extends IteratingSystem {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
                 state.setState(StateComponent.STATE_WALKING);
+            }
+        }
+
+        if (gravity != null && jump != null) {
+            if (gravity.isGrounded()) {
+                jump.setAvailableJumps(jump.getExtraJumps());
             }
         }
 

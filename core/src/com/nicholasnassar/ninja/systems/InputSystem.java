@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.ControlManager;
@@ -101,8 +100,20 @@ public class InputSystem extends IteratingSystem {
 
         JumpComponent jump = jumpMapper.get(entity);
 
-        if (jump != null && Gdx.input.isKeyPressed(ControlManager.JUMP) && gravity.isGrounded()) {
+        boolean shouldJump = false;
+
+        if (gravity.isGrounded() && Gdx.input.isKeyPressed(ControlManager.JUMP)) {
+            shouldJump = true;
+        }
+
+        if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && jump.getAvailableJumps() > 0) {
+            shouldJump = true;
+        }
+
+        if (jump != null && shouldJump) {
             velocity.y = jump.getJumpHeight();
+
+            jump.setAvailableJumps(jump.getAvailableJumps() - 1);
         }
     }
 }
