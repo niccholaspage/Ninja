@@ -15,6 +15,8 @@ public class PhysicsComponent implements Component {
 
     private final float radius;
 
+    private float sizeScale;
+
     public PhysicsComponent(float x, float y, float width, float height) {
         this(x, y, 0, width, height);
     }
@@ -29,6 +31,8 @@ public class PhysicsComponent implements Component {
         this.height = height;
 
         radius = -1;
+
+        sizeScale = 1;
     }
 
     public PhysicsComponent(float x, float y, float z, float radius, boolean circle) {
@@ -41,6 +45,8 @@ public class PhysicsComponent implements Component {
         height = -1;
 
         this.radius = radius;
+
+        sizeScale = 1;
     }
 
     public Vector3 getPosition() {
@@ -52,14 +58,22 @@ public class PhysicsComponent implements Component {
     }
 
     public float getWidth() {
-        return width;
+        return width * sizeScale;
     }
 
     public float getHeight() {
-        return height;
+        return height * sizeScale;
     }
 
     public float getRadius() {
         return radius;
+    }
+
+    public void setSizeScale(float sizeScale) {
+        this.sizeScale = sizeScale;
+    }
+
+    public float getSizeScale() {
+        return sizeScale;
     }
 }

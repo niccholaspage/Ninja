@@ -123,9 +123,9 @@ public class RenderSystem extends SortedIteratingSystem {
 
         Vector3 position = physics.getPosition();
 
-        int width = region.getRegionWidth();
+        float width = region.getRegionWidth() * physics.getSizeScale();
 
-        int height = region.getRegionHeight();
+        float height = region.getRegionHeight() * physics.getSizeScale();
 
         int x = (int) (position.x * GameScreen.PIXELS_PER_METER);
 
@@ -133,8 +133,10 @@ public class RenderSystem extends SortedIteratingSystem {
 
         OffsetComponent offset = offsetMapper.get(entity);
 
+        float sizeScale = physics.getSizeScale();
+
         if (state != null && offset != null) {
-            x += offset.getStateOffsets().get(state.getState(), 0);
+            x += offset.getStateOffsets().get(state.getState(), 0) * sizeScale;
         }
 
         ColorComponent color = colorMapper.get(entity);
@@ -145,7 +147,6 @@ public class RenderSystem extends SortedIteratingSystem {
             batch.setColor(Color.WHITE);
         }
 
-        //batch.draw(region, flip ? x + width : x, y, width / 2, height / 2, flip ? -width : width, height, 1, 1, flip ? -rotation : rotation);
         batch.draw(region, flip ? x + width : x, y, flip ? -width / 2 : width / 2, height / 2, flip ? -width : width, height, 1, 1, rotation);
     }
 }

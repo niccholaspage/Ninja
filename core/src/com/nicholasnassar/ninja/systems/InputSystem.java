@@ -100,20 +100,22 @@ public class InputSystem extends IteratingSystem {
 
         JumpComponent jump = jumpMapper.get(entity);
 
-        boolean shouldJump = false;
+        if (gravity != null && jump != null) {
+            boolean shouldJump = false;
 
-        if (gravity.isGrounded() && Gdx.input.isKeyPressed(ControlManager.JUMP)) {
-            shouldJump = true;
-        }
+            if (gravity.isGrounded() && Gdx.input.isKeyPressed(ControlManager.JUMP)) {
+                shouldJump = true;
+            }
 
-        if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && jump.getAvailableJumps() > 0) {
-            shouldJump = true;
-        }
+            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && jump.getAvailableJumps() > 0) {
+                shouldJump = true;
+            }
 
-        if (jump != null && shouldJump) {
-            velocity.y = jump.getJumpHeight();
+            if (shouldJump) {
+                velocity.y = jump.getJumpHeight();
 
-            jump.setAvailableJumps(jump.getAvailableJumps() - 1);
+                jump.setAvailableJumps(jump.getAvailableJumps() - 1);
+            }
         }
     }
 }
