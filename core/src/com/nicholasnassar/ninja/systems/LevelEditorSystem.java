@@ -49,6 +49,10 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
     private String selectedBuild;
 
+    private float mouseX;
+
+    private float mouseY;
+
     private int selectedButton;
 
     private boolean foreground;
@@ -167,6 +171,10 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
             screen.getCamera().unproject(mouse);
 
+            mouseX = mouse.x;
+
+            mouseY = mouse.y;
+
             Entity[] entities = this.entities.toArray(Entity.class);
 
             Arrays.sort(entities, Collections.reverseOrder(depthComparator));
@@ -201,7 +209,15 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT && screen.getState() == GameScreen.STATE_EDITING) {
+            Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+
+            screen.getCamera().unproject(mouse);
+
             selectedEntity = null;
+
+            if (selectedBuild != null && mouseX == mouse.x && mouseY == mouse.y) {
+                placeLogic();
+            }
         }
 
         selectedButton = -1;
@@ -300,7 +316,13 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
             return false;
         }
 
+        boolean ignoreBackground = selectedEntity == null && selectedBuild != null && !selectedBuild.startsWith("block_");
+
         for (Entity entity : entities) {
+            if (ignoreBackground && tileMapper.has(entity) && !collidableMapper.has(entity)) {
+                continue;
+            }
+
             PhysicsComponent physics = physicsMapper.get(entity);
 
             Vector3 position = physics.getPosition();
