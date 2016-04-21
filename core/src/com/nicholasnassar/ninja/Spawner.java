@@ -42,17 +42,11 @@ public class Spawner {
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent());
 
-        if (levelEditing) {
-            //entity.add(new SaveComponent("creature_soldier"));
-        }
-
         entity.add(new StateComponent());
         entity.add(new VisualComponent(animations));
         entity.add(new SpeedComponent(5f));
         entity.add(new AIComponent());
         entity.add(new ColorComponent((float) Math.random(), (float) Math.random(), (float) Math.random()));
-
-        //TODO: Offsets? Probably isn't necessary.
 
         engine.addEntity(entity);
 
@@ -75,10 +69,6 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent());
-
-        if (levelEditing) {
-            //entity.add(new SaveComponent("creature_player"));
-        }
 
         entity.add(new StateComponent());
         entity.add(new VisualComponent(animations));
