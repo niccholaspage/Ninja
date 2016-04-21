@@ -75,7 +75,7 @@ public class NinjaAssetManager {
 
         IntMap<Animation> animations = new IntMap<Animation>();
 
-        Animation idle = new Animation(1 / 7f, TextureRegion.split(getTexture(entityPath + "player_idle.png"), 13, 27)[0]);
+        Animation idle = new Animation(1 / 4f, TextureRegion.split(getTexture(entityPath + "player_idle.png"), 13, 27)[0]);
 
         idle.setPlayMode(Animation.PlayMode.LOOP);
 
