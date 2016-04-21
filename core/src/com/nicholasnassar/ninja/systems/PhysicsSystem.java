@@ -11,9 +11,9 @@ import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class PhysicsSystem extends IteratingSystem {
-    public static final float GRAVITY = 1.65f;
+    public static final float GRAVITY = 96.5f;
 
-    public static final float MAX = 20f;
+    public static final float MAX = 1170f;
 
     private final GameScreen screen;
 
@@ -58,7 +58,7 @@ public class PhysicsSystem extends IteratingSystem {
         GravityComponent gravity = gravityMapper.get(entity);
 
         if (gravity != null) {
-            velocity.y -= GRAVITY;
+            velocity.y -= GRAVITY * deltaTime;
 
             if (velocity.y < -MAX) {
                 velocity.y = -MAX;
