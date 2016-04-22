@@ -26,6 +26,8 @@ public class InputSystem extends IteratingSystem {
 
     private final ComponentMapper<DirectionComponent> directionMapper;
 
+    private final ComponentMapper<StateComponent> stateMapper;
+
     public InputSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class, SpeedComponent.class, ControllableComponent.class).get());
 
@@ -42,6 +44,8 @@ public class InputSystem extends IteratingSystem {
         levelMapper = ComponentMapper.getFor(LevelEditorComponent.class);
 
         directionMapper = ComponentMapper.getFor(DirectionComponent.class);
+
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
     }
 
     @Override
@@ -101,20 +105,16 @@ public class InputSystem extends IteratingSystem {
         JumpComponent jump = jumpMapper.get(entity);
 
         if (gravity != null && jump != null) {
-            boolean shouldJump = false;
-
-            if (gravity.isGrounded() && Gdx.input.isKeyPressed(ControlManager.JUMP)) {
-                shouldJump = true;
-            }
-
-            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && jump.getAvailableJumps() > 0) {
-                shouldJump = true;
-            }
-
-            if (shouldJump) {
+            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && (gravity.isGrounded() || jump.getAvailableJumps() > 0)) {
                 velocity.y = jump.getJumpHeight();
 
                 jump.setAvailableJumps(jump.getAvailableJumps() - 1);
+
+                StateComponent state = stateMapper.get(entity);
+
+                if (state != null) {
+                    state.setElapsedTime(0);
+                }
             }
         }
     }
