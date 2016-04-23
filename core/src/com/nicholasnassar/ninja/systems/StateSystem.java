@@ -52,7 +52,9 @@ public class StateSystem extends IteratingSystem {
             } else if (velocity.x == 0) {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
-                state.setState(StateComponent.STATE_WALKING);
+                if (state.getState() != StateComponent.STATE_GROUND_ROLL || state.getElapsedTime() > 5) {
+                    state.setState(StateComponent.STATE_WALKING);
+                }
             }
         }
 

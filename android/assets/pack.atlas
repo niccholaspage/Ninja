@@ -1,0 +1,116 @@
+
+pack.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+animations/player_idle
+  rotate: false
+  xy: 2, 99
+  size: 208, 27
+  orig: 208, 27
+  offset: 0, 0
+  index: -1
+animations/player_in_air
+  rotate: false
+  xy: 76, 7
+  size: 51, 27
+  orig: 51, 27
+  offset: 0, 0
+  index: -1
+animations/player_roll
+  rotate: false
+  xy: 2, 36
+  size: 120, 27
+  orig: 120, 27
+  offset: 0, 0
+  index: -1
+animations/player_walk
+  rotate: false
+  xy: 124, 36
+  size: 117, 27
+  orig: 117, 27
+  offset: 0, 0
+  index: -1
+animations/soldier_idle
+  rotate: false
+  xy: 2, 65
+  size: 180, 32
+  orig: 180, 32
+  offset: 0, 0
+  index: -1
+animations/soldier_walk
+  rotate: false
+  xy: 2, 2
+  size: 72, 32
+  orig: 72, 32
+  offset: 0, 0
+  index: -1
+
+pack2.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+blocks/cactus
+  rotate: false
+  xy: 2, 38
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/concrete
+  rotate: false
+  xy: 2, 20
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/dirt
+  rotate: false
+  xy: 164, 38
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/grass
+  rotate: false
+  xy: 2, 2
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/sand
+  rotate: false
+  xy: 164, 20
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/sandstone
+  rotate: false
+  xy: 326, 38
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/stone
+  rotate: false
+  xy: 164, 2
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+
+pack3.png
+size: 16,16
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+entities/shuriken
+  rotate: false
+  xy: 2, 2
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1

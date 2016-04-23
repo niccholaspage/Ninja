@@ -10,4 +10,5 @@ public class ControlManager {
     public static final int MOVE_RIGHT = Input.Keys.D;
     public static final int JUMP = Input.Keys.SPACE;
     public static final int THROW = Input.Keys.G;
+    public static final int ROLL = Input.Keys.V;
 }

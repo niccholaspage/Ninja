@@ -78,6 +78,7 @@ public class Spawner {
         IntIntMap offsets = new IntIntMap();
 
         offsets.put(StateComponent.STATE_IN_AIR, -2);
+        offsets.put(StateComponent.STATE_GROUND_ROLL, -1);
 
         entity.add(new OffsetComponent(offsets));
 
@@ -151,7 +152,7 @@ public class Spawner {
     public Entity spawnShuriken(float x, float y, int direction) {
         Entity entity = new Entity();
 
-        TextureRegion region = new TextureRegion(manager.getTexture("sprites/entities/shuriken.png"));
+        TextureRegion region = new TextureRegion(manager.getEntity("shuriken"));
 
         float width = region.getRegionWidth() / GameScreen.PIXELS_PER_METER;
 

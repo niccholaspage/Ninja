@@ -102,6 +102,13 @@ public class InputSystem extends IteratingSystem {
             velocity.x = 0;
         }
 
+        StateComponent state = stateMapper.get(entity);
+
+        if (state != null && state.getState() == StateComponent.STATE_WALKING &&
+                Gdx.input.isKeyJustPressed(ControlManager.ROLL)) {
+            state.setState(StateComponent.STATE_GROUND_ROLL);
+        }
+
         JumpComponent jump = jumpMapper.get(entity);
 
         if (gravity != null && jump != null) {
@@ -109,8 +116,6 @@ public class InputSystem extends IteratingSystem {
                 velocity.y = jump.getJumpHeight();
 
                 jump.setAvailableJumps(jump.getAvailableJumps() - 1);
-
-                StateComponent state = stateMapper.get(entity);
 
                 if (state != null) {
                     state.setElapsedTime(0);

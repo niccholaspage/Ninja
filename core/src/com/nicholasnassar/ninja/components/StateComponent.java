@@ -6,6 +6,7 @@ public class StateComponent implements Component {
     public static final int STATE_IDLE = 0;
     public static final int STATE_WALKING = 1;
     public static final int STATE_IN_AIR = 2;
+    public static final int STATE_GROUND_ROLL = 3;
 
     private int state;
 
