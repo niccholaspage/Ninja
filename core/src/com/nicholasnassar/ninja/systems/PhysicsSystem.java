@@ -123,7 +123,7 @@ public class PhysicsSystem extends IteratingSystem {
                             if (velocity.x > 0) {
                                 newX = x2 - width;
                             } else {
-                                newX = position.x;
+                                newX = x2 + width2;
                             }
 
                             velocity.x = 0;
