@@ -94,4 +94,8 @@ public class VisualComponent implements Component {
 
         currentAnimation = newAnimation;
     }
+
+    public boolean hasMultipleAnimations(int state) {
+        return animations.get(state).size > 1;
+    }
 }

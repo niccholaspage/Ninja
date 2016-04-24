@@ -76,7 +76,7 @@ public class RenderSystem extends SortedIteratingSystem {
 
             int stateInt = state.getState();
 
-            if (visual.getAnimation(stateInt).isAnimationFinished(elapsedTime)) {
+            if (visual.hasMultipleAnimations(stateInt) && visual.getAnimation(stateInt).isAnimationFinished(elapsedTime)) {
                 visual.randomize(stateInt);
 
                 elapsedTime = 0;
