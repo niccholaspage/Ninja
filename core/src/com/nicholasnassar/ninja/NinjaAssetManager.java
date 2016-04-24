@@ -50,10 +50,6 @@ public class NinjaAssetManager {
         return manager.get("ui/uiskin.json", Skin.class);
     }
 
-    private Texture getTexture(String name) {
-        return manager.get(name);
-    }
-
     public TextureRegion getEntity(String name) {
         return entities.get(name);
     }
