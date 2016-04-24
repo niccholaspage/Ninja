@@ -80,128 +80,128 @@ public class PhysicsSystem extends IteratingSystem {
 
             if (collide != null) {
                 collide.setOnWall(false);
-            }
 
-            for (Entity loopEntity : getEntities()) {
-                CollidableComponent loopCollide = collideMapper.get(loopEntity);
+                for (Entity loopEntity : getEntities()) {
+                    CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
-                if (entity == loopEntity || loopCollide == null) {
-                    continue;
-                }
+                    if (entity == loopEntity || loopCollide == null) {
+                        continue;
+                    }
 
-                PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
+                    PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                Vector3 pos2 = loopPhysics.getPosition();
+                    Vector3 pos2 = loopPhysics.getPosition();
 
-                float x2 = pos2.x;
+                    float x2 = pos2.x;
 
-                float y2 = pos2.y;
+                    float y2 = pos2.y;
 
-                float width2 = loopPhysics.getWidth();
+                    float width2 = loopPhysics.getWidth();
 
-                float height2 = loopPhysics.getHeight();
+                    float height2 = loopPhysics.getHeight();
 
-                float radius = physics.getRadius();
+                    float radius = physics.getRadius();
 
-                float radius2 = loopPhysics.getRadius();
+                    float radius2 = loopPhysics.getRadius();
 
-                if (width2 > 0 && height2 > 0) {
-                    if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
-                        if (collide != null && collide.shouldDestroy()) {
-                            getEngine().removeEntity(entity);
+                    if (width2 > 0 && height2 > 0) {
+                        if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
+                            if (collide.shouldDestroy()) {
+                                getEngine().removeEntity(entity);
 
-                            continue;
-                        }
-
-                        if (loopCollide.shouldDestroy()) {
-                            getEngine().removeEntity(loopEntity);
-
-                            continue;
-                        }
-
-                        if (velocity.x != 0) {
-                            if (velocity.x > 0) {
-                                newX = x2 - width;
-                            } else {
-                                newX = x2 + width2;
+                                continue;
                             }
 
-                            velocity.x = 0;
+                            if (loopCollide.shouldDestroy()) {
+                                getEngine().removeEntity(loopEntity);
 
-                            if (collide != null && velocity.y < 0) {
-                                collide.setOnWall(true);
+                                continue;
+                            }
 
-                                velocity.y /= 2;
+                            if (velocity.x != 0) {
+                                if (velocity.x > 0) {
+                                    newX = x2 - width;
+                                } else {
+                                    newX = x2 + width2;
+                                }
 
-                                JumpComponent jump = jumpMapper.get(entity);
+                                velocity.x = 0;
 
-                                if (jump != null) {
-                                    jump.setAvailableJumps(jump.getExtraJumps());
+                                if (velocity.y < 0) {
+                                    collide.setOnWall(true);
+
+                                    velocity.y /= 2;
+
+                                    JumpComponent jump = jumpMapper.get(entity);
+
+                                    if (jump != null) {
+                                        jump.setAvailableJumps(jump.getExtraJumps());
+                                    }
                                 }
                             }
-                        }
 
-                        break;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (gravity != null) {
-                gravity.setGrounded(false);
-            }
-
-            for (Entity loopEntity : getEntities()) {
-                CollidableComponent loopCollide = collideMapper.get(loopEntity);
-
-                if (entity == loopEntity || loopCollide == null) {
-                    continue;
+                if (gravity != null) {
+                    gravity.setGrounded(false);
                 }
 
-                PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
+                for (Entity loopEntity : getEntities()) {
+                    CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
-                Vector3 pos2 = loopPhysics.getPosition();
+                    if (entity == loopEntity || loopCollide == null) {
+                        continue;
+                    }
 
-                float x2 = pos2.x;
+                    PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                float y2 = pos2.y;
+                    Vector3 pos2 = loopPhysics.getPosition();
 
-                float width2 = loopPhysics.getWidth();
+                    float x2 = pos2.x;
 
-                float height2 = loopPhysics.getHeight();
+                    float y2 = pos2.y;
 
-                float radius = physics.getRadius();
+                    float width2 = loopPhysics.getWidth();
 
-                float radius2 = loopPhysics.getRadius();
+                    float height2 = loopPhysics.getHeight();
 
-                if (width2 > 0 && height2 > 0) {
-                    if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
-                        if (collide != null && collide.shouldDestroy()) {
-                            getEngine().removeEntity(entity);
+                    float radius = physics.getRadius();
 
-                            continue;
-                        }
+                    float radius2 = loopPhysics.getRadius();
 
-                        if (loopCollide.shouldDestroy()) {
-                            getEngine().removeEntity(loopEntity);
+                    if (width2 > 0 && height2 > 0) {
+                        if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
+                            if (collide.shouldDestroy()) {
+                                getEngine().removeEntity(entity);
 
-                            continue;
-                        }
-
-                        if (velocity.y > 0) {
-                            velocity.y = 0;
-
-                            newY = y2 - height;
-                        } else {
-                            newY = y2 + height2;
-
-                            velocity.y = 0;
-
-                            if (gravity != null) {
-                                gravity.setGrounded(true);
+                                continue;
                             }
-                        }
 
-                        break;
+                            if (loopCollide.shouldDestroy()) {
+                                getEngine().removeEntity(loopEntity);
+
+                                continue;
+                            }
+
+                            if (velocity.y > 0) {
+                                velocity.y = 0;
+
+                                newY = y2 - height;
+                            } else {
+                                newY = y2 + height2;
+
+                                velocity.y = 0;
+
+                                if (gravity != null) {
+                                    gravity.setGrounded(true);
+                                }
+                            }
+
+                            break;
+                        }
                     }
                 }
             }
