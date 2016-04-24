@@ -28,8 +28,6 @@ public class RenderSystem extends SortedIteratingSystem {
 
     private final ComponentMapper<StateComponent> stateMapper;
 
-    private final ComponentMapper<OffsetComponent> offsetMapper;
-
     private final ComponentMapper<ColorComponent> colorMapper;
 
     public RenderSystem(GameScreen screen, SpriteBatch batch, Camera camera) {
@@ -48,8 +46,6 @@ public class RenderSystem extends SortedIteratingSystem {
         directionMapper = ComponentMapper.getFor(DirectionComponent.class);
 
         stateMapper = ComponentMapper.getFor(StateComponent.class);
-
-        offsetMapper = ComponentMapper.getFor(OffsetComponent.class);
 
         colorMapper = ComponentMapper.getFor(ColorComponent.class);
     }
@@ -131,13 +127,7 @@ public class RenderSystem extends SortedIteratingSystem {
 
         int y = (int) (position.y * GameScreen.PIXELS_PER_METER);
 
-        OffsetComponent offset = offsetMapper.get(entity);
-
-        float sizeScale = physics.getSizeScale();
-
-        if (state != null && offset != null) {
-            x += offset.getStateOffsets().get(state.getState(), 0) * sizeScale;
-        }
+        x -= width / 2 - physics.getWidth() * GameScreen.PIXELS_PER_METER / 2;
 
         ColorComponent color = colorMapper.get(entity);
 

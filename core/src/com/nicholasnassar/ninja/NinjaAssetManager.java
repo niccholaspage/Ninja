@@ -103,7 +103,7 @@ public class NinjaAssetManager {
             newSplit[i] = split[i];
         }
 
-        Animation roll = new Animation(1, newSplit);
+        Animation roll = new Animation(1 / 25f, newSplit);
 
         animations.put(StateComponent.STATE_GROUND_ROLL, roll);
 

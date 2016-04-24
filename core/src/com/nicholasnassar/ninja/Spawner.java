@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.IntMap;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
@@ -74,13 +73,6 @@ public class Spawner {
         entity.add(new VisualComponent(animations));
         entity.add(new SpeedComponent(5f));
         entity.add(new ControllableComponent());
-
-        IntIntMap offsets = new IntIntMap();
-
-        offsets.put(StateComponent.STATE_IN_AIR, -2);
-        offsets.put(StateComponent.STATE_GROUND_ROLL, -1);
-
-        entity.add(new OffsetComponent(offsets));
 
         engine.addEntity(entity);
 
