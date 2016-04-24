@@ -12,10 +12,14 @@ public class StateComponent implements Component {
 
     private float elapsedTime;
 
-    public StateComponent() {
+    private final VisualComponent visual;
+
+    public StateComponent(VisualComponent visual) {
         state = STATE_IDLE;
 
         elapsedTime = 0;
+
+        this.visual = visual;
     }
 
     public int getState() {
@@ -25,6 +29,8 @@ public class StateComponent implements Component {
     public void setState(int state) {
         if (this.state != state) {
             elapsedTime = 0;
+
+            visual.randomize(state);
         }
 
         this.state = state;

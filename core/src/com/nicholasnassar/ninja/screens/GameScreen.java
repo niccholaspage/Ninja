@@ -456,12 +456,12 @@ public class GameScreen extends NinjaScreen {
 
         creatureTable.align(Align.left);
 
-        OrderedMap<String, IntMap<Animation>> creatureAnimations = game.getAssetManager().getCreatureAnimations();
+        OrderedMap<String, IntMap<Array<Animation>>> creatureAnimations = game.getAssetManager().getCreatureAnimations();
 
         for (int i = 1; i < creatureAnimations.size; i++) {
             String key = creatureAnimations.orderedKeys().get(i);
 
-            TextureRegion region = creatureAnimations.get(key).get(0).getKeyFrame(0);
+            TextureRegion region = creatureAnimations.get(key).get(0).get(0).getKeyFrame(0);
 
             SelectButton button = new SelectButton(levelEditorSystem, region, "spawner_" + key, blockTable, creatureTable);
 

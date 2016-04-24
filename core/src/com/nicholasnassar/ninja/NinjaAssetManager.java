@@ -18,7 +18,7 @@ public class NinjaAssetManager {
     private final AssetManager manager;
 
     private final OrderedMap<String, Array<TextureRegion>> blocks;
-    private final OrderedMap<String, IntMap<Animation>> creatureAnimations;
+    private final OrderedMap<String, IntMap<Array<Animation>>> creatureAnimations;
     private final ObjectMap<String, TextureRegion> entities;
     private final ObjectMap<String, Music> music;
 
@@ -27,7 +27,7 @@ public class NinjaAssetManager {
 
         blocks = new OrderedMap<String, Array<TextureRegion>>();
 
-        creatureAnimations = new OrderedMap<String, IntMap<Animation>>();
+        creatureAnimations = new OrderedMap<String, IntMap<Array<Animation>>>();
 
         entities = new ObjectMap<String, TextureRegion>();
 
@@ -79,21 +79,27 @@ public class NinjaAssetManager {
             }
         }
 
-        IntMap<Animation> animations = new IntMap<Animation>();
+        IntMap<Array<Animation>> animations = new IntMap<Array<Animation>>();
 
         Animation idle = new Animation(1 / 4f, spriteAnimations.get("player_idle").split(13, 27)[0]);
 
-        idle.setPlayMode(Animation.PlayMode.LOOP);
+        Animation idle2 = new Animation(1 / 10f, spriteAnimations.get("player_idle2").split(13, 40)[0]);
 
-        animations.put(StateComponent.STATE_IDLE, idle);
+        Animation idle3 = new Animation(1 / 10f, spriteAnimations.get("player_idle3").split(13, 40)[0]);
+
+        Array<Animation> idleAnimations = new Array<Animation>();
+
+        idleAnimations.addAll(idle, idle2, idle3);
+
+        animations.put(StateComponent.STATE_IDLE, idleAnimations);
 
         Animation walk = new Animation(1 / 15f, spriteAnimations.get("player_walk").split(13, 27)[0]);
 
         walk.setPlayMode(Animation.PlayMode.LOOP);
 
-        animations.put(StateComponent.STATE_WALKING, walk);
+        animations.put(StateComponent.STATE_WALKING, Array.with(walk));
 
-        animations.put(StateComponent.STATE_IN_AIR, new Animation(1 / 10f, spriteAnimations.get("player_in_air").split(17, 27)[0]));
+        animations.put(StateComponent.STATE_IN_AIR, Array.with(new Animation(1 / 10f, spriteAnimations.get("player_in_air").split(17, 27)[0])));
 
         TextureRegion[] split = spriteAnimations.get("player_roll").split(20, 27)[0];
 
@@ -105,23 +111,23 @@ public class NinjaAssetManager {
 
         Animation roll = new Animation(1 / 25f, newSplit);
 
-        animations.put(StateComponent.STATE_GROUND_ROLL, roll);
+        animations.put(StateComponent.STATE_GROUND_ROLL, Array.with(roll));
 
         creatureAnimations.put("player", animations);
 
-        animations = new IntMap<Animation>();
+        animations = new IntMap<Array<Animation>>();
 
         idle = new Animation(1 / 4f, spriteAnimations.get("soldier_idle").split(18, 32)[0]);
 
         idle.setPlayMode(Animation.PlayMode.LOOP);
 
-        animations.put(StateComponent.STATE_IDLE, idle);
-        animations.put(StateComponent.STATE_IN_AIR, idle);
+        animations.put(StateComponent.STATE_IDLE, Array.with(idle));
+        animations.put(StateComponent.STATE_IN_AIR, Array.with(idle));
 
         walk = new Animation(1 / 15f, spriteAnimations.get("soldier_walk").split(18, 32)[0]);
 
         walk.setPlayMode(Animation.PlayMode.LOOP);
-        animations.put(StateComponent.STATE_WALKING, walk);
+        animations.put(StateComponent.STATE_WALKING, Array.with(walk));
 
         creatureAnimations.put("soldier", animations);
 
@@ -155,11 +161,11 @@ public class NinjaAssetManager {
         return music.get(key);
     }
 
-    public OrderedMap<String, IntMap<Animation>> getCreatureAnimations() {
+    public OrderedMap<String, IntMap<Array<Animation>>> getCreatureAnimations() {
         return creatureAnimations;
     }
 
-    public IntMap<Animation> getAnimationsFor(String creature) {
+    public IntMap<Array<Animation>> getAnimationsFor(String creature) {
         return creatureAnimations.get(creature);
     }
 

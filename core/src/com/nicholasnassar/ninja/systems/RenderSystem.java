@@ -74,13 +74,17 @@ public class RenderSystem extends SortedIteratingSystem {
         if (visual.isAnimation()) {
             float elapsedTime = state.getElapsedTime();
 
-            if (screen.getState() == GameScreen.STATE_RUNNING) {
-                elapsedTime += deltaTime;
+            int stateInt = state.getState();
 
-                state.setElapsedTime(elapsedTime);
+            if (visual.getAnimation(stateInt).isAnimationFinished(elapsedTime)) {
+                visual.randomize(stateInt);
+
+                elapsedTime = 0;
+            } else if (screen.getState() == GameScreen.STATE_RUNNING) {
+                elapsedTime += deltaTime;
             }
 
-            int stateInt = state.getState();
+            state.setElapsedTime(elapsedTime);
 
             region = visual.getRegion(stateInt, elapsedTime);
         } else {

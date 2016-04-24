@@ -3,16 +3,19 @@ package com.nicholasnassar.ninja.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 
 public class VisualComponent implements Component {
-    private final IntMap<Animation> animations;
+    private final IntMap<Array<Animation>> animations;
 
     private final TextureRegion region;
 
     private float rotation;
 
     private final float rotationSpeed;
+
+    private int currentAnimation;
 
     public VisualComponent(TextureRegion region) {
         this(region, -1);
@@ -29,10 +32,12 @@ public class VisualComponent implements Component {
             rotation = -1;
         }
 
+        currentAnimation = 0;
+
         this.rotationSpeed = rotationSpeed;
     }
 
-    public VisualComponent(IntMap<Animation> animations) {
+    public VisualComponent(IntMap<Array<Animation>> animations) {
         this.animations = animations;
 
         region = null;
@@ -42,16 +47,20 @@ public class VisualComponent implements Component {
         rotationSpeed = -1;
     }
 
+    public Animation getAnimation(int state) {
+        return animations.get(state).get(currentAnimation);
+    }
+
     public TextureRegion getRegion() {
         if (region == null) {
-            return animations.get(0).getKeyFrame(0);
+            return animations.get(0).get(0).getKeyFrame(0);
         }
 
         return region;
     }
 
     public TextureRegion getRegion(int state, float elapsedTime) {
-        return animations.get(state).getKeyFrame(elapsedTime);
+        return animations.get(state).get(currentAnimation).getKeyFrame(elapsedTime);
     }
 
     public boolean isAnimation() {
@@ -68,5 +77,9 @@ public class VisualComponent implements Component {
 
     public void setRotation(float rotation) {
         this.rotation = rotation;
+    }
+
+    public void randomize(int state) {
+        currentAnimation = (int) (Math.random() * animations.get(state).size);
     }
 }

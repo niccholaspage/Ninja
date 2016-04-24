@@ -1,47 +1,61 @@
 
 pack.png
-size: 256,128
+size: 512,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 animations/player_idle
   rotate: false
-  xy: 2, 99
+  xy: 290, 49
   size: 208, 27
   orig: 208, 27
   offset: 0, 0
   index: -1
+animations/player_idle2
+  rotate: false
+  xy: 2, 36
+  size: 286, 40
+  orig: 286, 40
+  offset: 0, 0
+  index: -1
+animations/player_idle3
+  rotate: false
+  xy: 2, 78
+  size: 403, 40
+  orig: 403, 40
+  offset: 0, 0
+  index: -1
 animations/player_in_air
   rotate: false
-  xy: 76, 7
+  xy: 425, 20
   size: 51, 27
   orig: 51, 27
   offset: 0, 0
   index: -1
 animations/player_roll
   rotate: false
-  xy: 2, 36
+  xy: 184, 7
   size: 120, 27
   orig: 120, 27
   offset: 0, 0
   index: -1
 animations/player_walk
   rotate: false
-  xy: 124, 36
+  xy: 306, 20
   size: 117, 27
   orig: 117, 27
   offset: 0, 0
   index: -1
 animations/soldier_idle
   rotate: false
-  xy: 2, 65
+  xy: 2, 2
   size: 180, 32
   orig: 180, 32
   offset: 0, 0
   index: -1
 animations/soldier_walk
   rotate: false
-  xy: 2, 2
+  xy: 407, 86
   size: 72, 32
   orig: 72, 32
   offset: 0, 0

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
@@ -27,9 +28,9 @@ public class Spawner {
     public Entity spawnSoldier(float x, float y) {
         Entity entity = new Entity();
 
-        IntMap<Animation> animations = manager.getAnimationsFor("soldier");
+        IntMap<Array<Animation>> animations = manager.getAnimationsFor("soldier");
 
-        TextureRegion region = animations.get(0).getKeyFrame(0);
+        TextureRegion region = animations.get(0).get(0).getKeyFrame(0);
 
         float width = region.getRegionWidth() / GameScreen.PIXELS_PER_METER;
 
@@ -41,8 +42,9 @@ public class Spawner {
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent());
 
-        entity.add(new StateComponent());
-        entity.add(new VisualComponent(animations));
+        VisualComponent visual = new VisualComponent(animations);
+        entity.add(new StateComponent(visual));
+        entity.add(visual);
         entity.add(new SpeedComponent(5f));
         entity.add(new AIComponent());
         entity.add(new ColorComponent((float) Math.random(), (float) Math.random(), (float) Math.random()));
@@ -55,9 +57,9 @@ public class Spawner {
     public Entity spawnPlayer(float x, float y) {
         Entity entity = new Entity();
 
-        IntMap<Animation> animations = manager.getAnimationsFor("player");
+        IntMap<Array<Animation>> animations = manager.getAnimationsFor("player");
 
-        TextureRegion region = animations.get(0).getKeyFrame(0);
+        TextureRegion region = animations.get(0).get(0).getKeyFrame(0);
 
         float width = region.getRegionWidth() / GameScreen.PIXELS_PER_METER;
 
@@ -69,9 +71,10 @@ public class Spawner {
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent());
 
-        entity.add(new StateComponent());
-        entity.add(new VisualComponent(animations));
-        entity.add(new SpeedComponent(5f));
+        VisualComponent visual = new VisualComponent(animations);
+        entity.add(new StateComponent(visual));
+        entity.add(visual);
+        entity.add(new SpeedComponent(7.5f));
         entity.add(new ControllableComponent());
 
         engine.addEntity(entity);
@@ -158,7 +161,7 @@ public class Spawner {
 
         PhysicsComponent physics = new PhysicsComponent(x, y + .5f, 0, width, height);
 
-        physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 10 : -10;
+        physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 12.5f : -12.5f;
 
         entity.add(physics);
         entity.add(new VisualComponent(region, 1000f));
@@ -174,7 +177,7 @@ public class Spawner {
     public Entity spawnSpawner(String id, float x, float y) {
         Entity entity = new Entity();
 
-        TextureRegion region = manager.getAnimationsFor(id).get(0).getKeyFrame(0);
+        TextureRegion region = manager.getAnimationsFor(id).get(0).get(0).getKeyFrame(0);
 
         float width = region.getRegionWidth() / GameScreen.PIXELS_PER_METER;
 
