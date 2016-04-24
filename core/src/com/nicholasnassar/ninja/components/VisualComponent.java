@@ -80,6 +80,18 @@ public class VisualComponent implements Component {
     }
 
     public void randomize(int state) {
-        currentAnimation = (int) (Math.random() * animations.get(state).size);
+        int size = animations.get(state).size;
+
+        int newAnimation = (int) (Math.random() * size - 1);
+
+        if (newAnimation >= currentAnimation) {
+            newAnimation += 1;
+
+            if (newAnimation > size - 1) {
+                newAnimation = size - 1;
+            }
+        }
+
+        currentAnimation = newAnimation;
     }
 }
