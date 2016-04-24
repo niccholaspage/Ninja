@@ -21,7 +21,7 @@ public class PhysicsSystem extends IteratingSystem {
 
     private final ComponentMapper<GravityComponent> gravityMapper;
 
-    private final ComponentMapper<LevelEditorComponent> levelMapper;
+    private final ComponentMapper<JumpComponent> jumpMapper;
 
     private final ComponentMapper<CollidableComponent> collideMapper;
 
@@ -36,7 +36,7 @@ public class PhysicsSystem extends IteratingSystem {
 
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
 
-        levelMapper = ComponentMapper.getFor(LevelEditorComponent.class);
+        jumpMapper = ComponentMapper.getFor(JumpComponent.class);
 
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
 
@@ -78,6 +78,10 @@ public class PhysicsSystem extends IteratingSystem {
 
             CollidableComponent collide = collideMapper.get(entity);
 
+            if (collide != null) {
+                collide.setOnWall(false);
+            }
+
             for (Entity loopEntity : getEntities()) {
                 CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
@@ -115,14 +119,26 @@ public class PhysicsSystem extends IteratingSystem {
                             continue;
                         }
 
-                        if (velocity.x > 0) {
+                        if (velocity.x != 0) {
+                            if (velocity.x > 0) {
+                                newX = x2 - width;
+                            } else {
+                                newX = position.x;
+                            }
+
                             velocity.x = 0;
 
-                            newX = x2 - width;
-                        } else {
-                            velocity.x = 0;
+                            if (collide != null && velocity.y < 0) {
+                                collide.setOnWall(true);
 
-                            newX = position.x;
+                                velocity.y /= 2;
+
+                                JumpComponent jump = jumpMapper.get(entity);
+
+                                if (jump != null) {
+                                    jump.setAvailableJumps(jump.getExtraJumps());
+                                }
+                            }
                         }
 
                         break;

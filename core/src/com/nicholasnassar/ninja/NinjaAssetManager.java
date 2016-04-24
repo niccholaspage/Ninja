@@ -113,6 +113,10 @@ public class NinjaAssetManager {
 
         animations.put(StateComponent.STATE_GROUND_ROLL, Array.with(roll));
 
+        Animation wallSlide = new Animation(1, spriteAnimations.get("player_wall_slide"));
+
+        animations.put(StateComponent.STATE_WALL_SLIDE, Array.with(wallSlide));
+
         creatureAnimations.put("player", animations);
 
         animations = new IntMap<Array<Animation>>();
@@ -123,6 +127,7 @@ public class NinjaAssetManager {
 
         animations.put(StateComponent.STATE_IDLE, Array.with(idle));
         animations.put(StateComponent.STATE_IN_AIR, Array.with(idle));
+        animations.put(StateComponent.STATE_WALL_SLIDE, Array.with(idle));
 
         walk = new Animation(1 / 15f, spriteAnimations.get("soldier_walk").split(18, 32)[0]);
 

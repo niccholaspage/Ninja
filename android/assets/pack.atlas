@@ -46,6 +46,13 @@ animations/player_walk
   orig: 117, 27
   offset: 0, 0
   index: -1
+animations/player_wall_slide
+  rotate: false
+  xy: 481, 94
+  size: 13, 24
+  orig: 13, 24
+  offset: 0, 0
+  index: -1
 animations/soldier_idle
   rotate: false
   xy: 2, 2

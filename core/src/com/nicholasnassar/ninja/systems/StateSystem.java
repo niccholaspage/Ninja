@@ -18,6 +18,8 @@ public class StateSystem extends IteratingSystem {
 
     private final ComponentMapper<JumpComponent> jumpMapper;
 
+    private final ComponentMapper<CollidableComponent> collidableMapper;
+
     public StateSystem() {
         super(Family.all(PhysicsComponent.class).one(StateComponent.class, DirectionComponent.class).get());
 
@@ -30,6 +32,8 @@ public class StateSystem extends IteratingSystem {
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
 
         jumpMapper = ComponentMapper.getFor(JumpComponent.class);
+
+        collidableMapper = ComponentMapper.getFor(CollidableComponent.class);
     }
 
     @Override
@@ -42,13 +46,19 @@ public class StateSystem extends IteratingSystem {
 
         GravityComponent gravity = gravityMapper.get(entity);
 
+        CollidableComponent collidable = collidableMapper.get(entity);
+
         JumpComponent jump = jumpMapper.get(entity);
 
         Vector2 velocity = physics.getVelocity();
 
         if (state != null) {
             if (gravity != null && !gravity.isGrounded()) {
-                state.setState(StateComponent.STATE_IN_AIR);
+                if (collidable != null && collidable.isOnWall()) {
+                    state.setState(StateComponent.STATE_WALL_SLIDE);
+                } else {
+                    state.setState(StateComponent.STATE_IN_AIR);
+                }
             } else if (velocity.x == 0) {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
