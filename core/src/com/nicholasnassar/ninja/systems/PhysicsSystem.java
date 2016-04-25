@@ -88,6 +88,10 @@ public class PhysicsSystem extends IteratingSystem {
                         continue;
                     }
 
+                    if (collide.getException() == loopCollide.getException()) {
+                        continue;
+                    }
+
                     PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
                     Vector3 pos2 = loopPhysics.getPosition();
@@ -153,6 +157,10 @@ public class PhysicsSystem extends IteratingSystem {
                     CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
                     if (entity == loopEntity || loopCollide == null) {
+                        continue;
+                    }
+
+                    if (collide.getException() == loopCollide.getException()) {
                         continue;
                     }
 

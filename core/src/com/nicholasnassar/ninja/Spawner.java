@@ -40,7 +40,7 @@ public class Spawner {
         entity.add(new JumpComponent(26f));
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
-        entity.add(new CollidableComponent());
+        entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
 
         VisualComponent visual = new VisualComponent(animations);
         entity.add(new StateComponent(visual));
@@ -65,11 +65,11 @@ public class Spawner {
 
         float height = region.getRegionHeight() / GameScreen.PIXELS_PER_METER;
 
-        entity.add(new PhysicsComponent(x, y, width, height));
-        entity.add(new JumpComponent(26f, 1));
+        entity.add(new PhysicsComponent(x, y, 10, width, height));
+        entity.add(new JumpComponent(28.6f, 1));
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
-        entity.add(new CollidableComponent());
+        entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
 
         VisualComponent visual = new VisualComponent(animations);
         entity.add(new StateComponent(visual));
@@ -125,7 +125,7 @@ public class Spawner {
         }
 
         if (foreground) {
-            entity.add(new CollidableComponent());
+            entity.add(new CollidableComponent(CollidableComponent.TILE_EXCEPTION));
         } else {
             entity.add(new ColorComponent(0.5f, 0.5f, 0.5f));
         }
@@ -161,12 +161,12 @@ public class Spawner {
 
         PhysicsComponent physics = new PhysicsComponent(x, y + .5f, 0, width, height);
 
-        physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 12.5f : -12.5f;
+        physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 15.625f : -15.625f;
 
         entity.add(physics);
         entity.add(new VisualComponent(region, 1000f));
         entity.add(new DirectionComponent());
-        entity.add(new CollidableComponent(true));
+        entity.add(new CollidableComponent(CollidableComponent.THROWABLE_EXCEPTION, true));
         entity.add(new DestroyOutsideComponent());
 
         engine.addEntity(entity);

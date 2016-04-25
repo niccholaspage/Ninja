@@ -66,20 +66,24 @@ public class InputSystem extends IteratingSystem {
 
         Vector2 velocity = physics.getVelocity();
 
-        if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT)) {
-            velocity.x = -force;
+        if (physics.getLockVelocityX() <= 0) {
+            if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT)) {
+                velocity.x = -force;
 
-            stop = false;
-        }
+                stop = false;
+            }
 
-        if (Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
-            velocity.x = force;
+            if (Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
+                velocity.x = force;
 
-            stop = false;
-        }
+                stop = false;
+            }
 
-        if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) && Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
-            stop = true;
+            if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) && Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
+                stop = true;
+            }
+        } else {
+            physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
         }
 
         if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(ControlManager.THROW)) {
@@ -98,7 +102,7 @@ public class InputSystem extends IteratingSystem {
             }
         }
 
-        if (stop) {
+        if (stop && (gravity == null || gravity.isGrounded()) && physics.getLockVelocityX() <= 0) {
             velocity.x = 0;
         }
 
@@ -113,6 +117,17 @@ public class InputSystem extends IteratingSystem {
 
         if (gravity != null && jump != null) {
             if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && (gravity.isGrounded() || jump.getAvailableJumps() > 0)) {
+                if (state != null && state.getState() == StateComponent.STATE_WALL_SLIDE) {
+                    if (velocity.x != 0) {
+                        if (velocity.x > 0) {
+                            velocity.x = -force * 2f;
+                        } else if (velocity.x < 0) {
+                            velocity.x = force * 2f;
+                        }
+                        physics.setLockVelocityX(0.2f);
+                    }
+                }
+
                 velocity.y = jump.getJumpHeight();
 
                 jump.setAvailableJumps(jump.getAvailableJumps() - 1);
