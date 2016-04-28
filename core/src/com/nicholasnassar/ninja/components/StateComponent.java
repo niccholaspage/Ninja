@@ -15,6 +15,7 @@ public class StateComponent implements Component {
 
     private final VisualComponent visual;
 
+    private boolean canSlide;
 
     public StateComponent(VisualComponent visual) {
         state = STATE_IDLE;
@@ -23,6 +24,7 @@ public class StateComponent implements Component {
 
         this.visual = visual;
 
+        canSlide = false;
     }
 
     public int getState() {
@@ -48,8 +50,10 @@ public class StateComponent implements Component {
     }
 
     public boolean canSlide() {
+        return canSlide;
     }
 
     public void setCanSlide(boolean shouldSlide) {
+        this.canSlide = shouldSlide;
     }
 }
