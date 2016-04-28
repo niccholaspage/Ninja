@@ -15,12 +15,14 @@ public class StateComponent implements Component {
 
     private final VisualComponent visual;
 
+
     public StateComponent(VisualComponent visual) {
         state = STATE_IDLE;
 
         elapsedTime = 0;
 
         this.visual = visual;
+
     }
 
     public int getState() {
@@ -43,5 +45,11 @@ public class StateComponent implements Component {
 
     public void setElapsedTime(float elapsedTime) {
         this.elapsedTime = elapsedTime;
+    }
+
+    public boolean canSlide() {
+    }
+
+    public void setCanSlide(boolean shouldSlide) {
     }
 }

@@ -123,6 +123,10 @@ public class InputSystem extends IteratingSystem {
             state.setState(StateComponent.STATE_GROUND_ROLL);
         }
 
+        if (state != null) {
+            state.setCanSlide(Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) || Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT));
+        }
+
         JumpComponent jump = jumpMapper.get(entity);
 
         if (gravity != null && jump != null) {

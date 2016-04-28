@@ -54,7 +54,7 @@ public class StateSystem extends IteratingSystem {
 
         if (state != null) {
             if (gravity != null && !gravity.isGrounded()) {
-                if (collidable != null && collidable.isOnWall() && velocity.y < 0) {
+                if (collidable != null && collidable.isOnWall() && velocity.y < 0 && state.canSlide()) {
                     state.setState(StateComponent.STATE_WALL_SLIDE);
                 } else {
                     state.setState(StateComponent.STATE_IN_AIR);
