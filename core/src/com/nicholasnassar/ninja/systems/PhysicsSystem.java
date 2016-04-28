@@ -7,7 +7,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Level;
-import com.nicholasnassar.ninja.components.*;
+import com.nicholasnassar.ninja.components.CollidableComponent;
+import com.nicholasnassar.ninja.components.DestroyOutsideComponent;
+import com.nicholasnassar.ninja.components.GravityComponent;
+import com.nicholasnassar.ninja.components.PhysicsComponent;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class PhysicsSystem extends IteratingSystem {
@@ -21,8 +24,6 @@ public class PhysicsSystem extends IteratingSystem {
 
     private final ComponentMapper<GravityComponent> gravityMapper;
 
-    private final ComponentMapper<JumpComponent> jumpMapper;
-
     private final ComponentMapper<CollidableComponent> collideMapper;
 
     private final ComponentMapper<DestroyOutsideComponent> destroyMapper;
@@ -35,8 +36,6 @@ public class PhysicsSystem extends IteratingSystem {
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
 
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
-
-        jumpMapper = ComponentMapper.getFor(JumpComponent.class);
 
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
 
@@ -131,16 +130,10 @@ public class PhysicsSystem extends IteratingSystem {
 
                                 velocity.x = 0;
 
+                                collide.setOnWall(true);
+
                                 if (velocity.y < 0) {
-                                    collide.setOnWall(true);
-
                                     velocity.y /= 2;
-
-                                    JumpComponent jump = jumpMapper.get(entity);
-
-                                    if (jump != null) {
-                                        jump.setAvailableJumps(jump.getExtraJumps());
-                                    }
                                 }
                             }
 

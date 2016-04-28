@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 animations/player_idle
   rotate: false
-  xy: 290, 49
+  xy: 2, 7
   size: 208, 27
   orig: 208, 27
   offset: 0, 0
@@ -27,49 +27,49 @@ animations/player_idle3
   index: -1
 animations/player_in_air
   rotate: false
-  xy: 425, 20
+  xy: 409, 15
   size: 51, 27
   orig: 51, 27
   offset: 0, 0
   index: -1
 animations/player_roll
   rotate: false
-  xy: 184, 7
-  size: 120, 27
-  orig: 120, 27
+  xy: 407, 102
+  size: 88, 16
+  orig: 88, 16
   offset: 0, 0
   index: -1
 animations/player_walk
   rotate: false
-  xy: 306, 20
+  xy: 290, 15
   size: 117, 27
   orig: 117, 27
   offset: 0, 0
   index: -1
 animations/player_wall_slide
   rotate: false
-  xy: 481, 94
+  xy: 497, 94
   size: 13, 24
   orig: 13, 24
   offset: 0, 0
   index: -1
 animations/soldier_idle
   rotate: false
-  xy: 2, 2
+  xy: 290, 44
   size: 180, 32
   orig: 180, 32
   offset: 0, 0
   index: -1
 animations/soldier_walk
   rotate: false
-  xy: 407, 86
+  xy: 212, 2
   size: 72, 32
   orig: 72, 32
   offset: 0, 0
   index: -1
 
 pack2.png
-size: 512,64
+size: 1024,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -101,23 +101,65 @@ blocks/grass
   orig: 160, 16
   offset: 0, 0
   index: -1
-blocks/sand
+blocks/leaves
   rotate: false
   xy: 164, 20
   size: 160, 16
   orig: 160, 16
   offset: 0, 0
   index: -1
-blocks/sandstone
+blocks/log
+  rotate: false
+  xy: 488, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+blocks/metal
   rotate: false
   xy: 326, 38
   size: 160, 16
   orig: 160, 16
   offset: 0, 0
   index: -1
-blocks/stone
+blocks/military_green_stone
   rotate: false
   xy: 164, 2
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/military_grey_stone
+  rotate: false
+  xy: 326, 20
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/military_netting
+  rotate: false
+  xy: 488, 38
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/sand
+  rotate: false
+  xy: 326, 2
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/sandstone
+  rotate: false
+  xy: 488, 20
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+blocks/stone
+  rotate: false
+  xy: 650, 38
   size: 160, 16
   orig: 160, 16
   offset: 0, 0

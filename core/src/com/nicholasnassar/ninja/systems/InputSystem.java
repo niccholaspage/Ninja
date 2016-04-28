@@ -28,6 +28,8 @@ public class InputSystem extends IteratingSystem {
 
     private final ComponentMapper<StateComponent> stateMapper;
 
+    private final ComponentMapper<CollidableComponent> collideMapper;
+
     public InputSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class, SpeedComponent.class, ControllableComponent.class).get());
 
@@ -46,6 +48,8 @@ public class InputSystem extends IteratingSystem {
         directionMapper = ComponentMapper.getFor(DirectionComponent.class);
 
         stateMapper = ComponentMapper.getFor(StateComponent.class);
+
+        collideMapper = ComponentMapper.getFor(CollidableComponent.class);
     }
 
     @Override
@@ -66,7 +70,11 @@ public class InputSystem extends IteratingSystem {
 
         Vector2 velocity = physics.getVelocity();
 
-        if (physics.getLockVelocityX() <= 0) {
+        CollidableComponent collide = collideMapper.get(entity);
+
+        physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
+
+        if (!physics.isXVelocityLocked()) {
             if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT)) {
                 velocity.x = -force;
 
@@ -82,8 +90,10 @@ public class InputSystem extends IteratingSystem {
             if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) && Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
                 stop = true;
             }
-        } else {
-            physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
+        } else if (gravity != null && gravity.isGrounded()) {
+            physics.setLockVelocityX(0);
+        } else if (collide != null && collide.isOnWall()) {
+            physics.setLockVelocityX(0.1f);
         }
 
         if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(ControlManager.THROW)) {
@@ -102,7 +112,7 @@ public class InputSystem extends IteratingSystem {
             }
         }
 
-        if (stop && (gravity == null || gravity.isGrounded()) && physics.getLockVelocityX() <= 0) {
+        if (stop && !physics.isXVelocityLocked()) {
             velocity.x = 0;
         }
 
@@ -116,15 +126,17 @@ public class InputSystem extends IteratingSystem {
         JumpComponent jump = jumpMapper.get(entity);
 
         if (gravity != null && jump != null) {
-            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && (gravity.isGrounded() || jump.getAvailableJumps() > 0)) {
-                if (state != null && state.getState() == StateComponent.STATE_WALL_SLIDE) {
+            boolean wallSliding = state != null && state.getState() == StateComponent.STATE_WALL_SLIDE;
+
+            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && (gravity.isGrounded() || jump.getAvailableJumps() > 0 || wallSliding)) {
+                if (wallSliding && !Gdx.input.isKeyPressed(ControlManager.MOVE_UP)) {
                     if (velocity.x != 0) {
                         if (velocity.x > 0) {
-                            velocity.x = -force * 2f;
+                            velocity.x = -force * 1.5f;
                         } else if (velocity.x < 0) {
-                            velocity.x = force * 2f;
+                            velocity.x = force * 1.5f;
                         }
-                        physics.setLockVelocityX(0.2f);
+                        physics.setLockVelocityX(Float.MAX_VALUE);
                     }
                 }
 

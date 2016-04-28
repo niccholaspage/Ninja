@@ -54,7 +54,7 @@ public class StateSystem extends IteratingSystem {
 
         if (state != null) {
             if (gravity != null && !gravity.isGrounded()) {
-                if (collidable != null && collidable.isOnWall()) {
+                if (collidable != null && collidable.isOnWall() && velocity.y < 0) {
                     state.setState(StateComponent.STATE_WALL_SLIDE);
                 } else {
                     state.setState(StateComponent.STATE_IN_AIR);
@@ -62,7 +62,7 @@ public class StateSystem extends IteratingSystem {
             } else if (velocity.x == 0) {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
-                if (state.getState() != StateComponent.STATE_GROUND_ROLL || state.getElapsedTime() > 0.19999999) {
+                if (state.getState() != StateComponent.STATE_GROUND_ROLL || state.getElapsedTime() > 0.16) {
                     state.setState(StateComponent.STATE_WALKING);
                 }
             }

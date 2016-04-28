@@ -97,15 +97,7 @@ public class NinjaAssetManager {
 
         animations.put(StateComponent.STATE_IN_AIR, Array.with(new Animation(1 / 10f, spriteAnimations.get("player_in_air").split(17, 27)[0])));
 
-        TextureRegion[] split = spriteAnimations.get("player_roll").split(20, 27)[0];
-
-        TextureRegion[] newSplit = new TextureRegion[split.length - 1];
-
-        for (int i = 0; i < newSplit.length; i++) {
-            newSplit[i] = split[i];
-        }
-
-        Animation roll = new Animation(1 / 25f, newSplit);
+        Animation roll = new Animation(1 / 25f, spriteAnimations.get("player_roll").split(22, 16)[0]);
 
         animations.put(StateComponent.STATE_GROUND_ROLL, Array.with(roll));
 

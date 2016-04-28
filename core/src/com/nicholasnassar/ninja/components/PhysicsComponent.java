@@ -83,11 +83,19 @@ public class PhysicsComponent implements Component {
         return sizeScale;
     }
 
+    public boolean isXVelocityLocked() {
+        return lockVelocityX > 0;
+    }
+
     public float getLockVelocityX() {
         return lockVelocityX;
     }
 
     public void setLockVelocityX(float lockVelocityX) {
+        if (lockVelocityX < 0) {
+            lockVelocityX = 0;
+        }
+
         this.lockVelocityX = lockVelocityX;
     }
 }

@@ -111,15 +111,12 @@ public class GameScreen extends NinjaScreen {
 
         engine = new Engine();
 
-        PhysicsSystem physics = new PhysicsSystem(this);
-        RenderSystem render = new RenderSystem(this, batch, camera);
-
         engine.addSystem(new CameraSystem(this));
-        engine.addSystem(render);
+        engine.addSystem(new RenderSystem(this, batch, camera));
         engine.addSystem(new InputSystem(this));
         engine.addSystem(new AISystem());
         engine.addSystem(new StateSystem());
-        engine.addSystem(physics);
+        engine.addSystem(new PhysicsSystem(this));
 
         spawner = new Spawner(game.getAssetManager(), engine, levelEditor);
 
