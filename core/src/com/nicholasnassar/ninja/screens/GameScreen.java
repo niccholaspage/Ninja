@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
@@ -23,10 +24,7 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.nicholasnassar.ninja.ControlManager;
-import com.nicholasnassar.ninja.Level;
-import com.nicholasnassar.ninja.NinjaGame;
-import com.nicholasnassar.ninja.Spawner;
+import com.nicholasnassar.ninja.*;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.systems.*;
 import com.nicholasnassar.ninja.ui.SelectButton;
@@ -107,13 +105,55 @@ public class GameScreen extends NinjaScreen {
 
         level = new Level(100, 20);
 
+        MobileInput mobileInput = null;
+
+        if (isMobile()) {
+            Touchpad touchpad = new Touchpad(10, skin);
+
+            int width = Gdx.graphics.getWidth();
+
+            int height = Gdx.graphics.getHeight();
+
+            touchpad.setSize(width / 7, width / 7);
+
+            touchpad.setPosition(10, 10);
+
+            uiStage.addActor(touchpad);
+
+            TextButton jumpButton = new TextButton("Jump", skin);
+
+            jumpButton.setSize(width / 7, width / 7);
+
+            jumpButton.setPosition(width - jumpButton.getWidth() - 5, 10);
+
+            uiStage.addActor(jumpButton);
+
+            TextButton throwButton = new TextButton("Throw", skin);
+
+            throwButton.setSize(width / 7, width / 7);
+
+            throwButton.setPosition(width - jumpButton.getWidth() - throwButton.getWidth() - 10, 10);
+
+            uiStage.addActor(throwButton);
+
+            TextButton pauseButton = new TextButton("Pause", skin);
+
+            pauseButton.setSize(width / 14, width / 14);
+
+            pauseButton.setPosition(width - pauseButton.getWidth() - 5, height - pauseButton.getHeight() - 5);
+
+            uiStage.addActor(pauseButton);
+
+            mobileInput = new MobileInput(this, touchpad, jumpButton, throwButton, pauseButton);
+        }
+
         Gdx.input.setInputProcessor(uiStage);
 
         engine = new Engine();
 
         engine.addSystem(new CameraSystem(this));
         engine.addSystem(new RenderSystem(this, batch, camera));
-        engine.addSystem(new InputSystem(this));
+        engine.addSystem(new InputSystem(this, mobileInput));
         engine.addSystem(new AISystem());
         engine.addSystem(new StateSystem());
         engine.addSystem(new PhysicsSystem(this));
@@ -282,7 +322,7 @@ public class GameScreen extends NinjaScreen {
         }
     }
 
-    private void togglePause() {
+    public void togglePause() {
         if (state == STATE_RUNNING) {
             updateSystems(STATE_PAUSED);
         } else if (state == STATE_PAUSED) {
@@ -572,5 +612,9 @@ public class GameScreen extends NinjaScreen {
         } else {
             return false;
         }
+    }
+
+    private boolean isMobile() {
+        return true || Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.ControlManager;
+import com.nicholasnassar.ninja.MobileInput;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -30,7 +31,9 @@ public class InputSystem extends IteratingSystem {
 
     private final ComponentMapper<CollidableComponent> collideMapper;
 
-    public InputSystem(GameScreen screen) {
+    private final MobileInput mobileInput;
+
+    public InputSystem(GameScreen screen, MobileInput mobileInput) {
         super(Family.all(PhysicsComponent.class, SpeedComponent.class, ControllableComponent.class).get());
 
         this.screen = screen;
@@ -50,6 +53,8 @@ public class InputSystem extends IteratingSystem {
         stateMapper = ComponentMapper.getFor(StateComponent.class);
 
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
+
+        this.mobileInput = mobileInput;
     }
 
     @Override
@@ -74,20 +79,50 @@ public class InputSystem extends IteratingSystem {
 
         physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
 
+        boolean moveLeft = Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT);
+
+        boolean moveRight = Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT);
+
+        boolean moveUp = Gdx.input.isKeyPressed(ControlManager.MOVE_UP);
+
+        boolean moveDown = Gdx.input.isKeyPressed(ControlManager.MOVE_DOWN);
+
+        boolean throwPressed = Gdx.input.isKeyJustPressed(ControlManager.THROW);
+
+        boolean jumpPressed = Gdx.input.isKeyJustPressed(ControlManager.JUMP);
+
+        boolean rollPressed = Gdx.input.isKeyJustPressed(ControlManager.ROLL);
+
+        if (mobileInput != null) {
+            moveLeft = mobileInput.isLeftDown();
+
+            moveRight = mobileInput.isRightDown();
+
+            moveUp = mobileInput.isUpDown();
+
+            moveDown = rollPressed = mobileInput.isDownDown();
+
+            throwPressed = mobileInput.isThrowPressed();
+
+            jumpPressed = mobileInput.isJumpPressed();
+
+            mobileInput.reset();
+        }
+
         if (!physics.isXVelocityLocked()) {
-            if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT)) {
+            if (moveLeft) {
                 velocity.x = -force;
 
                 stop = false;
             }
 
-            if (Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
+            if (moveRight) {
                 velocity.x = force;
 
                 stop = false;
             }
 
-            if (Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) && Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT)) {
+            if (moveLeft && moveRight) {
                 stop = true;
             }
         } else if (gravity != null && gravity.isGrounded()) {
@@ -96,16 +131,16 @@ public class InputSystem extends IteratingSystem {
             physics.setLockVelocityX(0.1f);
         }
 
-        if (!levelMapper.has(entity) && Gdx.input.isKeyJustPressed(ControlManager.THROW)) {
+        if (!levelMapper.has(entity) && throwPressed) {
             Vector3 position = physics.getPosition();
 
             screen.getSpawner().spawnShuriken(position.x, position.y, directionMapper.get(entity).getDirection());
         }
 
         if (levelMapper.has(entity)) {
-            if (Gdx.input.isKeyPressed(ControlManager.MOVE_UP)) {
+            if (moveUp) {
                 velocity.y = force;
-            } else if (Gdx.input.isKeyPressed(ControlManager.MOVE_DOWN)) {
+            } else if (moveDown) {
                 velocity.y = -force;
             } else {
                 velocity.y = 0;
@@ -118,13 +153,12 @@ public class InputSystem extends IteratingSystem {
 
         StateComponent state = stateMapper.get(entity);
 
-        if (state != null && state.getState() == StateComponent.STATE_WALKING &&
-                Gdx.input.isKeyJustPressed(ControlManager.ROLL)) {
+        if (state != null && state.getState() == StateComponent.STATE_WALKING && rollPressed) {
             state.setState(StateComponent.STATE_GROUND_ROLL);
         }
 
         if (state != null) {
-            state.setCanSlide(Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT) || Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT));
+            state.setCanSlide(moveLeft || moveRight);
         }
 
         JumpComponent jump = jumpMapper.get(entity);
@@ -132,8 +166,8 @@ public class InputSystem extends IteratingSystem {
         if (gravity != null && jump != null) {
             boolean wallSliding = state != null && state.getState() == StateComponent.STATE_WALL_SLIDE;
 
-            if (Gdx.input.isKeyJustPressed(ControlManager.JUMP) && (gravity.isGrounded() || jump.getAvailableJumps() > 0 || wallSliding)) {
-                if (wallSliding && !Gdx.input.isKeyPressed(ControlManager.MOVE_UP)) {
+            if (jumpPressed && (gravity.isGrounded() || jump.getAvailableJumps() > 0 || wallSliding)) {
+                if (wallSliding && !moveUp) {
                     if (velocity.x != 0) {
                         if (velocity.x > 0) {
                             velocity.x = -force * 1.5f;
