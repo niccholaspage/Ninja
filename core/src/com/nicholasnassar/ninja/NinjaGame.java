@@ -37,6 +37,8 @@ public class NinjaGame extends Game {
 
         batch = new SpriteBatch();
 
+        platformFeatures.init();
+
         setScreen(new LoadingScreen(this, batch));
     }
 

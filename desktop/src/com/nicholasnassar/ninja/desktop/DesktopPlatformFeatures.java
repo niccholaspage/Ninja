@@ -10,6 +10,11 @@ import java.io.File;
 
 public class DesktopPlatformFeatures implements PlatformFeatures {
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void loadLevel(final LevelEditorSystem system) {
         new Thread(new Runnable() {
             @Override

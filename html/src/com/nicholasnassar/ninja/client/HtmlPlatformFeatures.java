@@ -9,16 +9,18 @@ import com.nicholasnassar.ninja.systems.LevelEditorSystem;
 import java.io.StringWriter;
 
 public class HtmlPlatformFeatures implements PlatformFeatures, Input.TextInputListener {
-    private final Preferences preferences;
+    private Preferences preferences;
 
     private LevelEditorSystem levelEditorSystem;
 
     private boolean saving;
 
     public HtmlPlatformFeatures() {
-        preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
-
         saving = false;
+    }
+
+    public void init() {
+        preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
     }
 
     @Override

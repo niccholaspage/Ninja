@@ -615,6 +615,6 @@ public class GameScreen extends NinjaScreen {
     }
 
     private boolean isMobile() {
-        return true || Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
+        return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
     }
 }
