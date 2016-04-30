@@ -51,6 +51,8 @@ public class HtmlPlatformFeatures implements PlatformFeatures, Input.TextInputLi
             levelEditorSystem.save(writer);
 
             preferences.putString(levelName, writer.toString());
+
+            preferences.flush();
         } else {
             if (preferences.contains(levelName)) {
                 levelEditorSystem.load(preferences.getString(text));

@@ -358,8 +358,7 @@ public class GameScreen extends NinjaScreen {
         loadButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (game.getPlatformFeatures() != null)
-                    game.getPlatformFeatures().loadLevel(levelEditorSystem);
+                game.getPlatformFeatures().loadLevel(levelEditorSystem);
             }
         });
 
@@ -372,8 +371,7 @@ public class GameScreen extends NinjaScreen {
         save.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (game.getPlatformFeatures() != null)
-                    game.getPlatformFeatures().saveLavel(levelEditorSystem);
+                game.getPlatformFeatures().saveLavel(levelEditorSystem);
             }
         });
 
