@@ -52,6 +52,8 @@ public class GameScreen extends NinjaScreen {
 
     private final Table pauseMenu;
 
+    private final MobileInput mobileInput;
+
     private Table levelProperties;
 
     private Table blockTable;
@@ -105,46 +107,26 @@ public class GameScreen extends NinjaScreen {
 
         level = new Level(100, 20);
 
-        MobileInput mobileInput = null;
-
         if (isMobile()) {
             Touchpad touchpad = new Touchpad(10, skin);
-
-            int width = Gdx.graphics.getWidth();
-
-            int height = Gdx.graphics.getHeight();
-
-            touchpad.setSize(width / 7, width / 7);
-
-            touchpad.setPosition(10, 10);
 
             uiStage.addActor(touchpad);
 
             TextButton jumpButton = new TextButton("Jump", skin);
 
-            jumpButton.setSize(width / 7, width / 7);
-
-            jumpButton.setPosition(width - jumpButton.getWidth() - 5, 10);
-
             uiStage.addActor(jumpButton);
 
             TextButton throwButton = new TextButton("Throw", skin);
-
-            throwButton.setSize(width / 7, width / 7);
-
-            throwButton.setPosition(width - jumpButton.getWidth() - throwButton.getWidth() - 10, 10);
 
             uiStage.addActor(throwButton);
 
             TextButton pauseButton = new TextButton("Pause", skin);
 
-            pauseButton.setSize(width / 14, width / 14);
-
-            pauseButton.setPosition(width - pauseButton.getWidth() - 5, height - pauseButton.getHeight() - 5);
-
             uiStage.addActor(pauseButton);
 
             mobileInput = new MobileInput(this, touchpad, jumpButton, throwButton, pauseButton);
+        } else {
+            mobileInput = null;
         }
 
         Gdx.input.setInputProcessor(uiStage);
@@ -205,6 +187,10 @@ public class GameScreen extends NinjaScreen {
             blockTable.setPosition(8, stageHeight - 25);
 
             creatureTable.setPosition(8, stageHeight - 67);
+        }
+
+        if (mobileInput != null) {
+            mobileInput.resize(width, height);
         }
 
         /*pauseLabel.setPosition(width / 2 - pauseLabel.getWidth() / 2, height / 2 - pauseLabel.getHeight() / 2);
