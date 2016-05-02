@@ -59,22 +59,6 @@ public class MobileInput {
         });
     }
 
-    public Touchpad getTouchPad() {
-        return touchPad;
-    }
-
-    public Button getJumpButton() {
-        return jumpButton;
-    }
-
-    public Button getThrowButton() {
-        return throwButton;
-    }
-
-    public Button getPauseButton() {
-        return pauseButton;
-    }
-
     public void resize(int width, int height) {
         touchPad.setSize(width / 7, width / 7);
 
