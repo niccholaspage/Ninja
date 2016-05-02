@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.nicholasnassar.ninja.NinjaGame;
 
 public class MainMenuScreen extends NinjaScreen {
@@ -21,7 +21,8 @@ public class MainMenuScreen extends NinjaScreen {
     public MainMenuScreen(final NinjaGame game, final SpriteBatch batch) {
         super(batch);
 
-        stage = new Stage(new ScreenViewport());
+        //stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ExtendViewport(792, 445.5f));
 
         Gdx.input.setInputProcessor(stage);
 

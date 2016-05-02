@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nicholasnassar.ninja.*;
 import com.nicholasnassar.ninja.components.*;
@@ -77,8 +76,8 @@ public class GameScreen extends NinjaScreen {
 
         viewport = new ExtendViewport(300, 250, camera);
 
-        uiStage = new Stage(new ScreenViewport());
-        //uiStage = new Stage(new ExtendViewport(792, 445.5f));
+        //uiStage = new Stage(new ScreenViewport());
+        uiStage = new Stage(new ExtendViewport(792, 445.5f));
 
         Skin skin = game.getSkin();
 
@@ -190,18 +189,8 @@ public class GameScreen extends NinjaScreen {
         }
 
         if (mobileInput != null) {
-            mobileInput.resize(width, height);
+            mobileInput.resize((int) stageWidth, (int) stageHeight);
         }
-
-        /*pauseLabel.setPosition(width / 2 - pauseLabel.getWidth() / 2, height / 2 - pauseLabel.getHeight() / 2);
-
-        mainMenuButton.setPosition(width / 2 - mainMenuButton.getWidth() / 2, height / 2 - pauseLabel.getHeight() * 2);
-
-        if (levelProperties != null) {
-            levelProperties.setPosition(width - 130, height - 5);
-
-            blockTable.setPosition(8, height - 25);
-        }*/
     }
 
     @Override
@@ -236,6 +225,10 @@ public class GameScreen extends NinjaScreen {
         pauseMenu.setVisible(state == STATE_PAUSED);
 
         if (levelProperties != null) {
+            if (mobileInput != null) {
+                mobileInput.update(state);
+            }
+            
             CameraComponent camera = cameraEntity.getComponent(CameraComponent.class);
 
             if (state == STATE_EDITING) {

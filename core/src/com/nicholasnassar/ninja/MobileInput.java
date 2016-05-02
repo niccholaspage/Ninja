@@ -101,6 +101,10 @@ public class MobileInput {
         return throwPressed;
     }
 
+    public void update(int state) {
+        pauseButton.setVisible(state != GameScreen.STATE_EDITING);
+    }
+
     public void reset() {
         jumpPressed = false;
 
