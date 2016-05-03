@@ -34,6 +34,7 @@ public class NinjaAssetManager {
         manager.load("ui/uiskin.json", Skin.class);
         manager.load("ui/buttons/foreground.png", Texture.class);
         manager.load("ui/buttons/background.png", Texture.class);
+        manager.load("ui/buttons/delete.png", Texture.class);
 
         manager.load("pack.atlas", TextureAtlas.class);
 

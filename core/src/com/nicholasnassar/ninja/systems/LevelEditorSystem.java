@@ -265,7 +265,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
     }
 
     private boolean removeLogic() {
-        if (selectedButton == Input.Buttons.RIGHT) {
+        if (selectedButton == Input.Buttons.RIGHT || (screen.isMobile() && selectedBuild == null)) {
             Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             screen.getCamera().unproject(mouse);

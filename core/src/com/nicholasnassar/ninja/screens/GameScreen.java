@@ -433,6 +433,16 @@ public class GameScreen extends NinjaScreen {
             blockTable.add(button).padRight(5).padBottom(8);
         }
 
+        if (isMobile()) {
+            TextureRegion region = game.getAssetManager().getUIElement("buttons/delete.png");
+
+            SelectButton button = new SelectButton(levelEditorSystem, region, null, blockTable, creatureTable);
+
+            button.getColor().a = 0.5f;
+
+            blockTable.add(button).padRight(5).padBottom(8);
+        }
+
         blockTable.row().align(Align.left);
 
         final ImageButton foregroundButton = new ImageButton(new TextureRegionDrawable(game.getAssetManager().getUIElement("buttons/foreground.png")));
@@ -591,7 +601,7 @@ public class GameScreen extends NinjaScreen {
         }
     }
 
-    private boolean isMobile() {
+    public boolean isMobile() {
         return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
     }
 }
