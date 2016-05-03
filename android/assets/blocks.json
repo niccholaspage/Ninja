@@ -1,0 +1,56 @@
+{
+  "blocks": [
+    {
+      "name": "Stone",
+      "sprite": "stone"
+    },
+    {
+      "name": "Dirt",
+      "sprite": "dirt"
+    },
+    {
+      "name": "Grass",
+      "sprite": "grass"
+    },
+    {
+      "name": "Log",
+      "sprite": "log"
+    },
+    {
+      "name": "Leaves",
+      "sprite": "leaves"
+    },
+    {
+      "name": "Sand",
+      "sprite": "sand"
+    },
+    {
+      "name": "Sandstone",
+      "sprite": "sandstone"
+    },
+    {
+      "name": "Cactus",
+      "sprite": "cactus"
+    },
+    {
+      "name": "Metal",
+      "sprite": "metal"
+    },
+    {
+      "name": "Concrete",
+      "sprite": "concrete"
+    },
+    {
+      "name": "Military Green Stone",
+      "sprite": "military_green_stone"
+    },
+    {
+      "name": "Military Grey Stone",
+      "sprite": "military_grey_stone"
+    },
+    {
+      "name": "Military Netting",
+      "sprite": "military_netting"
+    }
+  ]
+}

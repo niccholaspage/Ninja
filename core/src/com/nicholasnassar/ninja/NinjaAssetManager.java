@@ -1,5 +1,6 @@
 package com.nicholasnassar.ninja;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,10 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.*;
 import com.nicholasnassar.ninja.components.StateComponent;
 
 public class NinjaAssetManager {
@@ -66,14 +64,14 @@ public class NinjaAssetManager {
 
             Sprite sprite = atlas.createSprite(regionName);
 
-            if (regionName.startsWith("blocks")) {
-                blocks.put(name, Array.with(sprite.split(16, 16)[0]));
-            } else if (regionName.startsWith("animations")) {
+            if (regionName.startsWith("animations")) {
                 spriteAnimations.put(name, sprite);
             } else if (regionName.startsWith("entities")) {
                 entities.put(name, sprite);
             }
         }
+
+        addBlocks( atlas);
 
         IntMap<Array<Animation>> animations = new IntMap<Array<Animation>>();
 
@@ -130,6 +128,16 @@ public class NinjaAssetManager {
             music.setLooping(true);
 
             this.music.put(key, music);
+        }
+    }
+
+    public void addBlocks(TextureAtlas atlas) {
+        JsonValue json = new JsonReader().parse(Gdx.files.internal("blocks.json"));
+
+        for (JsonValue block : json.get("blocks").iterator()) {
+            String sprite = block.getString("sprite");
+
+            blocks.put(sprite, Array.with(atlas.createSprite("blocks/" + sprite).split(16, 16)[0]));
         }
     }
 
