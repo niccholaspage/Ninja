@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.*;
-import com.nicholasnassar.ninja.components.StateComponent;
 
 public class NinjaAssetManager {
     private final AssetManager manager;
@@ -72,56 +71,57 @@ public class NinjaAssetManager {
             }
         }
 
-        addBlocks( atlas);
+        addBlocks(atlas);
 
-        IntMap<Array<Animation>> animations = new IntMap<Array<Animation>>();
+        JsonValue json = new JsonReader().parse(Gdx.files.internal("animations.json"));
 
-        Animation idle = new Animation(1 / 4f, spriteAnimations.get("player_idle").split(13, 27)[0]);
+        for (JsonValue creature : json.get("animations").iterator()) {
+            IntMap<Array<Animation>> animations = new IntMap<Array<Animation>>();
 
-        Animation idle2 = new Animation(1 / 10f, spriteAnimations.get("player_idle2").split(13, 40)[0]);
+            String creatureName = creature.get(0).name;
 
-        Animation idle3 = new Animation(1 / 10f, spriteAnimations.get("player_idle3").split(13, 40)[0]);
+            for (JsonValue state : creature.get(0).iterator()) {
+                String[] states = state.get(0).name.split(",");
 
-        Array<Animation> idleAnimations = new Array<Animation>();
+                int[] stateInts = new int[states.length];
 
-        idleAnimations.addAll(idle, idle2, idle3);
+                for (int i = 0; i < stateInts.length; i++) {
+                    stateInts[i] = Integer.parseInt(states[i]);
+                }
 
-        animations.put(StateComponent.STATE_IDLE, idleAnimations);
+                Array<Animation> loadAnimations = new Array<Animation>();
 
-        Animation walk = new Animation(1 / 15f, spriteAnimations.get("player_walk").split(13, 27)[0]);
+                for (JsonValue animation : state.get(0).iterator()) {
+                    String name = animation.getString("sprite");
 
-        walk.setPlayMode(Animation.PlayMode.LOOP);
+                    float fps = animation.getFloat("fps");
 
-        animations.put(StateComponent.STATE_WALKING, Array.with(walk));
+                    int frameWidth = animation.getInt("frame_width", -1);
 
-        animations.put(StateComponent.STATE_IN_AIR, Array.with(new Animation(1 / 10f, spriteAnimations.get("player_in_air").split(17, 27)[0])));
+                    int frameHeight = animation.getInt("frame_height", 1);
 
-        Animation roll = new Animation(1 / 25f, spriteAnimations.get("player_roll").split(22, 16)[0]);
+                    Animation anim;
 
-        animations.put(StateComponent.STATE_GROUND_ROLL, Array.with(roll));
+                    if (frameWidth != -1 && frameHeight != -1) {
+                        anim = new Animation(fps, spriteAnimations.get(name).split(frameWidth, frameHeight)[0]);
+                    } else {
+                        anim = new Animation(fps, spriteAnimations.get(name));
+                    }
 
-        Animation wallSlide = new Animation(1, spriteAnimations.get("player_wall_slide"));
+                    if (animation.has("play_mode")) {
+                        anim.setPlayMode(Animation.PlayMode.valueOf(animation.getString("play_mode").toUpperCase()));
+                    }
 
-        animations.put(StateComponent.STATE_WALL_SLIDE, Array.with(wallSlide));
+                    loadAnimations.add(anim);
+                }
 
-        creatureAnimations.put("player", animations);
+                for (int stateNum : stateInts) {
+                    animations.put(stateNum, loadAnimations);
+                }
+            }
 
-        animations = new IntMap<Array<Animation>>();
-
-        idle = new Animation(1 / 4f, spriteAnimations.get("soldier_idle").split(18, 32)[0]);
-
-        idle.setPlayMode(Animation.PlayMode.LOOP);
-
-        animations.put(StateComponent.STATE_IDLE, Array.with(idle));
-        animations.put(StateComponent.STATE_IN_AIR, Array.with(idle));
-        animations.put(StateComponent.STATE_WALL_SLIDE, Array.with(idle));
-
-        walk = new Animation(1 / 15f, spriteAnimations.get("soldier_walk").split(18, 32)[0]);
-
-        walk.setPlayMode(Animation.PlayMode.LOOP);
-        animations.put(StateComponent.STATE_WALKING, Array.with(walk));
-
-        creatureAnimations.put("soldier", animations);
+            creatureAnimations.put(creatureName, animations);
+        }
 
         for (String key : music.keys()) {
             Music music = manager.get("sounds/music/" + key + ".mp3");

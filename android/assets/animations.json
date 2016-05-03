@@ -1,0 +1,95 @@
+{
+  "animations": [
+    {
+      "player": [
+        {
+          "0": [
+            {
+              "sprite": "player_idle",
+              "fps": 0.25,
+              "frame_width": 13,
+              "frame_height": 27
+            },
+            {
+              "sprite": "player_idle2",
+              "fps": 0.1,
+              "frame_width": 13,
+              "frame_height": 40
+            },
+            {
+              "sprite": "player_idle3",
+              "fps": 0.1,
+              "frame_width": 13,
+              "frame_height": 40
+            }
+          ]
+        },
+        {
+          "1": [
+            {
+              "sprite": "player_walk",
+              "fps": 0.0666666667,
+              "frame_width": 13,
+              "frame_height": 27,
+              "play_mode": "loop"
+            }
+          ]
+        },
+        {
+          "2": [
+            {
+              "sprite": "player_in_air",
+              "fps": 0.1,
+              "frame_width": 17,
+              "frame_height": 27
+            }
+          ]
+        },
+        {
+          "3": [
+            {
+              "sprite": "player_roll",
+              "fps": 0.04,
+              "frame_width": 22,
+              "frame_height": 16
+            }
+          ]
+        },
+        {
+          "4": [
+            {
+              "sprite": "player_wall_slide",
+              "fps": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "soldier": [
+        {
+          "0,2,4": [
+            {
+              "sprite": "soldier_idle",
+              "fps": 0.25,
+              "play_mode": "loop",
+              "frame_width": 18,
+              "frame_height": 32
+            }
+          ]
+        },
+        {
+          "1": [
+            {
+              "sprite": "soldier_walk",
+              "fps": 0.0666666667,
+              "play_mode": "loop",
+              "frame_width": 18,
+              "frame_height": 32
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
