@@ -33,7 +33,7 @@ public class HtmlPlatformFeatures implements PlatformFeatures, Input.TextInputLi
     }
 
     @Override
-    public void saveLavel(LevelEditorSystem system) {
+    public void saveLevel(LevelEditorSystem system) {
         Gdx.input.getTextInput(this, "Save Level", "", "Type the level name");
 
         levelEditorSystem = system;

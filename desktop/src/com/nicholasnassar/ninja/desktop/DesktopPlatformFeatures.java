@@ -36,7 +36,7 @@ public class DesktopPlatformFeatures implements PlatformFeatures {
     }
 
     @Override
-    public void saveLavel(final LevelEditorSystem system) {
+    public void saveLevel(final LevelEditorSystem system) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

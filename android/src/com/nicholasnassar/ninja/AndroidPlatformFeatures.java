@@ -14,7 +14,7 @@ public class AndroidPlatformFeatures implements PlatformFeatures {
     }
 
     @Override
-    public void saveLavel(LevelEditorSystem system) {
+    public void saveLevel(LevelEditorSystem system) {
 
     }
 }

@@ -228,7 +228,7 @@ public class GameScreen extends NinjaScreen {
             if (mobileInput != null) {
                 mobileInput.update(state);
             }
-            
+
             CameraComponent camera = cameraEntity.getComponent(CameraComponent.class);
 
             if (state == STATE_EDITING) {
@@ -350,7 +350,7 @@ public class GameScreen extends NinjaScreen {
         save.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.getPlatformFeatures().saveLavel(levelEditorSystem);
+                game.getPlatformFeatures().saveLevel(levelEditorSystem);
             }
         });
 

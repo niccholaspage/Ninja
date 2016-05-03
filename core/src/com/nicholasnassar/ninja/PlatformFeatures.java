@@ -7,5 +7,5 @@ public interface PlatformFeatures {
 
     void loadLevel(LevelEditorSystem system);
 
-    void saveLavel(LevelEditorSystem system);
+    void saveLevel(LevelEditorSystem system);
 }
