@@ -41,6 +41,7 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
+        entity.add(new HealthComponent(20));
 
         VisualComponent visual = new VisualComponent(animations);
         entity.add(new StateComponent(visual));
@@ -70,6 +71,7 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
+        entity.add(new HealthComponent(20));
 
         VisualComponent visual = new VisualComponent(animations);
         entity.add(new StateComponent(visual));
@@ -168,6 +170,7 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new CollidableComponent(CollidableComponent.THROWABLE_EXCEPTION, true));
         entity.add(new DestroyOutsideComponent());
+        entity.add(new DamageComponent(10, DamageComponent.ON_COLLIDE));
 
         engine.addEntity(entity);
 

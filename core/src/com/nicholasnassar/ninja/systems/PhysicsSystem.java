@@ -7,10 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Level;
-import com.nicholasnassar.ninja.components.CollidableComponent;
-import com.nicholasnassar.ninja.components.DestroyOutsideComponent;
-import com.nicholasnassar.ninja.components.GravityComponent;
-import com.nicholasnassar.ninja.components.PhysicsComponent;
+import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class PhysicsSystem extends IteratingSystem {
@@ -28,6 +25,10 @@ public class PhysicsSystem extends IteratingSystem {
 
     private final ComponentMapper<DestroyOutsideComponent> destroyMapper;
 
+    private final ComponentMapper<DamageComponent> damageMapper;
+
+    private final ComponentMapper<HealthComponent> healthMapper;
+
     public PhysicsSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class).get());
 
@@ -40,6 +41,10 @@ public class PhysicsSystem extends IteratingSystem {
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
 
         destroyMapper = ComponentMapper.getFor(DestroyOutsideComponent.class);
+
+        damageMapper = ComponentMapper.getFor(DamageComponent.class);
+
+        healthMapper = ComponentMapper.getFor(HealthComponent.class);
     }
 
     @Override
@@ -77,11 +82,15 @@ public class PhysicsSystem extends IteratingSystem {
 
             CollidableComponent collide = collideMapper.get(entity);
 
+            DamageComponent damage = damageMapper.get(entity);
+
             if (collide != null) {
                 collide.setOnWall(false);
 
                 for (Entity loopEntity : getEntities()) {
                     CollidableComponent loopCollide = collideMapper.get(loopEntity);
+
+                    DamageComponent loopDamage = damageMapper.get(loopEntity);
 
                     if (entity == loopEntity || loopCollide == null) {
                         continue;
@@ -109,10 +118,25 @@ public class PhysicsSystem extends IteratingSystem {
 
                     if (width2 > 0 && height2 > 0) {
                         if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
+                            if (damage != null && damage.getWhen() == DamageComponent.ON_COLLIDE) {
+                                HealthComponent health = healthMapper.get(loopEntity);
+
+                                if (health != null) {
+                                    health.damage(damage.getDamage());
+                                }
+                            }
+
                             if (collide.shouldDestroy()) {
                                 getEngine().removeEntity(entity);
 
                                 continue;
+                            }
+
+                            if (loopDamage != null && loopDamage.getWhen() == DamageComponent.ON_COLLIDE) {
+                                HealthComponent health = healthMapper.get(entity);
+
+                                if (health != null) {
+                                }
                             }
 
                             if (loopCollide.shouldDestroy()) {
@@ -149,6 +173,8 @@ public class PhysicsSystem extends IteratingSystem {
                 for (Entity loopEntity : getEntities()) {
                     CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
+                    DamageComponent loopDamage = damageMapper.get(loopEntity);
+
                     if (entity == loopEntity || loopCollide == null) {
                         continue;
                     }
@@ -175,10 +201,25 @@ public class PhysicsSystem extends IteratingSystem {
 
                     if (width2 > 0 && height2 > 0) {
                         if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
+                            if (damage != null && damage.getWhen() == DamageComponent.ON_COLLIDE) {
+                                HealthComponent health = healthMapper.get(loopEntity);
+
+                                if (health != null) {
+                                    health.damage(damage.getDamage());
+                                }
+                            }
+
                             if (collide.shouldDestroy()) {
                                 getEngine().removeEntity(entity);
 
                                 continue;
+                            }
+
+                            if (loopDamage != null && loopDamage.getWhen() == DamageComponent.ON_COLLIDE) {
+                                HealthComponent health = healthMapper.get(entity);
+
+                                if (health != null) {
+                                }
                             }
 
                             if (loopCollide.shouldDestroy()) {

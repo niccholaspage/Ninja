@@ -1,14 +1,20 @@
 package com.nicholasnassar.ninja.components;
 
-public class HealthComponent {
+import com.badlogic.ashley.core.Component;
+
+public class HealthComponent implements Component {
     private int health;
 
     private int maxHealth;
+
+    private boolean dead;
 
     public HealthComponent(int maxHealth) {
         this.maxHealth = maxHealth;
 
         health = maxHealth;
+
+        dead = false;
     }
 
     public int getHealth() {
@@ -18,8 +24,10 @@ public class HealthComponent {
     public void setHealth(int health) {
         if (health > maxHealth) {
             health = maxHealth;
-        } else if (health < 0) {
+        } else if (health <= 0) {
             health = 0;
+
+            dead = true;
         }
 
         this.health = health;
@@ -31,5 +39,13 @@ public class HealthComponent {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public void damage(int damage) {
+        setHealth(getHealth() - damage);
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }
