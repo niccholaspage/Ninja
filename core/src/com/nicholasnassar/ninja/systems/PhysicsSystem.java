@@ -136,6 +136,7 @@ public class PhysicsSystem extends IteratingSystem {
                                 HealthComponent health = healthMapper.get(entity);
 
                                 if (health != null) {
+                                    health.damage(loopDamage.getDamage());
                                 }
                             }
 
@@ -219,6 +220,7 @@ public class PhysicsSystem extends IteratingSystem {
                                 HealthComponent health = healthMapper.get(entity);
 
                                 if (health != null) {
+                                    health.damage(loopDamage.getDamage());
                                 }
                             }
 
