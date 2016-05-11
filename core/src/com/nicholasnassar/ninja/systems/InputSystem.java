@@ -109,14 +109,22 @@ public class InputSystem extends IteratingSystem {
             mobileInput.reset();
         }
 
+        StateComponent state = stateMapper.get(entity);
+
+        DirectionComponent direction = directionMapper.get(entity);
+
         if (!physics.isXVelocityLocked()) {
-            if (moveLeft) {
+            boolean rolling = state != null && state.getState() == StateComponent.STATE_GROUND_ROLL;
+
+            boolean left = direction.getDirection() == DirectionComponent.LEFT;
+
+            if ((rolling && left) || moveLeft) {
                 velocity.x = -force;
 
                 stop = false;
             }
 
-            if (moveRight) {
+            if ((rolling && !left) || moveRight) {
                 velocity.x = force;
 
                 stop = false;
@@ -134,7 +142,7 @@ public class InputSystem extends IteratingSystem {
         if (!levelMapper.has(entity) && throwPressed) {
             Vector3 position = physics.getPosition();
 
-            screen.getSpawner().spawnShuriken(position.x, position.y, directionMapper.get(entity).getDirection());
+            screen.getSpawner().spawnShuriken(position.x, position.y, direction.getDirection());
         }
 
         if (levelMapper.has(entity)) {
@@ -150,8 +158,6 @@ public class InputSystem extends IteratingSystem {
         if (stop && !physics.isXVelocityLocked()) {
             velocity.x = 0;
         }
-
-        StateComponent state = stateMapper.get(entity);
 
         if (state != null && state.getState() == StateComponent.STATE_WALKING && rollPressed) {
             state.setState(StateComponent.STATE_GROUND_ROLL);
