@@ -116,21 +116,33 @@ public class InputSystem extends IteratingSystem {
         if (!physics.isXVelocityLocked()) {
             boolean rolling = state != null && state.getState() == StateComponent.STATE_GROUND_ROLL;
 
-            boolean left = direction.getDirection() == DirectionComponent.LEFT;
+            boolean left = direction != null && direction.getDirection() == DirectionComponent.LEFT;
 
-            if ((rolling && left) || moveLeft) {
+            if (moveLeft) {
                 velocity.x = -force;
 
                 stop = false;
             }
 
-            if ((rolling && !left) || moveRight) {
+            if (rolling && left) {
+                velocity.x = -force * 5;
+
+                stop = false;
+            }
+
+            if (moveRight) {
                 velocity.x = force;
 
                 stop = false;
             }
 
-            if (moveLeft && moveRight) {
+            if (rolling && !left) {
+                velocity.x = force * 5;
+
+                stop = false;
+            }
+
+            if (!rolling && moveLeft && moveRight) {
                 stop = true;
             }
         } else if (gravity != null && gravity.isGrounded()) {
