@@ -125,7 +125,7 @@ public class InputSystem extends IteratingSystem {
             }
 
             if (rolling && left) {
-                velocity.x = -force * 5;
+                velocity.x = -force * 3;
 
                 stop = false;
             }
@@ -137,7 +137,7 @@ public class InputSystem extends IteratingSystem {
             }
 
             if (rolling && !left) {
-                velocity.x = force * 5;
+                velocity.x = force * 3;
 
                 stop = false;
             }
