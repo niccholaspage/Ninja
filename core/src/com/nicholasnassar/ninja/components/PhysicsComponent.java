@@ -9,9 +9,9 @@ public class PhysicsComponent implements Component {
 
     private final Vector2 velocity;
 
-    private final float width;
+    private float width;
 
-    private final float height;
+    private float height;
 
     private final float radius;
 
@@ -63,8 +63,16 @@ public class PhysicsComponent implements Component {
         return velocity;
     }
 
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
     public float getWidth() {
         return width * sizeScale;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 
     public float getHeight() {

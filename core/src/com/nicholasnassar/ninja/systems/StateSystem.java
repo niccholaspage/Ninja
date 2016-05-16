@@ -66,6 +66,12 @@ public class StateSystem extends IteratingSystem {
                     state.setState(StateComponent.STATE_WALKING);
                 }
             }
+
+            if (state.getState() == StateComponent.STATE_GROUND_ROLL) {
+                physics.setHeight(1);
+            } else {
+                physics.setHeight(123);
+            }
         }
 
         if (gravity != null && jump != null) {
