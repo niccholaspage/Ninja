@@ -6,63 +6,70 @@ filter: Nearest,Nearest
 repeat: none
 animations/player_idle
   rotate: false
-  xy: 2, 7
+  xy: 2, 2
   size: 208, 27
   orig: 208, 27
   offset: 0, 0
   index: -1
 animations/player_idle2
   rotate: false
-  xy: 2, 36
+  xy: 2, 31
   size: 286, 40
   orig: 286, 40
   offset: 0, 0
   index: -1
 animations/player_idle3
   rotate: false
-  xy: 2, 78
+  xy: 2, 83
   size: 403, 40
   orig: 403, 40
   offset: 0, 0
   index: -1
 animations/player_in_air
   rotate: false
-  xy: 409, 15
+  xy: 437, 10
   size: 51, 27
   orig: 51, 27
   offset: 0, 0
   index: -1
 animations/player_roll
   rotate: false
-  xy: 407, 102
+  xy: 407, 107
   size: 88, 16
   orig: 88, 16
   offset: 0, 0
   index: -1
+animations/player_shuriken_throw
+  rotate: false
+  xy: 331, 10
+  size: 104, 27
+  orig: 104, 27
+  offset: 0, 0
+  index: -1
 animations/player_walk
   rotate: false
-  xy: 290, 15
+  xy: 212, 2
   size: 117, 27
   orig: 117, 27
   offset: 0, 0
   index: -1
 animations/player_wall_slide
   rotate: false
-  xy: 497, 94
+  xy: 497, 99
   size: 13, 24
   orig: 13, 24
   offset: 0, 0
   index: -1
 animations/soldier_idle
   rotate: false
-  xy: 290, 44
+  xy: 290, 39
   size: 180, 32
   orig: 180, 32
   offset: 0, 0
   index: -1
 animations/soldier_walk
   rotate: false
-  xy: 212, 2
+  xy: 407, 73
   size: 72, 32
   orig: 72, 32
   offset: 0, 0
