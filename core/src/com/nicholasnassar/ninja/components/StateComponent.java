@@ -8,6 +8,7 @@ public class StateComponent implements Component {
     public static final int STATE_IN_AIR = 2;
     public static final int STATE_GROUND_ROLL = 3;
     public static final int STATE_WALL_SLIDE = 4;
+    public static final int STATE_THROW = 5;
 
     private int state;
 

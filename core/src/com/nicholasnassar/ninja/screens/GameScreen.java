@@ -139,6 +139,7 @@ public class GameScreen extends NinjaScreen {
         engine.addSystem(new StateSystem());
         engine.addSystem(new PhysicsSystem(this));
         engine.addSystem(new HealthSystem());
+        engine.addSystem(new CooldownSystem());
 
         spawner = new Spawner(game.getAssetManager(), engine, levelEditor);
 

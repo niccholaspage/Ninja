@@ -59,10 +59,14 @@ public class StateSystem extends IteratingSystem {
                 } else {
                     state.setState(StateComponent.STATE_IN_AIR);
                 }
-            } else if (velocity.x == 0) {
+            } else if (velocity.x == 0 && state.getState() != StateComponent.STATE_THROW) {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
-                if (state.getState() != StateComponent.STATE_GROUND_ROLL || state.getElapsedTime() > 0.16) {
+                if (state.getState() != StateComponent.STATE_GROUND_ROLL && state.getState() != StateComponent.STATE_THROW) {
+                    state.setState(StateComponent.STATE_WALKING);
+                } else if (state.getState() == StateComponent.STATE_GROUND_ROLL && state.getElapsedTime() > 0.16) {
+                    state.setState(StateComponent.STATE_WALKING);
+                } else if (state.getState() == StateComponent.STATE_THROW && state.getElapsedTime() > 0.32) {
                     state.setState(StateComponent.STATE_WALKING);
                 }
             }
@@ -70,7 +74,7 @@ public class StateSystem extends IteratingSystem {
             if (state.getState() == StateComponent.STATE_GROUND_ROLL) {
                 physics.setHeight(1);
             } else {
-                physics.setHeight(123);
+                physics.setHeight(1.6875f);
             }
         }
 

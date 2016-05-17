@@ -31,6 +31,8 @@ public class InputSystem extends IteratingSystem {
 
     private final ComponentMapper<CollidableComponent> collideMapper;
 
+    private final ComponentMapper<CooldownComponent> cooldownMapper;
+
     private final MobileInput mobileInput;
 
     public InputSystem(GameScreen screen, MobileInput mobileInput) {
@@ -53,6 +55,8 @@ public class InputSystem extends IteratingSystem {
         stateMapper = ComponentMapper.getFor(StateComponent.class);
 
         collideMapper = ComponentMapper.getFor(CollidableComponent.class);
+
+        cooldownMapper = ComponentMapper.getFor(CooldownComponent.class);
 
         this.mobileInput = mobileInput;
     }
@@ -151,10 +155,14 @@ public class InputSystem extends IteratingSystem {
             physics.setLockVelocityX(0.1f);
         }
 
-        if (!levelMapper.has(entity) && throwPressed) {
+        if (!levelMapper.has(entity) && throwPressed && cooldownMapper.get(entity).canUse(CooldownComponent.THROW)) {
             Vector3 position = physics.getPosition();
 
             screen.getSpawner().spawnShuriken(position.x, position.y, direction.getDirection());
+
+            state.setState(StateComponent.STATE_THROW);
+
+            cooldownMapper.get(entity).addCooldown(CooldownComponent.THROW, 1);
         }
 
         if (levelMapper.has(entity)) {

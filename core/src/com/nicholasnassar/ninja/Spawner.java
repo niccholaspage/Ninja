@@ -72,6 +72,7 @@ public class Spawner {
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
         entity.add(new HealthComponent(20));
+        entity.add(new CooldownComponent());
 
         VisualComponent visual = new VisualComponent(animations);
         entity.add(new StateComponent(visual));
