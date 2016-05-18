@@ -180,7 +180,7 @@ repeat: none
 entities/shuriken
   rotate: false
   xy: 2, 2
-  size: 9, 9
-  orig: 9, 9
+  size: 5, 5
+  orig: 5, 5
   offset: 0, 0
   index: -1

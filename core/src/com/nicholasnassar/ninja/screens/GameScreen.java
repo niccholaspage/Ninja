@@ -157,7 +157,7 @@ public class GameScreen extends NinjaScreen {
 
         isLoading = false;
 
-        load(Gdx.files.internal("levels/start.lvl"));
+        load(Gdx.files.internal("levels/metal.lvl"));
 
         updateSystems(STATE_RUNNING);
 

@@ -115,7 +115,7 @@ public class InputSystem extends IteratingSystem {
 
         StateComponent state = stateMapper.get(entity);
 
-        DirectionComponent direction = directionMapper.get(entity);
+        final DirectionComponent direction = directionMapper.get(entity);
 
         if (!physics.isXVelocityLocked()) {
             boolean rolling = state != null && state.getState() == StateComponent.STATE_GROUND_ROLL;
@@ -156,9 +156,23 @@ public class InputSystem extends IteratingSystem {
         }
 
         if (!levelMapper.has(entity) && throwPressed && cooldownMapper.get(entity).canUse(CooldownComponent.THROW)) {
-            Vector3 position = physics.getPosition();
+            final Vector3 position = physics.getPosition();
 
-            screen.getSpawner().spawnShuriken(position.x, position.y, direction.getDirection());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    long time = System.currentTimeMillis();
+
+                    while (System.currentTimeMillis() < time + 350) {
+                    }
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, direction.getDirection());
+                        }
+                    });
+                }
+            }).start();
 
             state.setState(StateComponent.STATE_THROW);
 
@@ -179,7 +193,9 @@ public class InputSystem extends IteratingSystem {
             velocity.x = 0;
         }
 
-        if (state != null && state.getState() == StateComponent.STATE_WALKING && rollPressed) {
+        if (state != null && state.getState() == StateComponent.STATE_WALKING && rollPressed && cooldownMapper.get(entity).canUse(CooldownComponent.ROLL)) {
+            cooldownMapper.get(entity).addCooldown(CooldownComponent.ROLL, 0.5f);
+
             state.setState(StateComponent.STATE_GROUND_ROLL);
         }
 

@@ -8,6 +8,8 @@ public class CooldownComponent implements Component {
 
     public static final int THROW = 0;
 
+    public static final int ROLL = 1;
+
     public CooldownComponent() {
         cooldowns = new IntMap<Float>();
     }
