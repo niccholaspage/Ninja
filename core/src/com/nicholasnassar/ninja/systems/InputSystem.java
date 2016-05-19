@@ -168,7 +168,7 @@ public class InputSystem extends IteratingSystem {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, direction.getDirection());
+                            screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, 1, direction.getDirection());
                         }
                     });
                 }

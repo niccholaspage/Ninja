@@ -1,75 +1,82 @@
 
 pack.png
-size: 512,128
+size: 1024,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 animations/player_idle
   rotate: false
-  xy: 2, 2
+  xy: 407, 91
   size: 208, 27
   orig: 208, 27
   offset: 0, 0
   index: -1
 animations/player_idle2
   rotate: false
-  xy: 2, 31
+  xy: 2, 36
   size: 286, 40
   orig: 286, 40
   offset: 0, 0
   index: -1
 animations/player_idle3
   rotate: false
-  xy: 2, 83
+  xy: 2, 78
   size: 403, 40
   orig: 403, 40
   offset: 0, 0
   index: -1
 animations/player_in_air
   rotate: false
-  xy: 437, 10
+  xy: 938, 91
   size: 51, 27
   orig: 51, 27
   offset: 0, 0
   index: -1
 animations/player_roll
   rotate: false
-  xy: 407, 107
+  xy: 184, 18
   size: 88, 16
   orig: 88, 16
   offset: 0, 0
   index: -1
 animations/player_shuriken_throw
   rotate: false
-  xy: 331, 10
+  xy: 290, 49
   size: 104, 27
   orig: 104, 27
   offset: 0, 0
   index: -1
 animations/player_walk
   rotate: false
-  xy: 212, 2
+  xy: 745, 91
   size: 117, 27
   orig: 117, 27
   offset: 0, 0
   index: -1
 animations/player_wall_slide
   rotate: false
-  xy: 497, 99
+  xy: 991, 94
   size: 13, 24
   orig: 13, 24
   offset: 0, 0
   index: -1
 animations/soldier_idle
   rotate: false
-  xy: 290, 39
+  xy: 2, 2
   size: 180, 32
   orig: 180, 32
   offset: 0, 0
   index: -1
+animations/soldier_throw
+  rotate: false
+  xy: 617, 86
+  size: 126, 32
+  orig: 126, 32
+  offset: 0, 0
+  index: -1
 animations/soldier_walk
   rotate: false
-  xy: 407, 73
+  xy: 864, 86
   size: 72, 32
   orig: 72, 32
   offset: 0, 0

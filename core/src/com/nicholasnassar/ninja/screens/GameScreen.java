@@ -59,9 +59,15 @@ public class GameScreen extends NinjaScreen {
 
     private Table creatureTable;
 
+    private final Label health;
+
     private LevelEditorSystem levelEditorSystem;
 
     private boolean isLoading;
+
+    private boolean dead;
+
+    private boolean win;
 
     public static final int STATE_RUNNING = 0;
 
@@ -135,13 +141,17 @@ public class GameScreen extends NinjaScreen {
         engine.addSystem(new CameraSystem(this));
         engine.addSystem(new RenderSystem(this, batch, camera));
         engine.addSystem(new InputSystem(this, mobileInput));
-        engine.addSystem(new AISystem());
+        engine.addSystem(new AISystem(this));
         engine.addSystem(new StateSystem());
         engine.addSystem(new PhysicsSystem(this));
-        engine.addSystem(new HealthSystem());
+        engine.addSystem(new HealthSystem(this));
         engine.addSystem(new CooldownSystem());
 
         spawner = new Spawner(game.getAssetManager(), engine, levelEditor);
+
+        health = new Label("", game.getSkin());
+
+        uiStage.addActor(health);
 
         if (levelEditor) {
             setupLevelEditor(game, spawner);
@@ -162,10 +172,16 @@ public class GameScreen extends NinjaScreen {
         updateSystems(STATE_RUNNING);
 
         flipEntities(true);
+
+        dead = false;
     }
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public Entity getCameraEntity() {
+        return cameraEntity;
     }
 
     public Level getLevel() {
@@ -193,6 +209,8 @@ public class GameScreen extends NinjaScreen {
         if (mobileInput != null) {
             mobileInput.resize((int) stageWidth, (int) stageHeight);
         }
+
+        health.setPosition(8, stageHeight - 25);
     }
 
     @Override
@@ -223,8 +241,10 @@ public class GameScreen extends NinjaScreen {
         boolean shouldProcess = state == STATE_RUNNING;
 
         engine.getSystem(AISystem.class).setProcessing(shouldProcess);
+        engine.getSystem(HealthSystem.class).setProcessing(shouldProcess);
 
         pauseMenu.setVisible(state == STATE_PAUSED);
+        health.setVisible(state == STATE_RUNNING);
 
         if (levelProperties != null) {
             if (mobileInput != null) {
@@ -306,7 +326,7 @@ public class GameScreen extends NinjaScreen {
     public void togglePause() {
         if (state == STATE_RUNNING) {
             updateSystems(STATE_PAUSED);
-        } else if (state == STATE_PAUSED) {
+        } else if (state == STATE_PAUSED && !dead && !win) {
             updateSystems(STATE_RUNNING);
         }
     }
@@ -580,6 +600,8 @@ public class GameScreen extends NinjaScreen {
         } else {
             cameraComponent.updateTargets(player);
         }
+
+        engine.getSystem(HealthSystem.class).setPlayer(player);
     }
 
     @Override
@@ -605,5 +627,25 @@ public class GameScreen extends NinjaScreen {
 
     public boolean isMobile() {
         return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
+    }
+
+    public void death() {
+        ((Label) pauseMenu.getChildren().get(0)).setText("You died!");
+
+        dead = true;
+
+        togglePause();
+    }
+
+    public void win() {
+        ((Label) pauseMenu.getChildren().get(0)).setText("You won!");
+
+        win = true;
+
+        togglePause();
+    }
+
+    public Label getHealth() {
+        return health;
     }
 }

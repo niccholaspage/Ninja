@@ -49,6 +49,7 @@ public class Spawner {
         entity.add(new SpeedComponent(5f));
         entity.add(new AIComponent());
         entity.add(new ColorComponent((float) Math.random(), (float) Math.random(), (float) Math.random()));
+        entity.add(new CooldownComponent());
 
         engine.addEntity(entity);
 
@@ -71,7 +72,7 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new GravityComponent());
         entity.add(new CollidableComponent(CollidableComponent.CREATURE_EXCEPTION));
-        entity.add(new HealthComponent(20));
+        entity.add(new HealthComponent(50));
         entity.add(new CooldownComponent());
 
         VisualComponent visual = new VisualComponent(animations);
@@ -147,7 +148,7 @@ public class Spawner {
         return entity;
     }
 
-    public Entity spawnShuriken(float x, float y, int direction) {
+    public Entity spawnShuriken(float x, float y, float xDiff, int direction) {
         Entity entity = new Entity();
 
         TextureRegion region = new TextureRegion(manager.getEntity("shuriken"));
@@ -157,9 +158,9 @@ public class Spawner {
         float height = region.getRegionHeight() / GameScreen.PIXELS_PER_METER;
 
         if (direction == DirectionComponent.RIGHT) {
-            x += 1;
+            x += xDiff;
         } else {
-            x -= 1;
+            x -= xDiff;
         }
 
         PhysicsComponent physics = new PhysicsComponent(x, y + .5f, 0, width, height);
