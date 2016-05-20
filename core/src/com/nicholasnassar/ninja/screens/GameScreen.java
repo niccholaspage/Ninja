@@ -630,6 +630,10 @@ public class GameScreen extends NinjaScreen {
     }
 
     public void death() {
+        if (levelProperties != null) {
+            return;
+        }
+
         ((Label) pauseMenu.getChildren().get(0)).setText("You died!");
 
         dead = true;
@@ -638,6 +642,10 @@ public class GameScreen extends NinjaScreen {
     }
 
     public void win() {
+        if (levelProperties != null) {
+            return;
+        }
+
         ((Label) pauseMenu.getChildren().get(0)).setText("You won!");
 
         win = true;
