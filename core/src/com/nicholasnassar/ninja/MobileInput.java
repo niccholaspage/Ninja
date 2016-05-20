@@ -24,13 +24,21 @@ public class MobileInput {
     public MobileInput(final GameScreen screen, Touchpad touchPad, Button jumpButton, Button throwButton, Button pauseButton) {
         this.touchPad = touchPad;
 
+        touchPad.setColor(1, 1, 1, 0.5f);
+
         jumpPressed = false;
 
         this.jumpButton = jumpButton;
 
+        jumpButton.setColor(1, 1, 1, 0.5f);
+
         this.throwButton = throwButton;
 
+        throwButton.setColor(1, 1, 1, 0.5f);
+
         this.pauseButton = pauseButton;
+
+        pauseButton.setColor(1, 1, 1, 0.5f);
 
         jumpButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

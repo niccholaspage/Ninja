@@ -14,8 +14,6 @@ import com.nicholasnassar.ninja.screens.GameScreen;
 public class HealthSystem extends IteratingSystem {
     private final GameScreen screen;
 
-    private final ComponentMapper<CameraComponent> cameraMapper;
-
     private final ComponentMapper<HealthComponent> healthMapper;
 
     private ImmutableArray<Entity> aiEntities;
@@ -26,8 +24,6 @@ public class HealthSystem extends IteratingSystem {
         super(Family.all(HealthComponent.class).get());
 
         this.screen = screen;
-
-        cameraMapper = ComponentMapper.getFor(CameraComponent.class);
 
         healthMapper = ComponentMapper.getFor(HealthComponent.class);
     }
