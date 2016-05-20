@@ -33,6 +33,10 @@ public class GameScreen extends NinjaScreen {
 
     private final Viewport viewport;
 
+    private final ComponentMapper<CameraComponent> cameraMapper;
+
+    private final ComponentMapper<PhysicsComponent> physicsMapper;
+
     private final Camera camera;
 
     private final Spawner spawner;
@@ -77,6 +81,10 @@ public class GameScreen extends NinjaScreen {
 
     public GameScreen(final NinjaGame game, final SpriteBatch batch, boolean levelEditor) {
         super(batch);
+
+        cameraMapper = ComponentMapper.getFor(CameraComponent.class);
+
+        physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
 
         camera = new OrthographicCamera();
 
@@ -251,14 +259,14 @@ public class GameScreen extends NinjaScreen {
                 mobileInput.update(state);
             }
 
-            CameraComponent camera = cameraEntity.getComponent(CameraComponent.class);
+            CameraComponent camera = cameraMapper.get(cameraEntity);
 
             if (state == STATE_EDITING) {
                 camera.setSelected(1);
 
-                PhysicsComponent physics = camera.getTargets()[0].getComponent(PhysicsComponent.class);
+                PhysicsComponent physics = physicsMapper.get(camera.getTargets()[0]);
 
-                PhysicsComponent physics2 = camera.getTargets()[1].getComponent(PhysicsComponent.class);
+                PhysicsComponent physics2 = physicsMapper.get(camera.getTargets()[1]);
 
                 physics2.getPosition().set(physics.getPosition());
             } else {
@@ -283,8 +291,6 @@ public class GameScreen extends NinjaScreen {
         ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.all(PhysicsComponent.class, VisualComponent.class).exclude(InvisibleComponent.class).get());
 
         ImmutableArray<Entity> saveEntities = engine.getEntitiesFor(Family.all(SaveComponent.class, PhysicsComponent.class).get());
-
-        ComponentMapper<PhysicsComponent> physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
 
         ComponentMapper<SaveComponent> saveMapper = ComponentMapper.getFor(SaveComponent.class);
 
@@ -348,7 +354,7 @@ public class GameScreen extends NinjaScreen {
 
         cameraEntity = spawner.spawnCamera(camera);
 
-        cameraEntity.getComponent(CameraComponent.class).updateTargets(player, freeMovingGuy = spawner.spawnFreeMovingGuy());
+        cameraMapper.get(cameraEntity).updateTargets(player, freeMovingGuy = spawner.spawnFreeMovingGuy());
 
         levelProperties = new Table();
 
@@ -587,14 +593,14 @@ public class GameScreen extends NinjaScreen {
     }
 
     private void updateCamera(Entity player) {
-        CameraComponent cameraComponent = cameraEntity.getComponent(CameraComponent.class);
+        CameraComponent cameraComponent = cameraMapper.get(cameraEntity);
 
         if (this.levelProperties != null) {
             cameraComponent.updateTargets(player, freeMovingGuy);
 
-            PhysicsComponent physics = player.getComponent(PhysicsComponent.class);
+            PhysicsComponent physics = physicsMapper.get(player);
 
-            PhysicsComponent physics2 = freeMovingGuy.getComponent(PhysicsComponent.class);
+            PhysicsComponent physics2 = physicsMapper.get(freeMovingGuy);
 
             physics2.getPosition().set(physics.getPosition());
         } else {
@@ -627,6 +633,10 @@ public class GameScreen extends NinjaScreen {
 
     public boolean isMobile() {
         return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
+    }
+
+    public boolean onScreen(PhysicsComponent component) {
+        return true;
     }
 
     public void death() {
