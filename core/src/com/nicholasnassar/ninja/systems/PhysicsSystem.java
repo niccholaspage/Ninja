@@ -112,12 +112,8 @@ public class PhysicsSystem extends IteratingSystem {
 
                     float height2 = loopPhysics.getHeight();
 
-                    float radius = physics.getRadius();
-
-                    float radius2 = loopPhysics.getRadius();
-
                     if (width2 > 0 && height2 > 0) {
-                        if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2, radius, radius2)) {
+                        if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
                             if (damage != null && damage.getWhen() == DamageComponent.ON_COLLIDE) {
                                 HealthComponent health = healthMapper.get(loopEntity);
 
@@ -201,7 +197,7 @@ public class PhysicsSystem extends IteratingSystem {
                     float radius2 = loopPhysics.getRadius();
 
                     if (width2 > 0 && height2 > 0) {
-                        if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2, radius, radius2)) {
+                        if (position.y != newY && overlaps(newX, x2, newY, y2, width, width2, height, height2)) {
                             if (damage != null && damage.getWhen() == DamageComponent.ON_COLLIDE) {
                                 HealthComponent health = healthMapper.get(loopEntity);
 
@@ -302,38 +298,7 @@ public class PhysicsSystem extends IteratingSystem {
         }
     }
 
-    private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2, float radius, float radius2) {
-        if (radius > 0 && radius2 > 0) {
-            float dx = x - x2;
-            float dy = y - y2;
-
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            return distance < radius + radius2;
-        }
-
-        if (radius > 0 && radius2 < 0) {
-            float closestX = clamp(x, x2, x2 + width2);
-            float closestY = clamp(y, y2, y2 + height2);
-
-            float distanceX = x - closestX;
-            float distanceY = y - closestY;
-
-            float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-            return distanceSquared < (radius * radius);
-        }
-
-        if (radius2 > 0 && radius < 0) {
-            float closestX = clamp(x2, x, x + width);
-            float closestY = clamp(y2, y, y + height);
-
-            float distanceX = x2 - closestX;
-            float distanceY = y2 - closestY;
-
-            float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-            return distanceSquared < (radius2 * radius2);
-        }
-
+    private boolean overlaps(float x, float x2, float y, float y2, float width, float width2, float height, float height2) {
         return x < x2 + width2 && x + width > x2 && y < y2 + height2 && height + y > y2;
     }
 

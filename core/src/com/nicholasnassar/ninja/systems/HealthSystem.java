@@ -5,9 +5,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.nicholasnassar.ninja.components.AIComponent;
-import com.nicholasnassar.ninja.components.CameraComponent;
 import com.nicholasnassar.ninja.components.HealthComponent;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -15,8 +12,6 @@ public class HealthSystem extends IteratingSystem {
     private final GameScreen screen;
 
     private final ComponentMapper<HealthComponent> healthMapper;
-
-    private ImmutableArray<Entity> aiEntities;
 
     private Entity player;
 
@@ -31,8 +26,6 @@ public class HealthSystem extends IteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-
-        aiEntities = engine.getEntitiesFor(Family.all(AIComponent.class).get());
     }
 
     @Override
@@ -40,10 +33,6 @@ public class HealthSystem extends IteratingSystem {
         HealthComponent health = healthMapper.get(entity);
 
         if (health.isDead()) {
-            if (entity == player) {
-                screen.death();
-            }
-
             getEngine().removeEntity(entity);
         }
     }
@@ -55,10 +44,6 @@ public class HealthSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
-        if (aiEntities.size() < 1) {
-            screen.win();
-        }
 
         HealthComponent health = healthMapper.get(player);
 

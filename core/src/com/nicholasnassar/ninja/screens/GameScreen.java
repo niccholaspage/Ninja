@@ -69,10 +69,6 @@ public class GameScreen extends NinjaScreen {
 
     private boolean isLoading;
 
-    private boolean dead;
-
-    private boolean win;
-
     public static final int STATE_RUNNING = 0;
 
     public static final int STATE_PAUSED = 1;
@@ -180,8 +176,6 @@ public class GameScreen extends NinjaScreen {
         updateSystems(STATE_RUNNING);
 
         flipEntities(true);
-
-        dead = false;
     }
 
     public Camera getCamera() {
@@ -332,7 +326,7 @@ public class GameScreen extends NinjaScreen {
     public void togglePause() {
         if (state == STATE_RUNNING) {
             updateSystems(STATE_PAUSED);
-        } else if (state == STATE_PAUSED && !dead && !win) {
+        } else if (state == STATE_PAUSED) {
             updateSystems(STATE_RUNNING);
         }
     }
@@ -637,30 +631,6 @@ public class GameScreen extends NinjaScreen {
 
     public boolean onScreen(PhysicsComponent component) {
         return true;
-    }
-
-    public void death() {
-        if (levelProperties != null) {
-            return;
-        }
-
-        ((Label) pauseMenu.getChildren().get(0)).setText("You died!");
-
-        dead = true;
-
-        togglePause();
-    }
-
-    public void win() {
-        if (levelProperties != null) {
-            return;
-        }
-
-        ((Label) pauseMenu.getChildren().get(0)).setText("You won!");
-
-        win = true;
-
-        togglePause();
     }
 
     public Label getHealth() {

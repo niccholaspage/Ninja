@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -30,6 +31,16 @@ public class RenderSystem extends SortedIteratingSystem {
 
     private final ComponentMapper<ColorComponent> colorMapper;
 
+    private float cameraX;
+
+    private float cameraY;
+
+    private float cameraXAndWidth;
+
+    private float cameraYAndHeight;
+
+    private FPSLogger logger;
+
     public RenderSystem(GameScreen screen, SpriteBatch batch, Camera camera) {
         super(Family.all(PhysicsComponent.class, VisualComponent.class).exclude(InvisibleComponent.class).get(), new DepthComparator());
 
@@ -48,6 +59,8 @@ public class RenderSystem extends SortedIteratingSystem {
         stateMapper = ComponentMapper.getFor(StateComponent.class);
 
         colorMapper = ComponentMapper.getFor(ColorComponent.class);
+
+        logger = new FPSLogger();
     }
 
     @Override
@@ -55,6 +68,16 @@ public class RenderSystem extends SortedIteratingSystem {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+
+        logger.log();
+
+        cameraX = camera.position.x / GameScreen.PIXELS_PER_METER - camera.viewportWidth / GameScreen.PIXELS_PER_METER;
+
+        cameraXAndWidth = camera.position.x / GameScreen.PIXELS_PER_METER + camera.viewportWidth / GameScreen.PIXELS_PER_METER;
+
+        cameraY = camera.position.y / GameScreen.PIXELS_PER_METER;
+
+        cameraYAndHeight = cameraY + camera.viewportHeight / GameScreen.PIXELS_PER_METER;
 
         super.update(deltaTime);
 
@@ -115,13 +138,14 @@ public class RenderSystem extends SortedIteratingSystem {
             rotation = 0;
         }
 
-        boolean flip = false;
-
-        if (direction != null && direction.getDirection() == DirectionComponent.LEFT) {
-            flip = true;
-        }
-
         Vector3 position = physics.getPosition();
+
+        //System.out.println(position.x + ", " + cameraX);
+
+        if (!(position.x < cameraXAndWidth && position.x + physics.getWidth() > cameraX &&
+                position.y < cameraYAndHeight && physics.getHeight() + position.y > position.y)) {
+            return;
+        }
 
         float width = region.getRegionWidth() * physics.getSizeScale();
 
@@ -132,6 +156,12 @@ public class RenderSystem extends SortedIteratingSystem {
         int y = (int) (position.y * GameScreen.PIXELS_PER_METER);
 
         x -= width / 2 - physics.getWidth() * GameScreen.PIXELS_PER_METER / 2;
+
+        boolean flip = false;
+
+        if (direction != null && direction.getDirection() == DirectionComponent.LEFT) {
+            flip = true;
+        }
 
         ColorComponent color = colorMapper.get(entity);
 
