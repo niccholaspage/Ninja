@@ -401,6 +401,8 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
 
         level.setHeight(height);
 
+        getEngine().getSystem(PhysicsSystem.class).remakeGrid();
+
         return true;
     }
 

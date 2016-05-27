@@ -182,10 +182,6 @@ public class GameScreen extends NinjaScreen {
         return camera;
     }
 
-    public Entity getCameraEntity() {
-        return cameraEntity;
-    }
-
     public Level getLevel() {
         return level;
     }
@@ -627,10 +623,6 @@ public class GameScreen extends NinjaScreen {
 
     public boolean isMobile() {
         return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
-    }
-
-    public boolean onScreen(PhysicsComponent component) {
-        return true;
     }
 
     public Label getHealth() {

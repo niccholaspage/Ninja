@@ -172,7 +172,7 @@ public class Spawner {
         entity.add(new DirectionComponent());
         entity.add(new CollidableComponent(CollidableComponent.THROWABLE_EXCEPTION, true));
         entity.add(new DestroyOutsideComponent());
-        entity.add(new DamageComponent(10, DamageComponent.ON_COLLIDE));
+        entity.add(new DamageComponent(DamageComponent.ON_COLLIDE, 10));
 
         engine.addEntity(entity);
 
