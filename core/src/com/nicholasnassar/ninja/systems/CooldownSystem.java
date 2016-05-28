@@ -22,15 +22,15 @@ public class CooldownSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
         CooldownComponent cooldown = cooldownMapper.get(entity);
 
-        Iterator<IntMap.Entry<Float>> it = cooldown.getCooldowns().entries().iterator();
+        Iterator<IntMap.Entry<Float>> iterator = cooldown.getCooldowns().iterator();
 
-        while (it.hasNext()) {
-            IntMap.Entry<Float> entry = it.next();
+        while (iterator.hasNext()) {
+            IntMap.Entry<Float> entry = iterator.next();
 
             float value = entry.value - deltaTime;
 
             if (value <= 0) {
-                it.remove();
+                iterator.remove();
             } else {
                 cooldown.getCooldowns().put(entry.key, value);
             }

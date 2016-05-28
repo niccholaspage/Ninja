@@ -158,21 +158,11 @@ public class InputSystem extends IteratingSystem {
         if (!levelMapper.has(entity) && throwPressed && cooldownMapper.get(entity).canUse(CooldownComponent.THROW)) {
             final Vector3 position = physics.getPosition();
 
-            new Thread(new Runnable() {
-                @Override
+            getEngine().getSystem(RunnableSystem.class).postRunnable(new Runnable() {
                 public void run() {
-                    long time = System.currentTimeMillis();
-
-                    while (System.currentTimeMillis() < time + 350) {
-                    }
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, 1, direction.getDirection());
-                        }
-                    });
+                    screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, 1, direction.getDirection());
                 }
-            }).start();
+            }, 0.35f);
 
             state.setState(StateComponent.STATE_THROW);
 
