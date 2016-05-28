@@ -65,6 +65,8 @@ public class GameScreen extends NinjaScreen {
 
     private final Label health;
 
+    private final Label fps;
+
     private LevelEditorSystem levelEditorSystem;
 
     private boolean isLoading;
@@ -155,7 +157,11 @@ public class GameScreen extends NinjaScreen {
 
         health = new Label("", game.getSkin());
 
+        fps = new Label("", game.getSkin());
+
         uiStage.addActor(health);
+
+        uiStage.addActor(fps);
 
         if (levelEditor) {
             setupLevelEditor(game, spawner);
@@ -209,6 +215,8 @@ public class GameScreen extends NinjaScreen {
         }
 
         health.setPosition(8, stageHeight - 25);
+
+        fps.setPosition(8, stageHeight - 50);
     }
 
     @Override
@@ -219,6 +227,8 @@ public class GameScreen extends NinjaScreen {
         }
 
         delta = (float) Math.min(0.05, delta);
+
+        fps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 
         viewport.apply();
 

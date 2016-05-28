@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.nicholasnassar.ninja.Level;
+import com.nicholasnassar.ninja.SpatialMap;
 import com.nicholasnassar.ninja.components.*;
-import com.nicholasnassar.ninja.QuadTree;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class PhysicsSystem extends IteratingSystem {
@@ -32,9 +31,9 @@ public class PhysicsSystem extends IteratingSystem {
 
     private final ComponentMapper<HealthComponent> healthMapper;
 
-    private final Array<Entity> retrieveArray;
+    private final ObjectSet<Entity> retrieveArray;
 
-    private QuadTree quadTree;
+    private final SpatialMap spatialMap;
 
     public PhysicsSystem(GameScreen screen) {
         super(Family.all(PhysicsComponent.class).get());
@@ -53,18 +52,18 @@ public class PhysicsSystem extends IteratingSystem {
 
         healthMapper = ComponentMapper.getFor(HealthComponent.class);
 
-        quadTree = new QuadTree(0, new Rectangle(0, 0, screen.getLevel().getWidth(), screen.getLevel().getHeight()));
+        spatialMap = new SpatialMap(screen.getLevel().getWidth(), screen.getLevel().getHeight());
 
-        retrieveArray = new Array<Entity>();
+        retrieveArray = new ObjectSet<Entity>();
     }
 
     public void remakeGrid() {
-        quadTree = new QuadTree(0, new Rectangle(0, 0, screen.getLevel().getWidth(), screen.getLevel().getHeight()));
+        spatialMap.resize(screen.getLevel().getWidth(), screen.getLevel().getHeight());
     }
 
     @Override
     public void update(float deltaTime) {
-        quadTree.clear();
+        spatialMap.clear();
 
         super.update(deltaTime);
 
@@ -76,10 +75,6 @@ public class PhysicsSystem extends IteratingSystem {
             PhysicsComponent physics = physicsMapper.get(entity);
 
             Vector3 position = physics.getPosition();
-
-            retrieveArray.clear();
-
-            quadTree.retrieve(retrieveArray, physics);
 
             Vector2 velocity = physics.getVelocity();
 
@@ -94,6 +89,10 @@ public class PhysicsSystem extends IteratingSystem {
             }
 
             if (velocity.x != 0 || velocity.y != 0) {
+                retrieveArray.clear();
+
+                spatialMap.retrieve(retrieveArray, physics);
+
                 float newX = position.x + velocity.x * deltaTime;
 
                 float y = position.y;
@@ -281,7 +280,7 @@ public class PhysicsSystem extends IteratingSystem {
             return;
         }
 
-        quadTree.insert(entity);
+        spatialMap.addEntity(physicsMapper.get(entity), entity);
     }
 
     private void setValidConstraints(Entity entity, Vector3 position) {

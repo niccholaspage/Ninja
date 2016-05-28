@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -39,8 +38,6 @@ public class RenderSystem extends SortedIteratingSystem {
 
     private float cameraYAndHeight;
 
-    private FPSLogger logger;
-
     public RenderSystem(GameScreen screen, SpriteBatch batch, Camera camera) {
         super(Family.all(PhysicsComponent.class, VisualComponent.class).exclude(InvisibleComponent.class).get(), new DepthComparator());
 
@@ -59,8 +56,6 @@ public class RenderSystem extends SortedIteratingSystem {
         stateMapper = ComponentMapper.getFor(StateComponent.class);
 
         colorMapper = ComponentMapper.getFor(ColorComponent.class);
-
-        logger = new FPSLogger();
     }
 
     @Override
@@ -69,15 +64,13 @@ public class RenderSystem extends SortedIteratingSystem {
 
         batch.begin();
 
-        logger.log();
-
         cameraX = camera.position.x / GameScreen.PIXELS_PER_METER - camera.viewportWidth / GameScreen.PIXELS_PER_METER;
 
         cameraXAndWidth = camera.position.x / GameScreen.PIXELS_PER_METER + camera.viewportWidth / GameScreen.PIXELS_PER_METER;
 
-        cameraY = camera.position.y / GameScreen.PIXELS_PER_METER;
+        cameraY = camera.position.y / GameScreen.PIXELS_PER_METER - camera.viewportHeight / GameScreen.PIXELS_PER_METER;
 
-        cameraYAndHeight = cameraY + camera.viewportHeight / GameScreen.PIXELS_PER_METER;
+        cameraYAndHeight = camera.position.y + camera.viewportHeight / GameScreen.PIXELS_PER_METER;
 
         super.update(deltaTime);
 
@@ -143,7 +136,7 @@ public class RenderSystem extends SortedIteratingSystem {
         //System.out.println(position.x + ", " + cameraX);
 
         if (!(position.x < cameraXAndWidth && position.x + physics.getWidth() > cameraX &&
-                position.y < cameraYAndHeight && physics.getHeight() + position.y > position.y)) {
+                position.y < cameraYAndHeight && physics.getHeight() + position.y > cameraY)) {
             return;
         }
 
