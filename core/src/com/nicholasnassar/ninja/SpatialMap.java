@@ -45,13 +45,13 @@ public class SpatialMap {
     public void retrieve(ObjectSet<Entity> returnEntities, PhysicsComponent physics) {
         Vector3 position = physics.getPosition();
 
-        float leftX = position.x;
+        float leftX = (float) Math.floor(position.x);
 
-        float rightX = position.x + physics.getWidth();
+        float rightX = (float) Math.ceil(position.x + physics.getWidth());
 
-        float bottomY = position.y;
+        float bottomY = (float) Math.floor(position.y);
 
-        float topY = position.y + physics.getHeight();
+        float topY = (float) Math.ceil(position.y + physics.getHeight());
 
         for (float x = leftX; x <= rightX; x++) {
             for (float y = bottomY; y <= topY; y++) {
@@ -69,13 +69,13 @@ public class SpatialMap {
     public void addEntity(PhysicsComponent physics, Entity entity) {
         Vector3 position = physics.getPosition();
 
-        float leftX = position.x;
+        float leftX = (float) Math.floor(position.x);
 
-        float rightX = position.x + physics.getWidth();
+        float rightX = (float) Math.ceil(position.x + physics.getWidth());
 
-        float bottomY = position.y;
+        float bottomY = (float) Math.floor(position.y);
 
-        float topY = position.y + physics.getHeight();
+        float topY = (float) Math.ceil(position.y + physics.getHeight());
 
         for (float x = leftX; x <= rightX; x++) {
             for (float y = bottomY; y <= topY; y++) {

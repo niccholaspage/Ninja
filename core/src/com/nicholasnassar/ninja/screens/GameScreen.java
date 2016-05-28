@@ -573,6 +573,8 @@ public class GameScreen extends NinjaScreen {
         level.setWidth(levelProperties.getInt("width"));
         level.setHeight(levelProperties.getInt("height"));
 
+        engine.getSystem(PhysicsSystem.class).remakeGrid();
+
         JsonValue entities = json.get("entities");
 
         for (JsonValue entity : entities.iterator()) {

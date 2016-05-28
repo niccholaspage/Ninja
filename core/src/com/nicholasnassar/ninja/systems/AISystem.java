@@ -4,9 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -83,32 +81,6 @@ public class AISystem extends IteratingSystem {
 
         if (Math.random() < 0.2f && gravity.isGrounded()) {
             velocity.y = jumpMapper.get(entity).getJumpHeight();
-        }
-
-        if (Math.random() < 0.4f && cooldownMapper.get(entity).canUse(CooldownComponent.THROW)) {
-            StateComponent state = stateMapper.get(entity);
-
-            final Vector3 position = physics.getPosition();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    long time = System.currentTimeMillis();
-
-                    while (System.currentTimeMillis() < time + 350) {
-                    }
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, 1.5f, directionMapper.get(entity).getDirection());
-                        }
-                    });
-                }
-            }).start();
-
-            state.setState(StateComponent.STATE_THROW);
-
-            cooldownMapper.get(entity).addCooldown(CooldownComponent.THROW, 1);
         }
     }
 }
