@@ -88,12 +88,12 @@ public class Spawner {
     public Entity spawnFreeMovingGuy() {
         Entity entity = new Entity();
 
-        engine.addEntity(entity);
-
         entity.add(new PhysicsComponent(0, 0, 0, 0));
         entity.add(new SpeedComponent(20f));
         entity.add(new ControllableComponent());
         entity.add(new LevelEditorComponent());
+
+        engine.addEntity(entity);
 
         return entity;
     }

@@ -371,8 +371,6 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
                     i--;
                 }
 
-                getEngine().update(0);
-
                 screen.load(text);
             }
         });
