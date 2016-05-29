@@ -132,7 +132,7 @@ public class NinjaAssetManager {
         }
     }
 
-    public void addBlocks(TextureAtlas atlas) {
+    private void addBlocks(TextureAtlas atlas) {
         JsonValue json = new JsonReader().parse(Gdx.files.internal("blocks.json"));
 
         for (JsonValue block : json.get("blocks").iterator()) {

@@ -25,7 +25,7 @@ public class Spawner {
         this.levelEditing = levelEditing;
     }
 
-    public Entity spawnSoldier(float x, float y) {
+    private Entity spawnSoldier(float x, float y) {
         Entity entity = new Entity();
 
         IntMap<Array<Animation>> animations = manager.getAnimationsFor("soldier");
@@ -108,7 +108,7 @@ public class Spawner {
         return entity;
     }
 
-    public Entity spawnBlock(String type, boolean foreground, float x, float y) {
+    private Entity spawnBlock(String type, boolean foreground, float x, float y) {
         Entity entity = new Entity();
 
         TextureRegion region = manager.getBlock(type);

@@ -19,7 +19,7 @@ public class AISystem extends IteratingSystem {
 
     private final ComponentMapper<GravityComponent> gravityMapper;
 
-    public AISystem(GameScreen screen) {
+    public AISystem() {
         super(Family.all(AIComponent.class, PhysicsComponent.class, SpeedComponent.class, JumpComponent.class).get());
 
         aiMapper = ComponentMapper.getFor(AIComponent.class);
