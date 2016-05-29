@@ -1,9 +1,7 @@
 package com.nicholasnassar.ninja.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -12,12 +10,14 @@ import com.nicholasnassar.ninja.SpatialMap;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
-public class PhysicsSystem extends IteratingSystem {
+public class PhysicsSystem extends EntitySystem {
     private static final float GRAVITY = 96.5f;
 
     private static final float MAX = 1170f;
 
     private final GameScreen screen;
+
+    private ImmutableArray<Entity> entities;
 
     private final ComponentMapper<PhysicsComponent> physicsMapper;
 
@@ -36,8 +36,6 @@ public class PhysicsSystem extends IteratingSystem {
     private final SpatialMap spatialMap;
 
     public PhysicsSystem(GameScreen screen) {
-        super(Family.all(PhysicsComponent.class).get());
-
         this.screen = screen;
 
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
@@ -57,6 +55,11 @@ public class PhysicsSystem extends IteratingSystem {
         retrieveArray = new ObjectSet<Entity>();
     }
 
+    @Override
+    public void addedToEngine(Engine engine) {
+        entities = engine.getEntitiesFor(Family.all(PhysicsComponent.class).get());
+    }
+
     public void remakeGrid() {
         spatialMap.resize(screen.getLevel().getWidth(), screen.getLevel().getHeight());
     }
@@ -65,11 +68,17 @@ public class PhysicsSystem extends IteratingSystem {
     public void update(float deltaTime) {
         spatialMap.clear();
 
-        super.update(deltaTime);
-
-        for (Entity entity : getEntities()) {
+        for (Entity entity : entities) {
             if (!screen.canProcess(entity)) {
-                return;
+                continue;
+            }
+
+            spatialMap.addEntity(physicsMapper.get(entity), entity);
+        }
+
+        for (Entity entity : entities) {
+            if (!screen.canProcess(entity)) {
+                continue;
             }
 
             PhysicsComponent physics = physicsMapper.get(entity);
@@ -272,15 +281,6 @@ public class PhysicsSystem extends IteratingSystem {
 
             setValidConstraints(entity, position);
         }
-    }
-
-    @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        if (!screen.canProcess(entity)) {
-            return;
-        }
-
-        spatialMap.addEntity(physicsMapper.get(entity), entity);
     }
 
     private void setValidConstraints(Entity entity, Vector3 position) {
