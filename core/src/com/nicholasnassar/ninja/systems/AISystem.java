@@ -9,8 +9,6 @@ import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class AISystem extends IteratingSystem {
-    private final GameScreen screen;
-
     private final ComponentMapper<AIComponent> aiMapper;
 
     private final ComponentMapper<PhysicsComponent> physicsMapper;
@@ -21,16 +19,8 @@ public class AISystem extends IteratingSystem {
 
     private final ComponentMapper<GravityComponent> gravityMapper;
 
-    private final ComponentMapper<StateComponent> stateMapper;
-
-    private final ComponentMapper<DirectionComponent> directionMapper;
-
-    private final ComponentMapper<CooldownComponent> cooldownMapper;
-
     public AISystem(GameScreen screen) {
         super(Family.all(AIComponent.class, PhysicsComponent.class, SpeedComponent.class, JumpComponent.class).get());
-
-        this.screen = screen;
 
         aiMapper = ComponentMapper.getFor(AIComponent.class);
 
@@ -41,12 +31,6 @@ public class AISystem extends IteratingSystem {
         jumpMapper = ComponentMapper.getFor(JumpComponent.class);
 
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
-
-        stateMapper = ComponentMapper.getFor(StateComponent.class);
-
-        directionMapper = ComponentMapper.getFor(DirectionComponent.class);
-
-        cooldownMapper = ComponentMapper.getFor(CooldownComponent.class);
     }
 
     @Override

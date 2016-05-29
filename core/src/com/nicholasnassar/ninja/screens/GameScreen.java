@@ -251,9 +251,11 @@ public class GameScreen extends NinjaScreen {
 
         engine.getSystem(AISystem.class).setProcessing(shouldProcess);
         engine.getSystem(HealthSystem.class).setProcessing(shouldProcess);
+        engine.getSystem(RunnableSystem.class).setProcessing(shouldProcess);
 
         pauseMenu.setVisible(state == STATE_PAUSED);
         health.setVisible(state == STATE_RUNNING);
+        fps.setVisible(state == STATE_RUNNING);
 
         if (levelProperties != null) {
             if (mobileInput != null) {
