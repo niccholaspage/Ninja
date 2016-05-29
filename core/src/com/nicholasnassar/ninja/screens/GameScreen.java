@@ -118,7 +118,7 @@ public class GameScreen extends NinjaScreen {
 
         level = new Level(100, 20);
 
-        if (isMobile()) {
+        if (canTouch()) {
             Touchpad touchpad = new Touchpad(10, skin);
 
             uiStage.addActor(touchpad);
@@ -464,7 +464,7 @@ public class GameScreen extends NinjaScreen {
             blockTable.add(button).padRight(5).padBottom(8);
         }
 
-        if (isMobile()) {
+        if (canTouch()) {
             TextureRegion region = game.getAssetManager().getUIElement("buttons/delete.png");
 
             SelectButton button = new SelectButton(levelEditorSystem, region, null, blockTable, creatureTable);
@@ -636,7 +636,7 @@ public class GameScreen extends NinjaScreen {
         }
     }
 
-    public boolean isMobile() {
+    public boolean canTouch() {
         return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
     }
 
