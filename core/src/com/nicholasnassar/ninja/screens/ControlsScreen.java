@@ -114,6 +114,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ControlManager.touchControls = checkBox.isChecked();
+
+                saveControls();
             }
         });
 
@@ -183,6 +185,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         for (Control control : ControlManager.controls) {
             preferences.putInteger("controls." + control.getId(), control.getKey());
         }
+
+        preferences.putBoolean("controls.touch_controls", ControlManager.touchControls);
 
         preferences.flush();
     }

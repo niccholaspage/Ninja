@@ -50,6 +50,8 @@ public class NinjaGame extends Game {
             control.setKey(keycode);
         }
 
+        ControlManager.touchControls = preferences.getBoolean("controls.touch_controls", ControlManager.touchControls);
+
         setScreen(new LoadingScreen(this, batch));
     }
 
