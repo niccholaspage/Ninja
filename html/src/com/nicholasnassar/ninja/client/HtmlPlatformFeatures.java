@@ -20,7 +20,7 @@ public class HtmlPlatformFeatures implements PlatformFeatures, Input.TextInputLi
     }
 
     public void init() {
-        preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
+        preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings.html");
     }
 
     @Override
