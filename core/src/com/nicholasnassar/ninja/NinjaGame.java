@@ -2,6 +2,7 @@ package com.nicholasnassar.ninja;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,8 @@ public class NinjaGame extends Game {
 
     private PlatformFeatures platformFeatures;
 
+    private Preferences preferences;
+
     public NinjaGame(PlatformFeatures platformFeatures) {
         this.platformFeatures = platformFeatures;
     }
@@ -38,6 +41,14 @@ public class NinjaGame extends Game {
         batch = new SpriteBatch();
 
         platformFeatures.init();
+
+        preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
+
+        for (Control control : ControlManager.controls) {
+            int keycode = preferences.getInteger("controls." + control.getId(), control.getDefaultKey());
+
+            control.setKey(keycode);
+        }
 
         setScreen(new LoadingScreen(this, batch));
     }
@@ -96,5 +107,9 @@ public class NinjaGame extends Game {
 
     public PlatformFeatures getPlatformFeatures() {
         return platformFeatures;
+    }
+
+    public Preferences getPreferences() {
+        return preferences;
     }
 }

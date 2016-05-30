@@ -1,9 +1,6 @@
 package com.nicholasnassar.ninja.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,11 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.nicholasnassar.ninja.Control;
 import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.NinjaGame;
+
+import java.util.Map;
 
 public class ControlsScreen extends NinjaScreen implements InputProcessor {
     private final NinjaGame game;
@@ -46,6 +46,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
         table.setFillParent(true);
 
+        TextButton defaults = new TextButton("Defaults", game.getSkin());
+
         TextButton back = new TextButton("Back", game.getSkin());
 
         back.addListener(new ChangeListener() {
@@ -57,6 +59,23 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
         controlsGroup = new OrderedMap<TextButton, Control>();
 
+        defaults.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                uncheckAll();
+
+                for (ObjectMap.Entry<TextButton, Control> entry : controlsGroup.entries()) {
+                    int keycode = entry.value.getDefaultKey();
+
+                    entry.value.setKey(keycode);
+
+                    entry.key.setText(Input.Keys.toString(keycode));
+                }
+
+                saveControls();
+            }
+        });
+
         for (Control control : ControlManager.controls) {
             table.add(new Label(control.getName() + ": ", game.getSkin())).padBottom(5);
 
@@ -66,7 +85,11 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
             table.add(controlButton).padBottom(5);
 
-            controlButton.getStyle().checked = controlButton.getStyle().down;
+            TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(controlButton.getStyle());
+
+            style.checked = style.down;
+
+            controlButton.setStyle(style);
 
             controlButton.addListener(new ClickListener() {
                 @Override
@@ -82,7 +105,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
         table.add(new Label("Right click to cancel", game.getSkin())).padBottom(5).colspan(2).row();
 
-        table.add(back).colspan(2);
+        table.add(defaults);
+        table.add(back);
 
         stage.addActor(table);
 
@@ -132,6 +156,22 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         game.setScreen(new OptionsScreen(game, batch));
     }
 
+    private void saveControls() {
+        Preferences preferences = game.getPreferences();
+
+        for (Map.Entry<String, ?> property : preferences.get().entrySet()) {
+            if (property.getKey().startsWith("controls.")) {
+                preferences.remove(property.getKey());
+            }
+        }
+
+        for (Control control : ControlManager.controls) {
+            preferences.putInteger("controls." + control.getId(), control.getKey());
+        }
+
+        preferences.flush();
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         TextButton checked = getChecked();
@@ -144,6 +184,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
             uncheckAll();
 
             recentlyChanged = true;
+
+            saveControls();
         }
 
         return true;
