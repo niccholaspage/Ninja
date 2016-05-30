@@ -27,6 +27,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
     private final OrderedMap<TextButton, Control> controlsGroup;
 
+    private boolean recentlyChanged;
+
     public ControlsScreen(NinjaGame game, SpriteBatch batch) {
         super(batch);
 
@@ -83,6 +85,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         table.add(back).colspan(2);
 
         stage.addActor(table);
+
+        recentlyChanged = false;
     }
 
     private void uncheckAll() {
@@ -108,8 +112,12 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
     @Override
     public void render(float deltaTime) {
-        if (ControlManager.isJustPressed(back)) {
-            goBack();
+        if (!recentlyChanged) {
+            if (ControlManager.isJustPressed(back)) {
+                goBack();
+            }
+        } else {
+            recentlyChanged = false;
         }
 
         stage.draw();
@@ -134,6 +142,8 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
             checked.setText(Input.Keys.toString(keycode));
 
             uncheckAll();
+
+            recentlyChanged = true;
         }
 
         return true;
