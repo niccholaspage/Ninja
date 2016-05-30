@@ -62,13 +62,13 @@ public class InputSystem extends IteratingSystem {
 
         this.mobileInput = mobileInput;
 
-        moveLeft = ControlManager.getControl("Move Left");
-        moveRight = ControlManager.getControl("Move Right");
-        moveUp = ControlManager.getControl("Move Up");
-        moveDown = ControlManager.getControl("Move Down");
-        throwC = ControlManager.getControl("Throw");
-        jump = ControlManager.getControl("Jump");
-        roll = ControlManager.getControl("Roll");
+        moveLeft = ControlManager.getControl("move_left");
+        moveRight = ControlManager.getControl("move_right");
+        moveUp = ControlManager.getControl("move_up");
+        moveDown = ControlManager.getControl("move_down");
+        throwC = ControlManager.getControl("throw");
+        jump = ControlManager.getControl("jump");
+        roll = ControlManager.getControl("roll");
     }
 
     @Override

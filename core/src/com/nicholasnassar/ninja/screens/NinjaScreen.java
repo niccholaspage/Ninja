@@ -14,7 +14,7 @@ public class NinjaScreen extends ScreenAdapter {
     public NinjaScreen(SpriteBatch batch) {
         this.batch = batch;
 
-        back = ControlManager.getControl("Back");
+        back = ControlManager.getControl("back");
     }
 
     @Override

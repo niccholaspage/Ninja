@@ -8,24 +8,24 @@ public class ControlManager {
     public static final Array<Control> controls = new Array<Control>();
 
     static {
-        controls.add(new Control("Back", Input.Keys.ESCAPE));
-        controls.add(new Control("Move Up", Input.Keys.W));
-        controls.add(new Control("Move Left", Input.Keys.A));
-        controls.add(new Control("Move Down", Input.Keys.S));
-        controls.add(new Control("Move Right", Input.Keys.D));
-        controls.add(new Control("Jump", Input.Keys.SPACE));
-        controls.add(new Control("Throw", Input.Keys.G));
-        controls.add(new Control("Roll", Input.Keys.S));
+        controls.add(new Control("back", "Back", Input.Keys.ESCAPE));
+        controls.add(new Control("move_up", "Move Up", Input.Keys.W));
+        controls.add(new Control("move_left", "Move Left", Input.Keys.A));
+        controls.add(new Control("move_down", "Move Down", Input.Keys.S));
+        controls.add(new Control("move_right", "Move Right", Input.Keys.D));
+        controls.add(new Control("jump", "Jump", Input.Keys.SPACE));
+        controls.add(new Control("throw", "Throw", Input.Keys.G));
+        controls.add(new Control("roll", "Roll", Input.Keys.S));
     }
 
-    public static Control getControl(String name) {
+    public static Control getControl(String id) {
         for (Control control : controls) {
-            if (control.getName().equals(name)) {
+            if (control.getId().equals(id)) {
                 return control;
             }
         }
 
-        return null;
+        throw new NullPointerException();
     }
 
     public static boolean isPressed(Control control) {
