@@ -223,7 +223,7 @@ public class GameScreen extends NinjaScreen {
     @Override
     public void render(float delta) {
         //super.render(delta); - We don't need this, we pause the game when escape is pressed (no exit anymore, oops.).
-        if (Gdx.input.isKeyJustPressed(ControlManager.BACK)) {
+        if (ControlManager.isJustPressed(back)) {
             togglePause();
         }
 

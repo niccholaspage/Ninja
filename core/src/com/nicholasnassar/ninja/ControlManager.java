@@ -1,14 +1,38 @@
 package com.nicholasnassar.ninja;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Array;
 
 public class ControlManager {
-    public static final int BACK = Input.Keys.ESCAPE;
-    public static final int MOVE_UP = Input.Keys.W;
-    public static final int MOVE_LEFT = Input.Keys.A;
-    public static final int MOVE_DOWN = Input.Keys.S;
-    public static final int MOVE_RIGHT = Input.Keys.D;
-    public static final int JUMP = Input.Keys.SPACE;
-    public static final int THROW = Input.Keys.G;
-    public static final int ROLL = Input.Keys.S;
+    public static final Array<Control> controls = new Array<Control>();
+
+    static {
+        controls.add(new Control("Back", Input.Keys.ESCAPE));
+        controls.add(new Control("Move Up", Input.Keys.W));
+        controls.add(new Control("Move Left", Input.Keys.A));
+        controls.add(new Control("Move Down", Input.Keys.S));
+        controls.add(new Control("Move Right", Input.Keys.D));
+        controls.add(new Control("Jump", Input.Keys.SPACE));
+        controls.add(new Control("Throw", Input.Keys.G));
+        controls.add(new Control("Roll", Input.Keys.S));
+    }
+
+    public static Control getControl(String name) {
+        for (Control control : controls) {
+            if (control.getName().equals(name)) {
+                return control;
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean isPressed(Control control) {
+        return Gdx.input.isKeyPressed(control.getKey());
+    }
+
+    public static boolean isJustPressed(Control control) {
+        return Gdx.input.isKeyJustPressed(control.getKey());
+    }
 }

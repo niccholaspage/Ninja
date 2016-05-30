@@ -36,10 +36,14 @@ public class MainMenuScreen extends NinjaScreen {
 
         TextButton levelEditor = new TextButton("Level Editor", game.getSkin());
 
+        TextButton options = new TextButton("Options", game.getSkin());
+
         mainMenuTable.add(new Label("nNINJA", game.getSkin())).colspan(2);
         mainMenuTable.row();
-        mainMenuTable.add(playGame).padRight(5);
-        mainMenuTable.add(levelEditor);
+        mainMenuTable.add(playGame).padRight(5).padBottom(5);
+        mainMenuTable.add(levelEditor).padBottom(5);
+        mainMenuTable.row();
+        mainMenuTable.add(options).colspan(2);
 
         stage.addActor(mainMenuTable);
 
@@ -54,6 +58,13 @@ public class MainMenuScreen extends NinjaScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 startGame(game, true);
+            }
+        });
+
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new OptionsScreen(game, batch));
             }
         });
 

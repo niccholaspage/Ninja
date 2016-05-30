@@ -1,26 +1,25 @@
 package com.nicholasnassar.ninja.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.nicholasnassar.ninja.Control;
 import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.NinjaGame;
 
-public class ControlsScreen extends NinjaScreen {
+public class OptionsScreen extends NinjaScreen {
     private final NinjaGame game;
 
     private final Stage stage;
 
-    public ControlsScreen(NinjaGame game, SpriteBatch batch) {
+    public OptionsScreen(final NinjaGame game, final SpriteBatch batch) {
         super(batch);
 
         this.game = game;
@@ -35,6 +34,23 @@ public class ControlsScreen extends NinjaScreen {
 
         table.setFillParent(true);
 
+        Slider musicVolume = new Slider(0, 100, 1, false, game.getSkin());
+
+        Slider soundVolume = new Slider(0, 100, 1, false, game.getSkin());
+
+        //TODO: Actual loading
+        musicVolume.setValue(100);
+        soundVolume.setValue(100);
+
+        TextButton controls = new TextButton("Controls", game.getSkin());
+
+        controls.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new ControlsScreen(game, batch));
+            }
+        });
+
         TextButton back = new TextButton("Back", game.getSkin());
 
         back.addListener(new ChangeListener() {
@@ -44,12 +60,11 @@ public class ControlsScreen extends NinjaScreen {
             }
         });
 
-        for (Control control : ControlManager.controls) {
-            table.add(new Label(control.getName() + ": ", game.getSkin())).padBottom(5);
-            table.add(new TextButton(Input.Keys.toString(control.getDefaultKey()), game.getSkin())).padBottom(5);
-            table.row();
-        }
-
+        table.add(new Label("Music Volume: ", game.getSkin()));
+        table.add(musicVolume).row();
+        table.add(new Label("Sound Volume: ", game.getSkin()));
+        table.add(soundVolume).row();
+        table.add(controls).colspan(2).padBottom(5).row();
         table.add(back).colspan(2);
 
         stage.addActor(table);
@@ -75,6 +90,6 @@ public class ControlsScreen extends NinjaScreen {
     }
 
     private void goBack() {
-        game.setScreen(new OptionsScreen(game, batch));
+        game.setScreen(new MainMenuScreen(game, batch));
     }
 }

@@ -4,9 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.nicholasnassar.ninja.Control;
 import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.MobileInput;
 import com.nicholasnassar.ninja.components.*;
@@ -35,6 +35,8 @@ public class InputSystem extends IteratingSystem {
 
     private final MobileInput mobileInput;
 
+    private final Control moveLeft, moveRight, moveUp, moveDown, throwC, jump, roll;
+
     public InputSystem(GameScreen screen, MobileInput mobileInput) {
         super(Family.all(PhysicsComponent.class, SpeedComponent.class, ControllableComponent.class).get());
 
@@ -59,6 +61,14 @@ public class InputSystem extends IteratingSystem {
         cooldownMapper = ComponentMapper.getFor(CooldownComponent.class);
 
         this.mobileInput = mobileInput;
+
+        moveLeft = ControlManager.getControl("Move Left");
+        moveRight = ControlManager.getControl("Move Right");
+        moveUp = ControlManager.getControl("Move Up");
+        moveDown = ControlManager.getControl("Move Down");
+        throwC = ControlManager.getControl("Throw");
+        jump = ControlManager.getControl("Jump");
+        roll = ControlManager.getControl("Roll");
     }
 
     @Override
@@ -83,19 +93,13 @@ public class InputSystem extends IteratingSystem {
 
         physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
 
-        boolean moveLeft = Gdx.input.isKeyPressed(ControlManager.MOVE_LEFT);
-
-        boolean moveRight = Gdx.input.isKeyPressed(ControlManager.MOVE_RIGHT);
-
-        boolean moveUp = Gdx.input.isKeyPressed(ControlManager.MOVE_UP);
-
-        boolean moveDown = Gdx.input.isKeyPressed(ControlManager.MOVE_DOWN);
-
-        boolean throwPressed = Gdx.input.isKeyJustPressed(ControlManager.THROW);
-
-        boolean jumpPressed = Gdx.input.isKeyJustPressed(ControlManager.JUMP);
-
-        boolean rollPressed = Gdx.input.isKeyJustPressed(ControlManager.ROLL);
+        boolean moveLeft = ControlManager.isPressed(this.moveLeft);
+        boolean moveRight = ControlManager.isPressed(this.moveRight);
+        boolean moveUp = ControlManager.isPressed(this.moveUp);
+        boolean moveDown = ControlManager.isPressed(this.moveDown);
+        boolean throwPressed = ControlManager.isJustPressed(throwC);
+        boolean jumpPressed = ControlManager.isJustPressed(jump);
+        boolean rollPressed = ControlManager.isJustPressed(roll);
 
         if (mobileInput != null) {
             moveLeft = mobileInput.isLeftDown();
