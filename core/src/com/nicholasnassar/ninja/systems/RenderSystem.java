@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -64,13 +65,15 @@ public class RenderSystem extends SortedIteratingSystem {
 
         batch.begin();
 
-        cameraX = camera.position.x / GameScreen.PIXELS_PER_METER - camera.viewportWidth / GameScreen.PIXELS_PER_METER;
+        float zoom = ((OrthographicCamera) camera).zoom;
 
-        cameraXAndWidth = camera.position.x / GameScreen.PIXELS_PER_METER + camera.viewportWidth / GameScreen.PIXELS_PER_METER;
+        cameraX = camera.position.x / GameScreen.PIXELS_PER_METER - zoom * camera.viewportWidth / GameScreen.PIXELS_PER_METER;
 
-        cameraY = camera.position.y / GameScreen.PIXELS_PER_METER - camera.viewportHeight / GameScreen.PIXELS_PER_METER;
+        cameraXAndWidth = camera.position.x / GameScreen.PIXELS_PER_METER + zoom * camera.viewportWidth / GameScreen.PIXELS_PER_METER;
 
-        cameraYAndHeight = camera.position.y + camera.viewportHeight / GameScreen.PIXELS_PER_METER;
+        cameraY = camera.position.y / GameScreen.PIXELS_PER_METER - zoom * camera.viewportHeight / GameScreen.PIXELS_PER_METER;
+
+        cameraYAndHeight = camera.position.y + zoom * camera.viewportHeight / GameScreen.PIXELS_PER_METER;
 
         super.update(deltaTime);
 
@@ -132,8 +135,6 @@ public class RenderSystem extends SortedIteratingSystem {
         }
 
         Vector3 position = physics.getPosition();
-
-        //System.out.println(position.x + ", " + cameraX);
 
         if (!(position.x < cameraXAndWidth && position.x + physics.getWidth() > cameraX &&
                 position.y < cameraYAndHeight && physics.getHeight() + position.y > cameraY)) {
