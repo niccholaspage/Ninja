@@ -1,11 +1,14 @@
 package com.nicholasnassar.ninja;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 
 public class ControlManager {
     public static final Array<Control> controls = new Array<Control>();
+
+    public static boolean touchControls = Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS;
 
     static {
         controls.add(new Control("back", "Back", Input.Keys.ESCAPE));

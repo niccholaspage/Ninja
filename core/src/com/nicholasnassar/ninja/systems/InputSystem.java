@@ -102,17 +102,19 @@ public class InputSystem extends IteratingSystem {
         boolean rollPressed = ControlManager.isJustPressed(roll);
 
         if (mobileInput != null) {
-            moveLeft = mobileInput.isLeftDown();
+            moveLeft = moveLeft || mobileInput.isLeftDown();
 
-            moveRight = mobileInput.isRightDown();
+            moveRight = moveRight || mobileInput.isRightDown();
 
-            moveUp = mobileInput.isUpDown();
+            moveUp = moveUp || mobileInput.isUpDown();
 
-            moveDown = rollPressed = mobileInput.isDownDown();
+            moveDown = moveDown || mobileInput.isDownDown();
 
-            throwPressed = mobileInput.isThrowPressed();
+            rollPressed = rollPressed || mobileInput.isDownDown();
 
-            jumpPressed = mobileInput.isJumpPressed();
+            throwPressed = throwPressed || mobileInput.isThrowPressed();
+
+            jumpPressed = jumpPressed || mobileInput.isJumpPressed();
 
             mobileInput.reset();
         }

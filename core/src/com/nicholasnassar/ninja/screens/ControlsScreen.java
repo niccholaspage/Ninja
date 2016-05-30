@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -104,6 +105,20 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         }
 
         table.add(new Label("Right click to cancel", game.getSkin())).padBottom(5).colspan(2).row();
+
+        final CheckBox checkBox = new CheckBox("", game.getSkin());
+
+        checkBox.setChecked(ControlManager.touchControls);
+
+        checkBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ControlManager.touchControls = checkBox.isChecked();
+            }
+        });
+
+        table.add(new Label("Touch Controls: ", game.getSkin()));
+        table.add(checkBox).padBottom(5).row();
 
         table.add(defaults);
         table.add(back);

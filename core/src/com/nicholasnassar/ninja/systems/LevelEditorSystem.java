@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.DepthComparator;
 import com.nicholasnassar.ninja.Level;
 import com.nicholasnassar.ninja.Spawner;
@@ -265,7 +266,7 @@ public class LevelEditorSystem extends EntitySystem implements InputProcessor {
     }
 
     private boolean removeLogic() {
-        if (selectedButton == Input.Buttons.RIGHT || (screen.canTouch() && selectedBuild == null)) {
+        if (selectedButton == Input.Buttons.RIGHT || (ControlManager.touchControls && selectedBuild == null)) {
             Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             screen.getCamera().unproject(mouse);

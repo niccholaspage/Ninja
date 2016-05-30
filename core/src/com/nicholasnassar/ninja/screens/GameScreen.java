@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
@@ -118,7 +117,7 @@ public class GameScreen extends NinjaScreen {
 
         level = new Level(100, 20);
 
-        if (canTouch()) {
+        if (ControlManager.touchControls) {
             Touchpad touchpad = new Touchpad(10, skin);
 
             uiStage.addActor(touchpad);
@@ -465,7 +464,7 @@ public class GameScreen extends NinjaScreen {
             blockTable.add(button).padRight(5).padBottom(8);
         }
 
-        if (canTouch()) {
+        if (ControlManager.touchControls) {
             TextureRegion region = game.getAssetManager().getUIElement("buttons/delete.png");
 
             SelectButton button = new SelectButton(levelEditorSystem, region, null, blockTable, creatureTable);
@@ -635,10 +634,6 @@ public class GameScreen extends NinjaScreen {
         } else {
             return false;
         }
-    }
-
-    public boolean canTouch() {
-        return Gdx.app.getType() == Application.ApplicationType.iOS || Gdx.app.getType() == Application.ApplicationType.Android;
     }
 
     public Label getHealth() {
