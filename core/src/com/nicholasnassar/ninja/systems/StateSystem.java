@@ -20,6 +20,8 @@ public class StateSystem extends IteratingSystem {
 
     private final ComponentMapper<CollidableComponent> collidableMapper;
 
+    private final ComponentMapper<VisualComponent> visualMapper;
+
     public StateSystem() {
         super(Family.all(PhysicsComponent.class).one(StateComponent.class, DirectionComponent.class).get());
 
@@ -34,6 +36,8 @@ public class StateSystem extends IteratingSystem {
         jumpMapper = ComponentMapper.getFor(JumpComponent.class);
 
         collidableMapper = ComponentMapper.getFor(CollidableComponent.class);
+
+        visualMapper = ComponentMapper.getFor(VisualComponent.class);
     }
 
     @Override
@@ -62,11 +66,13 @@ public class StateSystem extends IteratingSystem {
             } else if (velocity.x == 0 && state.getState() != StateComponent.STATE_THROW) {
                 state.setState(StateComponent.STATE_IDLE);
             } else {
+                VisualComponent visual = visualMapper.get(entity);
+
+                boolean animationFinished = visual.getAnimation(state.getState()).isAnimationFinished(state.getElapsedTime());
+
                 if (state.getState() != StateComponent.STATE_GROUND_ROLL && state.getState() != StateComponent.STATE_THROW) {
                     state.setState(StateComponent.STATE_WALKING);
-                } else if (state.getState() == StateComponent.STATE_GROUND_ROLL && state.getElapsedTime() > 0.16) {
-                    state.setState(StateComponent.STATE_WALKING);
-                } else if (state.getState() == StateComponent.STATE_THROW && state.getElapsedTime() > 0.32) {
+                } else if ((state.getState() == StateComponent.STATE_GROUND_ROLL || state.getState() == StateComponent.STATE_THROW) && animationFinished) {
                     state.setState(StateComponent.STATE_WALKING);
                 }
             }
