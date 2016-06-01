@@ -5,10 +5,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
 public class AISystem extends IteratingSystem {
+    private final GameScreen screen;
+
     private final ComponentMapper<AIComponent> aiMapper;
 
     private final ComponentMapper<PhysicsComponent> physicsMapper;
@@ -19,8 +22,16 @@ public class AISystem extends IteratingSystem {
 
     private final ComponentMapper<GravityComponent> gravityMapper;
 
-    public AISystem() {
+    private final ComponentMapper<CooldownComponent> cooldownMapper;
+
+    private final ComponentMapper<StateComponent> stateMapper;
+
+    private final ComponentMapper<DirectionComponent> directionMapper;
+
+    public AISystem(GameScreen screen) {
         super(Family.all(AIComponent.class, PhysicsComponent.class, SpeedComponent.class, JumpComponent.class).get());
+
+        this.screen = screen;
 
         aiMapper = ComponentMapper.getFor(AIComponent.class);
 
@@ -31,6 +42,12 @@ public class AISystem extends IteratingSystem {
         jumpMapper = ComponentMapper.getFor(JumpComponent.class);
 
         gravityMapper = ComponentMapper.getFor(GravityComponent.class);
+
+        cooldownMapper = ComponentMapper.getFor(CooldownComponent.class);
+
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
+
+        directionMapper = ComponentMapper.getFor(DirectionComponent.class);
     }
 
     @Override
@@ -65,6 +82,23 @@ public class AISystem extends IteratingSystem {
 
         if (Math.random() < 0.2f && gravity.isGrounded()) {
             velocity.y = jumpMapper.get(entity).getJumpHeight();
+        }
+
+        if (Math.random() < 0.4f && cooldownMapper.get(entity).canUse(CooldownComponent.THROW)) {
+            StateComponent state = stateMapper.get(entity);
+
+            final Vector3 position = physics.getPosition();
+
+            getEngine().getSystem(RunnableSystem.class).postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    screen.getSpawner().spawnShuriken(position.x, position.y + 0.5f, 1.5f, directionMapper.get(entity).getDirection());
+                }
+            }, 0.35f);
+
+            state.setState(StateComponent.STATE_THROW);
+
+            cooldownMapper.get(entity).addCooldown(CooldownComponent.THROW, 1);
         }
     }
 }

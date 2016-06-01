@@ -146,7 +146,7 @@ public class GameScreen extends NinjaScreen {
         engine.addSystem(new CameraSystem(this));
         engine.addSystem(new RenderSystem(this, batch, camera));
         engine.addSystem(new InputSystem(this, mobileInput));
-        engine.addSystem(new AISystem());
+        engine.addSystem(new AISystem(this));
         engine.addSystem(new StateSystem());
         engine.addSystem(new PhysicsSystem(this));
         engine.addSystem(new HealthSystem(this));

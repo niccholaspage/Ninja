@@ -49,6 +49,7 @@ public class Spawner {
         entity.add(new SpeedComponent(5f));
         entity.add(new AIComponent());
         entity.add(new ColorComponent((float) Math.random(), (float) Math.random(), (float) Math.random()));
+        entity.add(new CooldownComponent());
 
         engine.addEntity(entity);
 
