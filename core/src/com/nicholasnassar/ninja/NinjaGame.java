@@ -44,13 +44,15 @@ public class NinjaGame extends Game {
 
         preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
 
-        for (Control control : ControlManager.controls) {
+        for (Control control : OptionsManager.controls) {
             int keycode = preferences.getInteger("controls." + control.getId(), control.getDefaultKey());
 
             control.setKey(keycode);
         }
 
-        ControlManager.touchControls = preferences.getBoolean("controls.touch_controls", ControlManager.touchControls);
+        OptionsManager.touchControls = preferences.getBoolean("controls.touch_controls", OptionsManager.touchControls);
+
+        OptionsManager.musicVolume = preferences.getFloat("volumes.music", 1);
 
         setScreen(new LoadingScreen(this, batch));
     }

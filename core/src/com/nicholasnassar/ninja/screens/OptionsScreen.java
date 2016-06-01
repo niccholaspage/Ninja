@@ -1,6 +1,7 @@
 package com.nicholasnassar.ninja.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,13 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.nicholasnassar.ninja.ControlManager;
 import com.nicholasnassar.ninja.NinjaGame;
+import com.nicholasnassar.ninja.OptionsManager;
 
 public class OptionsScreen extends NinjaScreen {
     private final NinjaGame game;
 
     private final Stage stage;
+
+    private final Slider musicVolume;
 
     public OptionsScreen(final NinjaGame game, final SpriteBatch batch) {
         super(batch);
@@ -34,12 +37,13 @@ public class OptionsScreen extends NinjaScreen {
 
         table.setFillParent(true);
 
-        Slider musicVolume = new Slider(0, 100, 1, false, game.getSkin());
+        musicVolume = new Slider(0, 1, 0.01f, false, game.getSkin());
 
-        Slider soundVolume = new Slider(0, 100, 1, false, game.getSkin());
+        musicVolume.setValue(OptionsManager.musicVolume);
+
+        Slider soundVolume = new Slider(0, 1, 0.01f, false, game.getSkin());
 
         //TODO: Actual loading
-        musicVolume.setValue(100);
         soundVolume.setValue(100);
 
         TextButton controls = new TextButton("Controls", game.getSkin());
@@ -77,7 +81,7 @@ public class OptionsScreen extends NinjaScreen {
 
     @Override
     public void render(float deltaTime) {
-        if (ControlManager.isJustPressed(back)) {
+        if (OptionsManager.isJustPressed(back)) {
             goBack();
         }
 
@@ -90,6 +94,18 @@ public class OptionsScreen extends NinjaScreen {
     }
 
     private void goBack() {
+        save();
+
         game.setScreen(new MainMenuScreen(game, batch));
+    }
+
+    public void save() {
+        Preferences preferences = game.getPreferences();
+
+        OptionsManager.musicVolume = musicVolume.getValue();
+
+        preferences.putFloat("volumes.music", OptionsManager.musicVolume);
+
+        preferences.flush();
     }
 }

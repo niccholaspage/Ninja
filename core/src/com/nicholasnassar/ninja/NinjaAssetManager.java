@@ -160,7 +160,11 @@ public class NinjaAssetManager {
     }
 
     public Music getMusic(String key) {
-        return music.get(key);
+        Music track = music.get(key);
+
+        track.setVolume(OptionsManager.musicVolume);
+
+        return track;
     }
 
     public OrderedMap<String, IntMap<Array<Animation>>> getCreatureAnimations() {

@@ -117,7 +117,7 @@ public class GameScreen extends NinjaScreen {
 
         level = new Level(100, 20);
 
-        if (ControlManager.touchControls) {
+        if (OptionsManager.touchControls) {
             Touchpad touchpad = new Touchpad(10, skin);
 
             uiStage.addActor(touchpad);
@@ -222,7 +222,7 @@ public class GameScreen extends NinjaScreen {
     @Override
     public void render(float delta) {
         //super.render(delta); - We don't need this, we pause the game when escape is pressed (no exit anymore, oops.).
-        if (ControlManager.isJustPressed(back)) {
+        if (OptionsManager.isJustPressed(back)) {
             togglePause();
         }
 
@@ -464,7 +464,7 @@ public class GameScreen extends NinjaScreen {
             blockTable.add(button).padRight(5).padBottom(8);
         }
 
-        if (ControlManager.touchControls) {
+        if (OptionsManager.touchControls) {
             TextureRegion region = game.getAssetManager().getUIElement("buttons/delete.png");
 
             SelectButton button = new SelectButton(levelEditorSystem, region, null, blockTable, creatureTable);

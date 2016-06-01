@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.nicholasnassar.ninja.Control;
-import com.nicholasnassar.ninja.ControlManager;
+import com.nicholasnassar.ninja.OptionsManager;
 import com.nicholasnassar.ninja.NinjaGame;
 
 import java.util.Map;
@@ -77,7 +77,7 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
             }
         });
 
-        for (Control control : ControlManager.controls) {
+        for (Control control : OptionsManager.controls) {
             table.add(new Label(control.getName() + ": ", game.getSkin())).padBottom(5);
 
             final TextButton controlButton = new TextButton(Input.Keys.toString(control.getKey()), game.getSkin());
@@ -108,12 +108,12 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
 
         final CheckBox checkBox = new CheckBox("", game.getSkin());
 
-        checkBox.setChecked(ControlManager.touchControls);
+        checkBox.setChecked(OptionsManager.touchControls);
 
         checkBox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ControlManager.touchControls = checkBox.isChecked();
+                OptionsManager.touchControls = checkBox.isChecked();
 
                 saveControls();
             }
@@ -154,7 +154,7 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
     @Override
     public void render(float deltaTime) {
         if (!recentlyChanged) {
-            if (ControlManager.isJustPressed(back)) {
+            if (OptionsManager.isJustPressed(back)) {
                 goBack();
             }
         } else {
@@ -182,11 +182,11 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
             }
         }
 
-        for (Control control : ControlManager.controls) {
+        for (Control control : OptionsManager.controls) {
             preferences.putInteger("controls." + control.getId(), control.getKey());
         }
 
-        preferences.putBoolean("controls.touch_controls", ControlManager.touchControls);
+        preferences.putBoolean("controls.touch_controls", OptionsManager.touchControls);
 
         preferences.flush();
     }

@@ -7,7 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Control;
-import com.nicholasnassar.ninja.ControlManager;
+import com.nicholasnassar.ninja.OptionsManager;
 import com.nicholasnassar.ninja.MobileInput;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
@@ -62,13 +62,13 @@ public class InputSystem extends IteratingSystem {
 
         this.mobileInput = mobileInput;
 
-        moveLeft = ControlManager.getControl("move_left");
-        moveRight = ControlManager.getControl("move_right");
-        moveUp = ControlManager.getControl("move_up");
-        moveDown = ControlManager.getControl("move_down");
-        throwC = ControlManager.getControl("throw");
-        jump = ControlManager.getControl("jump");
-        roll = ControlManager.getControl("roll");
+        moveLeft = OptionsManager.getControl("move_left");
+        moveRight = OptionsManager.getControl("move_right");
+        moveUp = OptionsManager.getControl("move_up");
+        moveDown = OptionsManager.getControl("move_down");
+        throwC = OptionsManager.getControl("throw");
+        jump = OptionsManager.getControl("jump");
+        roll = OptionsManager.getControl("roll");
     }
 
     @Override
@@ -93,13 +93,13 @@ public class InputSystem extends IteratingSystem {
 
         physics.setLockVelocityX(physics.getLockVelocityX() - deltaTime);
 
-        boolean moveLeft = ControlManager.isPressed(this.moveLeft);
-        boolean moveRight = ControlManager.isPressed(this.moveRight);
-        boolean moveUp = ControlManager.isPressed(this.moveUp);
-        boolean moveDown = ControlManager.isPressed(this.moveDown);
-        boolean throwPressed = ControlManager.isJustPressed(throwC);
-        boolean jumpPressed = ControlManager.isJustPressed(jump);
-        boolean rollPressed = ControlManager.isJustPressed(roll);
+        boolean moveLeft = OptionsManager.isPressed(this.moveLeft);
+        boolean moveRight = OptionsManager.isPressed(this.moveRight);
+        boolean moveUp = OptionsManager.isPressed(this.moveUp);
+        boolean moveDown = OptionsManager.isPressed(this.moveDown);
+        boolean throwPressed = OptionsManager.isJustPressed(throwC);
+        boolean jumpPressed = OptionsManager.isJustPressed(jump);
+        boolean rollPressed = OptionsManager.isJustPressed(roll);
 
         if (mobileInput != null) {
             moveLeft = moveLeft || mobileInput.isLeftDown();

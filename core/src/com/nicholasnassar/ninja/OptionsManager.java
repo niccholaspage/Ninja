@@ -5,10 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 
-public class ControlManager {
+public class OptionsManager {
     public static final Array<Control> controls = new Array<Control>();
 
     public static boolean touchControls = Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS;
+
+    public static float musicVolume;
 
     static {
         controls.add(new Control("back", "Back", Input.Keys.ESCAPE));
