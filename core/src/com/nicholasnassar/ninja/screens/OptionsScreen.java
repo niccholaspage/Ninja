@@ -60,7 +60,7 @@ public class OptionsScreen extends NinjaScreen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                goBack();
+                backPressed();
             }
         });
 
@@ -81,9 +81,7 @@ public class OptionsScreen extends NinjaScreen {
 
     @Override
     public void render(float deltaTime) {
-        if (OptionsManager.isJustPressed(back)) {
-            goBack();
-        }
+        super.render(deltaTime);
 
         stage.draw();
     }
@@ -93,7 +91,7 @@ public class OptionsScreen extends NinjaScreen {
         stage.dispose();
     }
 
-    private void goBack() {
+    protected void backPressed() {
         save();
 
         game.setScreen(new MainMenuScreen(game, batch));

@@ -42,6 +42,10 @@ public class NinjaGame extends Game {
 
         platformFeatures.init();
 
+        Gdx.input.setCatchBackKey(true);
+
+        Gdx.input.setCatchMenuKey(true);
+
         preferences = Gdx.app.getPreferences("com.nicholasnassar.ninja.settings");
 
         for (Control control : OptionsManager.controls) {

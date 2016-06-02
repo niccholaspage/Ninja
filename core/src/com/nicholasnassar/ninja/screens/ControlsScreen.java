@@ -54,7 +54,7 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                goBack();
+                backPressed();
             }
         });
 
@@ -154,9 +154,7 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
     @Override
     public void render(float deltaTime) {
         if (!recentlyChanged) {
-            if (OptionsManager.isJustPressed(back)) {
-                goBack();
-            }
+            super.render(deltaTime);
         } else {
             recentlyChanged = false;
         }
@@ -169,7 +167,7 @@ public class ControlsScreen extends NinjaScreen implements InputProcessor {
         stage.dispose();
     }
 
-    private void goBack() {
+    protected void backPressed() {
         game.setScreen(new OptionsScreen(game, batch));
     }
 

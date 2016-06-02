@@ -1,6 +1,7 @@
 package com.nicholasnassar.ninja.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicholasnassar.ninja.Control;
@@ -17,10 +18,14 @@ public class NinjaScreen extends ScreenAdapter {
         back = OptionsManager.getControl("back");
     }
 
+    protected void backPressed() {
+        Gdx.app.exit();
+    }
+
     @Override
     public void render(float delta) {
-        if (OptionsManager.isJustPressed(back)) {
-            Gdx.app.exit();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK) || OptionsManager.isJustPressed(back)) {
+            backPressed();
         }
     }
 }

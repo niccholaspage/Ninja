@@ -220,11 +220,13 @@ public class GameScreen extends NinjaScreen {
     }
 
     @Override
+    protected void backPressed() {
+        togglePause();
+    }
+
+    @Override
     public void render(float delta) {
-        //super.render(delta); - We don't need this, we pause the game when escape is pressed (no exit anymore, oops.).
-        if (OptionsManager.isJustPressed(back)) {
-            togglePause();
-        }
+        super.render(delta);
 
         delta = (float) Math.min(0.05, delta);
 
