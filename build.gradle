@@ -96,6 +96,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        compile "com.nicholasnassar.ninja.api:ninja-api:0.0.1-SNAPSHOT"
     }
 }
 
