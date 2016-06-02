@@ -29,7 +29,7 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "https://jitpack.io" }
+        maven { url "http://nexus.nicholasnassar.com/repository/maven-snapshots/" }
     }
 }
 
@@ -96,7 +96,6 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compile "com.github.niccholaspage:NinjaAPI:-SNAPSHOT"
     }
 }
 
