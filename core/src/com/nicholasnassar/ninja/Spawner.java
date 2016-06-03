@@ -167,6 +167,8 @@ public class Spawner {
 
         physics.getVelocity().x = direction == DirectionComponent.RIGHT ? 15.625f : -15.625f;
 
+        physics.setSizeScale(0.3125f);
+
         entity.add(physics);
         entity.add(new VisualComponent(region, 1000f));
         entity.add(new DirectionComponent());
