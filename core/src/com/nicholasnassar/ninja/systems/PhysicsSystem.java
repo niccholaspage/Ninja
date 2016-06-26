@@ -298,13 +298,9 @@ public class PhysicsSystem extends EntitySystem {
                                 if (velocity.y > 0) {
                                     velocity.y = 0;
 
-                                    if (!stuckInTop) {
-                                        newY = y2 - height;
-                                    }
+                                    newY = y2 - height;
                                 } else {
-                                    if (!stuckInTop) {
-                                        newY = y2 + height2;
-                                    }
+                                    newY = y2 + height2;
 
                                     velocity.y = 0;
 
@@ -320,7 +316,7 @@ public class PhysicsSystem extends EntitySystem {
 
                     if (stuckInTop) {
                         newY = position.y;
-                        
+
                         state.setState(StateComponent.STATE_GROUND_ROLL);
 
                         state.setElapsedTime(0.04f);
