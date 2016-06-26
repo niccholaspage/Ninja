@@ -12,6 +12,8 @@ public class StateComponent implements Component {
 
     private int state;
 
+    private int previousState;
+
     private float elapsedTime;
 
     private final VisualComponent visual;
@@ -21,11 +23,17 @@ public class StateComponent implements Component {
     public StateComponent(VisualComponent visual) {
         state = STATE_IDLE;
 
+        previousState = STATE_IDLE;
+
         elapsedTime = 0;
 
         this.visual = visual;
 
         canSlide = false;
+    }
+
+    public int getPreviousState() {
+        return previousState;
     }
 
     public int getState() {
@@ -38,6 +46,8 @@ public class StateComponent implements Component {
 
             visual.randomize(state);
         }
+
+        previousState = this.state;
 
         this.state = state;
     }

@@ -7,8 +7,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.nicholasnassar.ninja.Control;
-import com.nicholasnassar.ninja.OptionsManager;
 import com.nicholasnassar.ninja.MobileInput;
+import com.nicholasnassar.ninja.OptionsManager;
 import com.nicholasnassar.ninja.components.*;
 import com.nicholasnassar.ninja.screens.GameScreen;
 
@@ -204,7 +204,7 @@ public class InputSystem extends IteratingSystem {
         if (gravity != null && jump != null) {
             boolean wallSliding = state != null && state.getState() == StateComponent.STATE_WALL_SLIDE;
 
-            if (jumpPressed && (gravity.isGrounded() || jump.getAvailableJumps() > 0 || wallSliding)) {
+            if (jumpPressed && state.getState() != StateComponent.STATE_GROUND_ROLL && (gravity.isGrounded() || jump.getAvailableJumps() > 0 || wallSliding)) {
                 if (wallSliding && !moveUp) {
                     if (velocity.x != 0) {
                         if (velocity.x > 0) {

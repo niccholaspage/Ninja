@@ -31,6 +31,8 @@ public class PhysicsSystem extends EntitySystem {
 
     private final ComponentMapper<HealthComponent> healthMapper;
 
+    private final ComponentMapper<StateComponent> stateMapper;
+
     private final ObjectSet<Entity> retrieveArray;
 
     private final SpatialMap spatialMap;
@@ -49,6 +51,8 @@ public class PhysicsSystem extends EntitySystem {
         damageMapper = ComponentMapper.getFor(DamageComponent.class);
 
         healthMapper = ComponentMapper.getFor(HealthComponent.class);
+
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
 
         spatialMap = new SpatialMap(screen.getLevel().getWidth(), screen.getLevel().getHeight());
 
@@ -89,6 +93,8 @@ public class PhysicsSystem extends EntitySystem {
 
             GravityComponent gravity = gravityMapper.get(entity);
 
+            StateComponent state = stateMapper.get(entity);
+
             if (gravity != null) {
                 velocity.y -= GRAVITY * deltaTime;
 
@@ -119,78 +125,113 @@ public class PhysicsSystem extends EntitySystem {
                 if (collide != null) {
                     collide.setOnWall(false);
 
-                    for (Entity loopEntity : retrieveArray) {
-                        CollidableComponent loopCollide = collideMapper.get(loopEntity);
+                    boolean stuckInTop = false;
 
-                        DamageComponent loopDamage = damageMapper.get(loopEntity);
+                    if (state != null && state.getPreviousState() == StateComponent.STATE_GROUND_ROLL && state.getState()
+                            == StateComponent.STATE_WALKING) {
+                        for (Entity loopEntity : retrieveArray) {
+                            CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
-                        if (entity == loopEntity || loopCollide == null) {
-                            continue;
+                            if (entity == loopEntity || loopCollide == null) {
+                                continue;
+                            }
+
+                            if (collide.getException() == loopCollide.getException()) {
+                                continue;
+                            }
+
+                            PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
+
+                            Vector3 pos2 = loopPhysics.getPosition();
+
+                            float x2 = pos2.x;
+
+                            float y2 = pos2.y;
+
+                            float width2 = loopPhysics.getWidth();
+
+                            float height2 = loopPhysics.getHeight();
+
+                            if (newX < x2 + width2 && newX + width > x2 && y < y2 + height2 && 1.6875f + y > y2) {
+                                stuckInTop = true;
+                            }
                         }
+                    }
 
-                        if (collide.getException() == loopCollide.getException()) {
-                            continue;
-                        }
+                    if (!stuckInTop) {
+                        for (Entity loopEntity : retrieveArray) {
+                            CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
-                        PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
+                            DamageComponent loopDamage = damageMapper.get(loopEntity);
 
-                        Vector3 pos2 = loopPhysics.getPosition();
+                            if (entity == loopEntity || loopCollide == null) {
+                                continue;
+                            }
 
-                        float x2 = pos2.x;
+                            if (collide.getException() == loopCollide.getException()) {
+                                continue;
+                            }
 
-                        float y2 = pos2.y;
+                            PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                        float width2 = loopPhysics.getWidth();
+                            Vector3 pos2 = loopPhysics.getPosition();
 
-                        float height2 = loopPhysics.getHeight();
+                            float x2 = pos2.x;
 
-                        if (width2 > 0 && height2 > 0) {
-                            if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
-                                if (damage != null && damage.when(DamageComponent.ON_COLLIDE)) {
-                                    HealthComponent health = healthMapper.get(loopEntity);
+                            float y2 = pos2.y;
 
-                                    if (health != null) {
-                                        health.damage(damage.getDamage(DamageComponent.ON_COLLIDE));
-                                    }
-                                }
+                            float width2 = loopPhysics.getWidth();
 
-                                if (collide.shouldDestroy()) {
-                                    getEngine().removeEntity(entity);
+                            float height2 = loopPhysics.getHeight();
 
-                                    continue;
-                                }
+                            if (width2 > 0 && height2 > 0) {
+                                if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
+                                    if (damage != null && damage.when(DamageComponent.ON_COLLIDE)) {
+                                        HealthComponent health = healthMapper.get(loopEntity);
 
-                                if (loopDamage != null && loopDamage.when(DamageComponent.ON_COLLIDE)) {
-                                    HealthComponent health = healthMapper.get(entity);
-
-                                    if (health != null) {
-                                        health.damage(loopDamage.getDamage(DamageComponent.ON_COLLIDE));
-                                    }
-                                }
-
-                                if (loopCollide.shouldDestroy()) {
-                                    getEngine().removeEntity(loopEntity);
-
-                                    continue;
-                                }
-
-                                if (velocity.x != 0) {
-                                    if (velocity.x > 0) {
-                                        newX = x2 - width;
-                                    } else {
-                                        newX = x2 + width2;
+                                        if (health != null) {
+                                            health.damage(damage.getDamage(DamageComponent.ON_COLLIDE));
+                                        }
                                     }
 
-                                    velocity.x = 0;
+                                    if (collide.shouldDestroy()) {
+                                        getEngine().removeEntity(entity);
 
-                                    collide.setOnWall(true);
-
-                                    if (velocity.y < 0) {
-                                        velocity.y /= 2;
+                                        continue;
                                     }
-                                }
 
-                                break;
+                                    if (loopDamage != null && loopDamage.when(DamageComponent.ON_COLLIDE)) {
+                                        HealthComponent health = healthMapper.get(entity);
+
+                                        if (health != null) {
+                                            health.damage(loopDamage.getDamage(DamageComponent.ON_COLLIDE));
+                                        }
+                                    }
+
+                                    if (loopCollide.shouldDestroy()) {
+                                        getEngine().removeEntity(loopEntity);
+
+                                        continue;
+                                    }
+
+                                    if (velocity.x != 0) {
+                                        if (velocity.x > 0) {
+                                            newX = x2 - width;
+                                        } else {
+                                            newX = x2 + width2;
+                                        }
+
+                                        velocity.x = 0;
+
+                                        collide.setOnWall(true);
+
+                                        if (velocity.y < 0) {
+                                            velocity.y /= 2;
+                                        }
+                                    }
+
+                                    break;
+                                }
                             }
                         }
                     }
@@ -257,9 +298,13 @@ public class PhysicsSystem extends EntitySystem {
                                 if (velocity.y > 0) {
                                     velocity.y = 0;
 
-                                    newY = y2 - height;
+                                    if (!stuckInTop) {
+                                        newY = y2 - height;
+                                    }
                                 } else {
-                                    newY = y2 + height2;
+                                    if (!stuckInTop) {
+                                        newY = y2 + height2;
+                                    }
 
                                     velocity.y = 0;
 
@@ -271,6 +316,14 @@ public class PhysicsSystem extends EntitySystem {
                                 break;
                             }
                         }
+                    }
+
+                    if (stuckInTop) {
+                        newY = position.y;
+                        
+                        state.setState(StateComponent.STATE_GROUND_ROLL);
+
+                        state.setElapsedTime(0.04f);
                     }
                 }
 
