@@ -152,7 +152,7 @@ public class PhysicsSystem extends EntitySystem {
 
                             float height2 = loopPhysics.getHeight();
 
-                            if (newX < x2 + width2 && newX + width > x2 && y < y2 + height2 && 1.6875f + y > y2) {
+                            if (newX < x2 + width2 && newX + width > x2 && y < y2 + height2 && 1.6875f + y > y2 && y < y2 - 1.6875f) {
                                 stuckInTop = true;
                             }
                         }
