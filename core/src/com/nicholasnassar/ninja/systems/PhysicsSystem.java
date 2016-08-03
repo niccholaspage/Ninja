@@ -125,113 +125,78 @@ public class PhysicsSystem extends EntitySystem {
                 if (collide != null) {
                     collide.setOnWall(false);
 
-                    boolean stuckInTop = false;
+                    for (Entity loopEntity : retrieveArray) {
+                        CollidableComponent loopCollide = collideMapper.get(loopEntity);
 
-                    if (state != null && state.getPreviousState() == StateComponent.STATE_GROUND_ROLL && state.getState()
-                            == StateComponent.STATE_WALKING) {
-                        for (Entity loopEntity : retrieveArray) {
-                            CollidableComponent loopCollide = collideMapper.get(loopEntity);
+                        DamageComponent loopDamage = damageMapper.get(loopEntity);
 
-                            if (entity == loopEntity || loopCollide == null) {
-                                continue;
-                            }
-
-                            if (collide.getException() == loopCollide.getException()) {
-                                continue;
-                            }
-
-                            PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
-
-                            Vector3 pos2 = loopPhysics.getPosition();
-
-                            float x2 = pos2.x;
-
-                            float y2 = pos2.y;
-
-                            float width2 = loopPhysics.getWidth();
-
-                            float height2 = loopPhysics.getHeight();
-
-                            if (newX < x2 + width2 && newX + width > x2 && y < y2 + height2 && 1.6875f + y > y2 && y < y2 - 1.6875f) {
-                                stuckInTop = true;
-                            }
+                        if (entity == loopEntity || loopCollide == null) {
+                            continue;
                         }
-                    }
 
-                    if (!stuckInTop) {
-                        for (Entity loopEntity : retrieveArray) {
-                            CollidableComponent loopCollide = collideMapper.get(loopEntity);
+                        if (collide.getException() == loopCollide.getException()) {
+                            continue;
+                        }
 
-                            DamageComponent loopDamage = damageMapper.get(loopEntity);
+                        PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
 
-                            if (entity == loopEntity || loopCollide == null) {
-                                continue;
-                            }
+                        Vector3 pos2 = loopPhysics.getPosition();
 
-                            if (collide.getException() == loopCollide.getException()) {
-                                continue;
-                            }
+                        float x2 = pos2.x;
 
-                            PhysicsComponent loopPhysics = physicsMapper.get(loopEntity);
+                        float y2 = pos2.y;
 
-                            Vector3 pos2 = loopPhysics.getPosition();
+                        float width2 = loopPhysics.getWidth();
 
-                            float x2 = pos2.x;
+                        float height2 = loopPhysics.getHeight();
 
-                            float y2 = pos2.y;
+                        if (width2 > 0 && height2 > 0) {
+                            if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
+                                if (damage != null && damage.when(DamageComponent.ON_COLLIDE)) {
+                                    HealthComponent health = healthMapper.get(loopEntity);
 
-                            float width2 = loopPhysics.getWidth();
-
-                            float height2 = loopPhysics.getHeight();
-
-                            if (width2 > 0 && height2 > 0) {
-                                if (position.x != newX && overlaps(newX, x2, y, y2, width, width2, height, height2)) {
-                                    if (damage != null && damage.when(DamageComponent.ON_COLLIDE)) {
-                                        HealthComponent health = healthMapper.get(loopEntity);
-
-                                        if (health != null) {
-                                            health.damage(damage.getDamage(DamageComponent.ON_COLLIDE));
-                                        }
+                                    if (health != null) {
+                                        health.damage(damage.getDamage(DamageComponent.ON_COLLIDE));
                                     }
-
-                                    if (collide.shouldDestroy()) {
-                                        getEngine().removeEntity(entity);
-
-                                        continue;
-                                    }
-
-                                    if (loopDamage != null && loopDamage.when(DamageComponent.ON_COLLIDE)) {
-                                        HealthComponent health = healthMapper.get(entity);
-
-                                        if (health != null) {
-                                            health.damage(loopDamage.getDamage(DamageComponent.ON_COLLIDE));
-                                        }
-                                    }
-
-                                    if (loopCollide.shouldDestroy()) {
-                                        getEngine().removeEntity(loopEntity);
-
-                                        continue;
-                                    }
-
-                                    if (velocity.x != 0) {
-                                        if (velocity.x > 0) {
-                                            newX = x2 - width;
-                                        } else {
-                                            newX = x2 + width2;
-                                        }
-
-                                        velocity.x = 0;
-
-                                        collide.setOnWall(true);
-
-                                        if (velocity.y < 0) {
-                                            velocity.y /= 2;
-                                        }
-                                    }
-
-                                    break;
                                 }
+
+                                if (collide.shouldDestroy()) {
+                                    getEngine().removeEntity(entity);
+
+                                    continue;
+                                }
+
+                                if (loopDamage != null && loopDamage.when(DamageComponent.ON_COLLIDE)) {
+                                    HealthComponent health = healthMapper.get(entity);
+
+                                    if (health != null) {
+                                        health.damage(loopDamage.getDamage(DamageComponent.ON_COLLIDE));
+                                    }
+                                }
+
+                                if (loopCollide.shouldDestroy()) {
+                                    getEngine().removeEntity(loopEntity);
+
+                                    continue;
+                                }
+
+                                if (velocity.x != 0) {
+                                    if (velocity.x > 0) {
+                                        newX = x2 - width;
+                                    } else {
+                                        newX = x2 + width2;
+                                    }
+
+                                    velocity.x = 0;
+
+                                    collide.setOnWall(true);
+
+                                    if (velocity.y < 0) {
+                                        velocity.y /= 2;
+                                    }
+                                }
+
+                                break;
                             }
                         }
                     }
@@ -312,14 +277,6 @@ public class PhysicsSystem extends EntitySystem {
                                 break;
                             }
                         }
-                    }
-
-                    if (stuckInTop) {
-                        newY = position.y;
-
-                        state.setState(StateComponent.STATE_GROUND_ROLL);
-
-                        state.setElapsedTime(0.04f);
                     }
                 }
 
