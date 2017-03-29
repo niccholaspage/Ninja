@@ -28,7 +28,7 @@ public class Spawner {
     private Entity spawnSoldier(float x, float y) {
         Entity entity = new Entity();
 
-        IntMap<Array<Animation>> animations = manager.getAnimationsFor("soldier");
+        IntMap<Array<Animation<TextureRegion>>> animations = manager.getAnimationsFor("soldier");
 
         TextureRegion region = animations.get(0).get(0).getKeyFrame(0);
 
@@ -59,7 +59,7 @@ public class Spawner {
     public Entity spawnPlayer(float x, float y) {
         Entity entity = new Entity();
 
-        IntMap<Array<Animation>> animations = manager.getAnimationsFor("player");
+        IntMap<Array<Animation<TextureRegion>>> animations = manager.getAnimationsFor("player");
 
         TextureRegion region = animations.get(0).get(0).getKeyFrame(0);
 

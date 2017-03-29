@@ -15,7 +15,7 @@ public class NinjaAssetManager {
     private final AssetManager manager;
 
     private final OrderedMap<String, Array<TextureRegion>> blocks;
-    private final OrderedMap<String, IntMap<Array<Animation>>> creatureAnimations;
+    private final OrderedMap<String, IntMap<Array<Animation<TextureRegion>>>> creatureAnimations;
     private final ObjectMap<String, TextureRegion> entities;
     private final ObjectMap<String, Music> music;
 
@@ -24,7 +24,7 @@ public class NinjaAssetManager {
 
         blocks = new OrderedMap<String, Array<TextureRegion>>();
 
-        creatureAnimations = new OrderedMap<String, IntMap<Array<Animation>>>();
+        creatureAnimations = new OrderedMap<String, IntMap<Array<Animation<TextureRegion>>>>();
 
         entities = new ObjectMap<String, TextureRegion>();
 
@@ -76,7 +76,7 @@ public class NinjaAssetManager {
         JsonValue json = new JsonReader().parse(Gdx.files.internal("animations.json"));
 
         for (JsonValue creature : json.get("animations").iterator()) {
-            IntMap<Array<Animation>> animations = new IntMap<Array<Animation>>();
+            IntMap<Array<Animation<TextureRegion>>> animations = new IntMap<Array<Animation<TextureRegion>>>();
 
             String creatureName = creature.get(0).name;
 
@@ -89,7 +89,7 @@ public class NinjaAssetManager {
                     stateInts[i] = Integer.parseInt(states[i]);
                 }
 
-                Array<Animation> loadAnimations = new Array<Animation>();
+                Array<Animation<TextureRegion>> loadAnimations = new Array<Animation<TextureRegion>>();
 
                 for (JsonValue animation : state.get(0).iterator()) {
                     String name = animation.getString("sprite");
@@ -103,9 +103,9 @@ public class NinjaAssetManager {
                     Animation anim;
 
                     if (frameWidth != -1 && frameHeight != -1) {
-                        anim = new Animation(fps, spriteAnimations.get(name).split(frameWidth, frameHeight)[0]);
+                        anim = new Animation<TextureRegion>(fps, spriteAnimations.get(name).split(frameWidth, frameHeight)[0]);
                     } else {
-                        anim = new Animation(fps, spriteAnimations.get(name));
+                        anim = new Animation<TextureRegion>(fps, spriteAnimations.get(name));
                     }
 
                     if (animation.has("play_mode")) {
@@ -167,11 +167,11 @@ public class NinjaAssetManager {
         return track;
     }
 
-    public OrderedMap<String, IntMap<Array<Animation>>> getCreatureAnimations() {
+    public OrderedMap<String, IntMap<Array<Animation<TextureRegion>>>> getCreatureAnimations() {
         return creatureAnimations;
     }
 
-    public IntMap<Array<Animation>> getAnimationsFor(String creature) {
+    public IntMap<Array<Animation<TextureRegion>>> getAnimationsFor(String creature) {
         return creatureAnimations.get(creature);
     }
 

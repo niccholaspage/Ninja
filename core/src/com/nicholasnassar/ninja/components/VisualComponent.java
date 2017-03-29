@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 
 public class VisualComponent implements Component {
-    private final IntMap<Array<Animation>> animations;
+    private final IntMap<Array<Animation<TextureRegion>>> animations;
 
     private final TextureRegion region;
 
@@ -37,7 +37,7 @@ public class VisualComponent implements Component {
         this.rotationSpeed = rotationSpeed;
     }
 
-    public VisualComponent(IntMap<Array<Animation>> animations) {
+    public VisualComponent(IntMap<Array<Animation<TextureRegion>>> animations) {
         this.animations = animations;
 
         region = null;

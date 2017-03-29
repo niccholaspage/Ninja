@@ -512,7 +512,7 @@ public class GameScreen extends NinjaScreen {
 
         creatureTable.align(Align.left);
 
-        OrderedMap<String, IntMap<Array<Animation>>> creatureAnimations = game.getAssetManager().getCreatureAnimations();
+        OrderedMap<String, IntMap<Array<Animation<TextureRegion>>>> creatureAnimations = game.getAssetManager().getCreatureAnimations();
 
         for (int i = 1; i < creatureAnimations.size; i++) {
             String key = creatureAnimations.orderedKeys().get(i);
